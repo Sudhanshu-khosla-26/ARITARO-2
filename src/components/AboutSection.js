@@ -92,7 +92,7 @@ export default function AboutSection() {
               backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
               animation: 'cyber-gradient-sweep 5s linear infinite',
             }}>
-              Zero-Trust
+              Absolute Defense
             </span>
             . Proven by Results.
           </h2>
@@ -123,7 +123,14 @@ export default function AboutSection() {
                   muted
                   loop
                   playsInline
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transform: 'scale(1.08)',
+                    transformOrigin: 'top left',
+                  }}
                 >
                   <source src="/grok-video-be4a4f39-a70b-41ec-af1d-5cf4d274b1aa.mp4" type="video/mp4" />
                 </video>
