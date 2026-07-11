@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useSession } from 'next-auth/react';
+import { useCart } from './CartContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -305,9 +306,82 @@ function SpringTiltCard({ service, cardRef: externalRef }) {
         <div style={{
           marginTop: 18, height: 1,
           background: 'linear-gradient(90deg, rgba(99,102,241,0.2), transparent 70%)',
+          marginBottom: 14,
         }} />
+
+        {/* Add to Cart button */}
+        <CartButton service={service} />
       </div>
     </div>
+  );
+}
+
+function CartButton({ service }) {
+  const { isInCart, addToCart, removeFromCart, openCart } = useCart();
+  const added = isInCart(service.number);
+
+  return (
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (added) {
+          removeFromCart(service.number);
+        } else {
+          addToCart(service);
+          openCart(); // Show the cart panel immediately on add for rich interactive experience!
+        }
+      }}
+      style={{
+        width: '100%',
+        fontSize: 11,
+        fontWeight: 600,
+        padding: '9px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+        border: '1px solid',
+        borderColor: added ? '#3B82F6' : 'rgba(255,255,255,0.08)',
+        color: added ? '#3B82F6' : '#94A3B8',
+        background: added ? 'rgba(59, 130, 246, 0.08)' : 'rgba(255, 255, 255, 0.02)',
+        cursor: 'pointer',
+        borderRadius: 8,
+        transition: 'all 0.2s ease-in-out',
+        fontFamily: 'var(--font-sans)',
+      }}
+      onMouseEnter={(e) => {
+        if (!added) {
+          e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.4)';
+          e.currentTarget.style.color = '#fff';
+          e.currentTarget.style.background = 'rgba(59, 130, 246, 0.04)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!added) {
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+          e.currentTarget.style.color = '#94A3B8';
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+        }
+      }}
+    >
+      {added ? (
+        <>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Added
+        </>
+      ) : (
+        <>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add to Cart
+        </>
+      )}
+    </button>
   );
 }
 

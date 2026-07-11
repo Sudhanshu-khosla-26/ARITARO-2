@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import GooeyNav from './GooeyNav';
 import { useSession } from 'next-auth/react';
+import { useCart } from './CartContext';
 
 const megaServices = [
   {
@@ -72,6 +73,7 @@ export default function Navbar() {
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter();
+  const { cartItems, openCart } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -205,20 +207,32 @@ export default function Navbar() {
                   alt="Aritaro"
                   fill
                   sizes="46px"
-                  style={{ objectFit: 'contain' }}
                   priority
                 />
               </div>
-              <span style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 16,
-                fontWeight: 700,
-                letterSpacing: '0.08em',
-                color: '#E2E8F0',
-                textShadow: scrolled ? 'none' : '0 1px 8px rgba(0,0,0,0.3)',
-              }}>
-                ARITARO
-              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
+                <span style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  color: '#E2E8F0',
+                  lineHeight: 1.1,
+                  textShadow: scrolled ? 'none' : '0 1px 8px rgba(0,0,0,0.3)',
+                }}>
+                  ARITARO
+                </span>
+                <span style={{
+                  fontSize: 7.5,
+                  fontWeight: 500,
+                  letterSpacing: '0.12em',
+                  color: 'rgba(226, 232, 240, 0.45)',
+                  marginTop: 2.5,
+                  textTransform: 'uppercase',
+                }}>
+                  Advance Security Solutions
+                </span>
+              </div>
             </button>
           </Link>
 
@@ -229,6 +243,66 @@ export default function Navbar() {
 
           {/* Right: Cart + Auth + CTA + toggle */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {/* Cart Button */}
+            <button
+              onClick={openCart}
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: 10,
+                width: 38,
+                height: 38,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                cursor: 'pointer',
+                color: '#94A3B8',
+                transition: 'all 0.2s',
+                marginRight: 6,
+              }}
+              title="View Selected Services"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#fff';
+                e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.04)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#94A3B8';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              {cartItems.length > 0 && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: -4,
+                    right: -4,
+                    background: '#3B82F6',
+                    color: '#fff',
+                    fontSize: 9,
+                    fontWeight: 700,
+                    borderRadius: '50%',
+                    width: 16,
+                    height: 16,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '2px solid #000',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                  }}
+                >
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
+
             {/* Auth — Login or User avatar */}
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

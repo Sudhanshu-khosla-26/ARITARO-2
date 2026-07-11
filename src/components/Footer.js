@@ -108,15 +108,29 @@ export default function Footer() {
                   style={{ objectFit: 'contain' }}
                 />
               </div>
-              <span style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 16,
-                fontWeight: 600,
-                letterSpacing: '0.05em',
-                color: 'var(--text-primary)',
-              }}>
-                ARITARO
-              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <span style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
+                  color: 'var(--text-primary)',
+                  lineHeight: 1.1,
+                }}>
+                  ARITARO
+                </span>
+                <span style={{
+                  fontSize: 7.5,
+                  fontWeight: 500,
+                  letterSpacing: '0.12em',
+                  color: 'var(--text-muted)',
+                  marginTop: 2.5,
+                  textTransform: 'uppercase',
+                  opacity: 0.6,
+                }}>
+                  Advance Security Solutions
+                </span>
+              </div>
             </div>
 
             <p style={{

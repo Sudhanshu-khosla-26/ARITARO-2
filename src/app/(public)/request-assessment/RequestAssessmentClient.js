@@ -35,6 +35,7 @@ function IntakeFormContent() {
     authorization_confirmed: false,
   });
 
+  const [selectedServices, setSelectedServices] = useState(['api_pt']);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -49,9 +50,16 @@ function IntakeFormContent() {
       }));
     }
 
+    const queryServices = searchParams.get('services');
     const queryService = searchParams.get('service');
-    if (queryService && ['api_pt', 'wap_pt', 'cloud_security', 'ai_pt'].includes(queryService)) {
-      setForm((prev) => ({ ...prev, service_type: queryService }));
+    
+    if (queryServices) {
+      const parts = queryServices.split(',').filter(s => ['api_pt', 'wap_pt', 'cloud_security', 'ai_pt'].includes(s));
+      if (parts.length > 0) {
+        setSelectedServices(parts);
+      }
+    } else if (queryService && ['api_pt', 'wap_pt', 'cloud_security', 'ai_pt'].includes(queryService)) {
+      setSelectedServices([queryService]);
     }
   }, [session, searchParams]);
 
@@ -59,6 +67,11 @@ function IntakeFormContent() {
     e.preventDefault();
     if (!session) {
       toast.error('You must be logged in to submit a request.');
+      return;
+    }
+
+    if (selectedServices.length === 0) {
+      toast.error('Please select at least one service type.');
       return;
     }
 
@@ -70,20 +83,39 @@ function IntakeFormContent() {
     setError('');
     setLoading(true);
 
-    const formData = new FormData();
-    Object.keys(form).forEach((key) => {
-      formData.set(key, form[key]);
-    });
-
     try {
-      const res = await submitServiceRequest(formData);
+      let succeededCount = 0;
+      let lastError = '';
+
+      for (const service of selectedServices) {
+        const formData = new FormData();
+        Object.keys(form).forEach((key) => {
+          if (key === 'service_type') {
+            formData.set('service_type', service);
+          } else {
+            formData.set(key, form[key]);
+          }
+        });
+        formData.set('service_type', service);
+
+        const res = await submitServiceRequest(formData);
+        if (res.success) {
+          succeededCount++;
+        } else {
+          lastError = res.error || 'Failed to submit request for one of the services.';
+        }
+      }
+
       setLoading(false);
-      if (res.success) {
+      if (succeededCount === selectedServices.length) {
         setSubmitted(true);
-        toast.success(res.message);
+        toast.success(`Successfully submitted ${succeededCount} scoping request(s)!`);
+      } else if (succeededCount > 0) {
+        setSubmitted(true);
+        toast.warning(`Submitted ${succeededCount} of ${selectedServices.length} requests. Error: ${lastError}`);
       } else {
-        setError(res.error || 'Failed to submit request.');
-        toast.error(res.error || 'Failed to submit request.');
+        setError(lastError || 'Failed to submit scoping requests.');
+        toast.error(lastError || 'Failed to submit scoping requests.');
       }
     } catch (err) {
       setLoading(false);
@@ -168,34 +200,65 @@ function IntakeFormContent() {
                     </div>
                   )}
 
-                  {/* Dropdowns */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      <label style={{ fontSize: 12, fontWeight: 600, color: '#94A3B8' }}>Service Type *</label>
-                      <select
-                        value={form.service_type}
-                        onChange={(e) => setForm({ ...form, service_type: e.target.value })}
-                        style={{ padding: '10px 12px', fontSize: 14, background: '#020617', border: '1px solid #1E293B', borderRadius: 8, color: '#F8FAFC', outline: 'none' }}
-                      >
-                        <option value="api_pt">API Pen Testing</option>
-                        <option value="wap_pt">Web App Pen Testing</option>
-                        <option value="cloud_security">Cloud Security Assessment</option>
-                        <option value="ai_pt">AI Pen Testing</option>
-                      </select>
+                  {/* Selected Services Multi-select Checkbox Grid */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, border: '1px solid #1E293B', padding: '16px', borderRadius: 12, background: 'rgba(99, 102, 241, 0.02)', marginBottom: 4 }}>
+                    <label style={{ fontSize: 12, fontWeight: 600, color: '#94A3B8' }}>Services to Assess *</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 4 }}>
+                      {[
+                        { id: 'api_pt', label: 'API Pen Testing' },
+                        { id: 'wap_pt', label: 'Web App Pen Testing' },
+                        { id: 'cloud_security', label: 'Cloud Assessment' },
+                        { id: 'ai_pt', label: 'AI Pen Testing' }
+                      ].map(s => {
+                        const active = selectedServices.includes(s.id);
+                        return (
+                          <div
+                            key={s.id}
+                            onClick={() => {
+                              setSelectedServices(prev =>
+                                prev.includes(s.id)
+                                  ? prev.filter(x => x !== s.id)
+                                  : [...prev, s.id]
+                              );
+                            }}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 10,
+                              padding: '10px 12px',
+                              background: active ? 'rgba(99, 102, 241, 0.08)' : '#020617',
+                              border: `1px solid ${active ? '#6366F1' : '#1E293B'}`,
+                              borderRadius: 8,
+                              cursor: 'pointer',
+                              userSelect: 'none',
+                              transition: 'all 0.2s',
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={active}
+                              readOnly
+                              style={{ cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: 13, fontWeight: 500, color: active ? '#F8FAFC' : '#94A3B8' }}>{s.label}</span>
+                          </div>
+                        );
+                      })}
                     </div>
+                  </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      <label style={{ fontSize: 12, fontWeight: 600, color: '#94A3B8' }}>Engagement Type *</label>
-                      <select
-                        value={form.engagement_type}
-                        onChange={(e) => setForm({ ...form, engagement_type: e.target.value })}
-                        style={{ padding: '10px 12px', fontSize: 14, background: '#020617', border: '1px solid #1E293B', borderRadius: 8, color: '#F8FAFC', outline: 'none' }}
-                      >
-                        <option value="black_box">Black Box (External)</option>
-                        <option value="grey_box">Grey Box (Partial Credentials)</option>
-                        <option value="white_box">White Box (Full Code Review)</option>
-                      </select>
-                    </div>
+                  {/* Dropdowns */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <label style={{ fontSize: 12, fontWeight: 600, color: '#94A3B8' }}>Engagement Type *</label>
+                    <select
+                      value={form.engagement_type}
+                      onChange={(e) => setForm({ ...form, engagement_type: e.target.value })}
+                      style={{ padding: '10px 12px', fontSize: 14, background: '#020617', border: '1px solid #1E293B', borderRadius: 8, color: '#F8FAFC', outline: 'none' }}
+                    >
+                      <option value="black_box">Black Box (External)</option>
+                      <option value="grey_box">Grey Box (Partial Credentials)</option>
+                      <option value="white_box">White Box (Full Code Review)</option>
+                    </select>
                   </div>
 
                   {/* Target Environment */}

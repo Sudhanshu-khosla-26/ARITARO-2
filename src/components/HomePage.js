@@ -81,6 +81,21 @@ function BlendedHeroVideo({ theme }) {
           pointerEvents: 'none',
         }}
       />
+      {/* Grok logo cover mask */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: 120,
+          height: 48,
+          background: theme === 'light'
+            ? 'linear-gradient(135deg, transparent, rgba(245,247,250,0.98) 75%)'
+            : 'linear-gradient(135deg, transparent, rgba(5,7,13,0.98) 75%)',
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
     </div>
   );
 }
@@ -519,7 +534,7 @@ export default function HomePage() {
             color: 'var(--hero-subtitle)', marginBottom: 34, maxWidth: 440,
           }}>
             AI-powered monitoring, detection, and response for a world of persistent threats.{" "}
-            <span style={{ color: 'var(--cyan-primary)', fontWeight: 600 }}>Zero-trust. Zero-compromise.</span>
+            <span style={{ color: 'var(--cyan-primary)', fontWeight: 600 }}>Absolute defense. Unmatched precision.</span>
           </p>
 
           {/* CTAs */}
@@ -600,6 +615,20 @@ export default function HomePage() {
           animationDelay: `${(i * 2.1) % 7}s`,
         }} />
       ))}
+
+      {/* Bottom fade/merge gradient layer */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 140,
+          background: 'linear-gradient(to bottom, transparent, var(--bg-base) 92%)',
+          zIndex: 8,
+          pointerEvents: 'none',
+        }}
+      />
 
       <style>{`
         @media (max-width: 860px) {

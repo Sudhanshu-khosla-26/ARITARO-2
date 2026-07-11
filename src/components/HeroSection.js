@@ -149,20 +149,20 @@ export default function HeroSection() {
           </div> */}
 				{/* </div> */}
 
-				{/* Main heading */}
 				<div
 					style={{
 						position: "relative",
-						display: "inline-block",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
 						marginBottom: 24,
 						borderRadius: 16,
 						background: "rgba(255, 255, 255, 0.05)",
-						// border: "1px solid rgba(255, 255, 255, 0.1)",
-						// boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
 						boxShadow:
 							"inset 2px 2px 12px rgba(255, 255, 255, 0.2), inset -2px -2px 12px rgba(255, 255, 255, 0.2)",
 						backdropFilter: "blur(2px)",
 						WebkitBackdropFilter: "blur(2px)",
+						padding: "16px 36px",
 					}}
 				>
 					{/* Sharp text on top */}
@@ -180,12 +180,23 @@ export default function HeroSection() {
 							WebkitTextFillColor: "transparent",
 							backgroundClip: "text",
 							color: "transparent",
-							padding: "16px 36px",
 							margin: 0,
 						}}
 					>
 						ARITARO
 					</h1>
+					<span
+						style={{
+							fontSize: "clamp(9px, 1.2vw, 11px)",
+							fontWeight: 600,
+							letterSpacing: "0.22em",
+							color: "rgba(255, 255, 255, 0.55)",
+							marginTop: 6,
+							textTransform: "uppercase",
+						}}
+					>
+						Advance Security Solutions
+					</span>
 				</div>
 
 				{/*SUB HEADING*/}
@@ -326,8 +337,22 @@ export default function HeroSection() {
 						</span>
 					))}
 				</div>
-				<CertificationBadges />
+				{/* <CertificationBadges /> */}
 			</div>
+
+			{/* Bottom fade/merge gradient layer to blend into next section */}
+			<div
+				style={{
+					position: "absolute",
+					bottom: 0,
+					left: 0,
+					right: 0,
+					height: 160,
+					background: "linear-gradient(to bottom, transparent, var(--bg-base) 92%)",
+					zIndex: 1,
+					pointerEvents: "none",
+				}}
+			/>
 		</section>
 	);
 }

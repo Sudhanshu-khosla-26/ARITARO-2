@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function WhatsAppWidget() {
   const [hovered, setHovered] = useState(false);
-  const phoneNumber = '919999999999'; // Replace with actual WhatsApp number
+  const phoneNumber = '919625894393'; // Replace with actual WhatsApp number
   const message = encodeURIComponent('Hi Aritaro! I\'m interested in learning about your penetration testing services.');
 
   return (

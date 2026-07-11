@@ -13,7 +13,7 @@ const contactMethods = [
       </svg>
     ),
     label: 'Call Us',
-    value: '+91 99999 99999',
+    value: '+91 96258 94393',
     sub: 'Mon–Sat, 9AM–7PM IST',
   },
   {
