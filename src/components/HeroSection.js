@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import FloatingLines from "./FloatingLines";
 import CertificationBadges from "./CertificationBadges";
 
@@ -68,6 +69,18 @@ export default function HeroSection() {
 		return () => ctx.revert();
 	}, []);
 
+	/* ── scroll transitions ── */
+	const prefersReducedMotion = useReducedMotion();
+	const { scrollYProgress } = useScroll({
+		target: sectionRef,
+		offset: ["start start", "end start"],
+	});
+
+	// Ease-out function approximating cubic-bezier(0.16, 1, 0.3, 1)
+	const backgroundOpacity = useTransform(scrollYProgress, [0.3, 1], [1, 0], {
+		ease: (t) => 1 - Math.pow(1 - t, 4)
+	});
+
 	return (
 		<section
 			id="hero"
@@ -88,12 +101,15 @@ export default function HeroSection() {
 			}}
 		>
 			{/* FloatingLines — fills the full section as a background */}
-			<div
+			<motion.div
 				style={{
 					position: "absolute",
 					inset: 0,
 					zIndex: 0,
 					pointerEvents: "none",
+					WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+					maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+					opacity: prefersReducedMotion ? 1 : backgroundOpacity,
 				}}
 			>
 				<FloatingLines
@@ -113,9 +129,10 @@ export default function HeroSection() {
 					mixBlendMode={isLight ? "normal" : "screen"}
 					backgroundColor={isLight ? "#ffffff" : "#000000"}
 				/>
-			</div>
+			</motion.div>
 
-			{/* Subtle grid texture above lines */}
+
+			{/* Subtle grid texture above lines and fade overlay */}
 			<div
 				className="cyber-grid"
 				style={{
@@ -340,19 +357,6 @@ export default function HeroSection() {
 				{/* <CertificationBadges /> */}
 			</div>
 
-			{/* Bottom fade/merge gradient layer to blend into next section */}
-			<div
-				style={{
-					position: "absolute",
-					bottom: 0,
-					left: 0,
-					right: 0,
-					height: 160,
-					background: "linear-gradient(to bottom, transparent, var(--bg-base) 92%)",
-					zIndex: 1,
-					pointerEvents: "none",
-				}}
-			/>
 		</section>
 	);
 }

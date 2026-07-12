@@ -99,7 +99,7 @@ export async function PATCH(request, { params }) {
 								<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
 									<h2 style="color: #4f46e5; margin-top: 0;">Security Report Released</h2>
 									<p>Hello ${clientUser.name},</p>
-									<p>A new security assessment report has been completed and released to your CipherShield portal.</p>
+									<p>A new security assessment report has been completed and released to your aritaro portal.</p>
 									<table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
 										<tr>
 											<td style="padding: 8px 0; font-weight: bold; width: 150px;">Ticket Ref:</td>

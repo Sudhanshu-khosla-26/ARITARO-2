@@ -1,5 +1,5 @@
 # Aritaro Cybersecurity Services — Master Document
-### Website Content & AI Context | v2.0 | June 2026 | CipherShield
+### Website Content & AI Context | v2.0 | June 2026 | aritaro
 
 > **"We break your systems before attackers do."**
 > Expert API PT · Web App PT · Cloud Security · AI Penetration Testing — certified, transparent, trusted.
@@ -483,5 +483,5 @@ Privacy Policy (DPDP Act + GDPR), Terms of Service (scope, liability, IP), Respo
 
 ---
 
-*Aritaro Master Document v2.0 — Prepared by CipherShield Strategy Team — June 2026*
-*© 2026 CipherShield / Aritaro. All Rights Reserved. Confidential.*
+*Aritaro Master Document v2.0 — Prepared by aritaro Strategy Team — June 2026*
+*© 2026 aritaro / Aritaro. All Rights Reserved. Confidential.*

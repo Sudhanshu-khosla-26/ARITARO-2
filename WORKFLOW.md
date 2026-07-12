@@ -1,6 +1,6 @@
-# Aritaro / CipherShield Platform — Working Model & Workflows
+# Aritaro / aritaro Platform — Working Model & Workflows
 
-This document outlines the architecture, database models, user workflows, and identified issues for the Aritaro / CipherShield platform. It serves as a working model blueprint before making changes.
+This document outlines the architecture, database models, user workflows, and identified issues for the Aritaro / aritaro platform. It serves as a working model blueprint before making changes.
 
 ---
 

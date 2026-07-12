@@ -126,7 +126,7 @@ export async function POST(request, { params }) {
 				cloudinary.uploader.upload_stream(
 					{
 						resource_type: "raw",
-						folder: "ciphershield_reports",
+						folder: "aritaro_reports",
 						public_id: `${Date.now()}-${file.name.split(".")[0].replace(/[^a-zA-Z0-9\-_]/g, "")}`,
 					},
 					(error, result) => {

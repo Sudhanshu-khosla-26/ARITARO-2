@@ -80,7 +80,7 @@ const reasons = [
       </svg>
     ),
     title: 'India-Focused Expertise',
-    stat: '500+',
+    stat: '20+',
     statLabel: 'Organizations Served',
     desc: "Deep knowledge of India's regulatory landscape, threat environment, and business context — not a global template.",
     tags: ['Made in India', 'Local Expertise', 'MSME'],
@@ -449,7 +449,7 @@ export default function WhyChooseUs() {
               color: 'var(--text-primary)',
               marginBottom: 4,
             }}>
-              Trusted by 500+ organizations across India
+              Trusted by 20+ organizations across India
             </div>
             <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
               From startups to Fortune 500 companies and government agencies

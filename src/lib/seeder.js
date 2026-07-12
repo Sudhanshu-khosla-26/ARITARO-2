@@ -211,11 +211,11 @@ export async function seedDatabase() {
 
 	const userCount = await User.countDocuments({ role: "admin" });
 	if (userCount === 0) {
-		const adminEmail = process.env.ADMIN_EMAIL || "admin@ciphershield.com";
+		const adminEmail = process.env.ADMIN_EMAIL || "admin@aritaro.com";
 		const adminPassword = process.env.ADMIN_PASSWORD || "Admin@123";
 
 		await User.create({
-			name: "CipherShield Admin",
+			name: "aritaro Admin",
 			email: adminEmail,
 			password: adminPassword,
 			role: "admin",

@@ -8,7 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const STATS = [
-  { value: '500+', label: 'Enterprise Clients' },
+  { value: '20+', label: 'Enterprise Clients' },
   { value: '99.9%', label: 'Threat Detection' },
   { value: '< 2ms', label: 'Response Time' },
 ];
@@ -209,10 +209,11 @@ export default function AboutSection() {
             }}>
               <div style={{
                 fontFamily: 'var(--font-orbitron), monospace',
-                fontSize: 18, fontWeight: 800,
-                color: '#818CF8', lineHeight: 1, marginBottom: 4,
+                fontSize: 'clamp(28px,3vw,38px)', fontWeight: 900,
+                color: '#6366F1', letterSpacing: '-1px',
+                lineHeight: 1, marginBottom: 4,
               }}>
-                500+
+                20+
               </div>
               <div style={{
                 fontFamily: 'var(--font-space-grotesk), Inter, sans-serif',

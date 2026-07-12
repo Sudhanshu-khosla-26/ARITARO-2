@@ -553,7 +553,7 @@ export default function HomePage() {
             paddingTop: 26, borderTop: '1px solid rgba(0,180,255,0.12)', width: '100%',
           }}>
             {[
-              { v: '500+',   l: 'Clients Protected', c: '#6366F1' },
+              { v: '20+',   l: 'Clients Protected', c: '#6366F1' },
               { v: '99.9%',  l: 'Detection Rate',    c: '#818CF8' },
               { v: '< 2ms',  l: 'Threat Response',   c: '#00FF9C' },
               { v: '24/7',   l: 'SOC Monitoring',    c: '#6366F1' },
@@ -623,8 +623,8 @@ export default function HomePage() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: 140,
-          background: 'linear-gradient(to bottom, transparent, var(--bg-base) 92%)',
+          height: 250,
+          background: 'linear-gradient(to bottom, transparent, var(--bg-base) 100%)',
           zIndex: 8,
           pointerEvents: 'none',
         }}
