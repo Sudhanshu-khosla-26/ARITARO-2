@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { submitContact } from "@/actions/contact.actions";
 import { toast } from "sonner";
 
@@ -34,6 +35,9 @@ function getInputStyle(focused, fieldName) {
 export function ContactForm() {
 	const [loading, setLoading] = useState(false);
 	const [focused, setFocused] = useState("");
+	const searchParams = useSearchParams();
+	const defaultSubject = searchParams.get("subject") || "";
+	const defaultMessage = searchParams.get("message") || "";
 
 	async function handleSubmit(e) {
 		e.preventDefault();
@@ -154,6 +158,7 @@ export function ContactForm() {
 					name="subject"
 					type="text"
 					placeholder="What is this about?"
+					defaultValue={defaultSubject}
 					required
 					style={getInputStyle(focused, "subject")}
 					onFocus={() => setFocused("subject")}
@@ -173,6 +178,7 @@ export function ContactForm() {
 					name="message"
 					rows={5}
 					placeholder="Tell us more about your inquiry..."
+					defaultValue={defaultMessage}
 					required
 					style={{
 						...getInputStyle(focused, "message"),

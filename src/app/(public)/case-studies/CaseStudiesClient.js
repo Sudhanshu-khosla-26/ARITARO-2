@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 import WhatsAppWidget from '@/components/WhatsAppWidget';
+import { listCaseStudies } from '@/actions/admin.actions';
 
 const CASES = [
   {
@@ -61,6 +63,22 @@ const CASES = [
 ];
 
 export default function CaseStudiesClient() {
+  const [casesList, setCasesList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      const res = await listCaseStudies();
+      if (res.success && res.cases && res.cases.length > 0) {
+        setCasesList(res.cases.filter(c => c.isPublished));
+      } else {
+        setCasesList(CASES);
+      }
+      setLoading(false);
+    }
+    loadData();
+  }, []);
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }}>
 
@@ -76,24 +94,28 @@ export default function CaseStudiesClient() {
 
       {/* Cases */}
       <section style={{ padding: '20px 24px 64px' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
-          {CASES.map((c, i) => (
+        <div className="case-studies-grid" style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(325px, 1fr))', gap: 20 }}>
+          {casesList.map((c, i) => (
             <div key={i} style={{
-              padding: '32px', background: 'var(--bg-surface)',
-              border: '1px solid var(--border-subtle)', borderRadius: 18,
+              padding: '22px 20px', background: 'var(--bg-surface)',
+              border: '1px solid var(--border-subtle)', borderRadius: 12,
               transition: 'all 0.2s ease',
               borderLeft: `4px solid ${c.color}`,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
             }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${c.color}60`; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-subtle)'; e.currentTarget.style.borderLeftColor = c.color; }}
             >
-              {/* Header */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 9999, background: `${c.color}12`, color: c.color, border: `1px solid ${c.color}25` }}>
-                  {c.industry}
-                </span>
-                <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>{c.type}</span>
-              </div>
+              <div>
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 9999, background: `${c.color}12`, color: c.color, border: `1px solid ${c.color}25` }}>
+                    {c.industry}
+                  </span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>{c.type}</span>
+                </div>
 
               {/* Challenge */}
               <p style={{ fontSize: 15, color: 'var(--text-primary)', lineHeight: 1.65, marginBottom: 16, fontWeight: 500 }}>
@@ -118,6 +140,7 @@ export default function CaseStudiesClient() {
                 <h3 style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: c.color, marginBottom: 6 }}>Business Impact</h3>
                 <p style={{ fontSize: 13, color: 'var(--text-primary)', lineHeight: 1.5 }}>{c.impact}</p>
               </div>
+            </div>
 
               {/* Stats */}
               <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
@@ -137,10 +160,9 @@ export default function CaseStudiesClient() {
       <section style={{ padding: '64px 24px', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
         <div style={{ maxWidth: 600, margin: '0 auto' }}>
           <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 14 }}>Want results like these?</h2>
-          <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 28 }}>Book a free 30-minute scoping call. No sales pressure.</p>
+          <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 28 }}>Book a 30-minute scoping call. No sales pressure.</p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/#contact" className="btn-primary" style={{ fontSize: 14, padding: '14px 28px', textDecoration: 'none' }}>Book Free Assessment</Link>
-            <Link href="/" className="btn-ghost" style={{ fontSize: 14, padding: '14px 28px', textDecoration: 'none' }}>← Back to Home</Link>
+            <Link href="/#contact" className="btn-primary" style={{ fontSize: 14, padding: '14px 28px', textDecoration: 'none' }}>Request Assessment</Link>
           </div>
         </div>
       </section>

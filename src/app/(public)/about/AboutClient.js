@@ -366,11 +366,10 @@ export default function AboutPage() {
 							marginBottom: 28,
 						}}
 					>
-						Book a free 30-minute scoping call. No sales pressure — just expert
-						insights.
+						We are always looking for exceptional security researchers, penetration testers, and software engineers. Explore our open roles and apply to join our mission.
 					</p>
 					<Link
-						href="/#contact"
+						href="/careers"
 						className="btn-primary"
 						style={{
 							fontSize: 14,
@@ -378,29 +377,10 @@ export default function AboutPage() {
 							textDecoration: "none",
 						}}
 					>
-						Book Free Assessment
+						View Open Careers
 					</Link>
 				</div>
 			</section>
-
-			<div style={{ textAlign: "center", padding: "32px 24px 48px" }}>
-				<Link
-					href="/"
-					style={{
-						fontSize: 14,
-						color: "var(--text-muted)",
-						textDecoration: "none",
-						padding: "12px 24px",
-						border: "1px solid var(--border-subtle)",
-						borderRadius: 10,
-						display: "inline-flex",
-						alignItems: "center",
-						gap: 8,
-					}}
-				>
-					← Back to Home
-				</Link>
-			</div>
 
 			<WhatsAppWidget />
 

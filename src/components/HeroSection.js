@@ -37,15 +37,9 @@ export default function HeroSection() {
 			gsap
 				.timeline({ delay: 0.15 })
 				.fromTo(
-					labelRef.current,
-					{ y: 20, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
-				)
-				.fromTo(
 					headingRef.current,
 					{ y: 32, opacity: 0 },
 					{ y: 0, opacity: 1, duration: 0.7, ease: "power2.out" },
-					"-=0.3",
 				)
 				.fromTo(
 					subRef.current,
@@ -60,9 +54,9 @@ export default function HeroSection() {
 					"-=0.3",
 				)
 				.fromTo(
-					trustRef.current,
+					".trust-item",
 					{ y: 12, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
+					{ y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 },
 					"-=0.25",
 				);
 		}, sectionRef);
@@ -76,9 +70,38 @@ export default function HeroSection() {
 		offset: ["start start", "end start"],
 	});
 
-	// Ease-out function approximating cubic-bezier(0.16, 1, 0.3, 1)
-	const backgroundOpacity = useTransform(scrollYProgress, [0.3, 1], [1, 0], {
-		ease: (t) => 1 - Math.pow(1 - t, 4)
+	// Exact cubic-bezier(0.16, 1, 0.3, 1) evaluator solver
+	const cubicBezier = (x1, y1, x2, y2) => {
+		return (x) => {
+			if (x <= 0) return 0;
+			if (x >= 1) return 1;
+			let t = x;
+			for (let i = 0; i < 8; i++) {
+				const cx = 3 * (1 - t) * (1 - t) * t * x1 + 3 * (1 - t) * t * t * x2 + t * t * t;
+				const dx = 3 * (1 - t) * (1 - t) * x1 + 6 * (1 - t) * t * (x2 - x1) + 3 * t * t * (1 - x2);
+				if (Math.abs(cx - x) < 1e-5) break;
+				t -= (cx - x) / (dx || 1);
+			}
+			return 3 * (1 - t) * (1 - t) * t * y1 + 3 * (1 - t) * t * t * y2 + t * t * t;
+		};
+	};
+	const easeOutExpo = cubicBezier(0.16, 1, 0.3, 1);
+
+	// Tie background wrapper opacity to scroll progress using custom easeOutExpo solver
+	const backgroundOpacity = useTransform(scrollYProgress, (progress) => {
+		if (progress <= 0) return 1;
+		if (progress >= 0.85) return 0;
+		const normalized = progress / 0.85;
+		const eased = easeOutExpo(normalized);
+		return 1 - eased;
+	});
+
+	// Tie background wrapper y-offset (parallax) to scroll progress
+	const backgroundY = useTransform(scrollYProgress, (progress) => {
+		if (progress <= 0) return "0%";
+		if (progress >= 1) return "15%";
+		const eased = easeOutExpo(progress);
+		return `${eased * 15}%`;
 	});
 
 	return (
@@ -93,32 +116,34 @@ export default function HeroSection() {
 				alignItems: "center",
 				textAlign: "center",
 				padding: "140px 32px 80px",
-				background: isLight
-					? "#ffffff"
-					: "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59,130,246,0.1) 0%, transparent 60%), var(--bg-base)",
+				background: isLight ? "#ffffff" : "var(--bg-base)",
 				position: "relative",
 				overflow: "hidden",
 			}}
 		>
-			{/* FloatingLines — fills the full section as a background */}
+			{/* FloatingLines & Radial Gradient Wrapper — fills the full section as a background */}
 			<motion.div
 				style={{
 					position: "absolute",
 					inset: 0,
 					zIndex: 0,
 					pointerEvents: "none",
-					WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
-					maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+					background: isLight
+						? "#ffffff"
+						: "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59,130,246,0.1) 0%, transparent 60%)",
+					WebkitMaskImage: "linear-gradient(to bottom, black calc(100% - 250px), transparent 100%)",
+					maskImage: "linear-gradient(to bottom, black calc(100% - 250px), transparent 100%)",
 					opacity: prefersReducedMotion ? 1 : backgroundOpacity,
+					y: prefersReducedMotion ? "0%" : backgroundY,
 				}}
 			>
 				<FloatingLines
 					linesGradient={[
-						"#22d3ee",
-						"#3b82f6",
-						"#6366f1",
-						"#3b82f6",
-						"#22d3ee",
+						"#1E3A8A", // deep blue
+						"#2563EB", // royal blue
+						"#3b82f6", // lighter blue
+						"#1E3A8A", // deep blue
+						"#22d3ee", // cyan accent (sparing)
 					]}
 					enabledWaves={["top", "middle", "bottom"]}
 					lineCount={[4, 6, 4]}
@@ -128,6 +153,7 @@ export default function HeroSection() {
 					parallax={false}
 					mixBlendMode={isLight ? "normal" : "screen"}
 					backgroundColor={isLight ? "#ffffff" : "#000000"}
+					opacity={0.6}
 				/>
 			</motion.div>
 
@@ -152,6 +178,7 @@ export default function HeroSection() {
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
+					marginTop: -55,
 				}}
 			>
 				{/* Section label */}
@@ -215,24 +242,6 @@ export default function HeroSection() {
 						Advance Security Solutions
 					</span>
 				</div>
-
-				{/*SUB HEADING*/}
-				{/* <h2
-					style={{
-						fontSize: "clamp(1vx, 2vw, 4vw)",
-            fontStyle: "italic",
-						fontWeight: 500,
-						lineHeight: 1.1,
-						color: "var(--text-primary)",
-						maxWidth: 800,
-						marginBottom: 24,
-						textShadow: isLight
-							? "none"
-							: "0 2px 20px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.5)",
-					}}
-				>
-					ARITARO
-				</h2> */}
 
 				{/* Subtitle */}
 				<p
@@ -327,35 +336,67 @@ export default function HeroSection() {
 					}}
 				>
 					{["ISO 27001", "Google Certified", "Global Ready"].map((item, i) => (
-						<span
-							key={i}
-							style={{
-								fontSize: 12,
-								color: "var(--text-muted)",
-								letterSpacing: "0.05em",
-								textTransform: "uppercase",
-								display: "flex",
-								alignItems: "center",
-								gap: 6,
-							}}
-						>
+						<div key={i} style={{ display: "flex", alignItems: "center" }}>
 							{i > 0 && (
 								<span
 									style={{
-										width: 3,
-										height: 3,
-										borderRadius: "50%",
+										width: 1,
+										height: 14,
 										background: "var(--border-subtle)",
-										marginRight: 4,
+										marginRight: "clamp(16px, 4vw, 40px)",
 									}}
 								/>
 							)}
-							{item}
-						</span>
+							<span
+								className="trust-item"
+								style={{
+									fontSize: 12,
+									color: "var(--text-muted)",
+									letterSpacing: "0.05em",
+									textTransform: "uppercase",
+									display: "flex",
+									alignItems: "center",
+									gap: 8,
+								}}
+							>
+								{item === "ISO 27001" && (
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+								)}
+								{item === "Google Certified" && (
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12.08V12a10 10 0 1 0-10 10 10.05 10.05 0 0 0 7.37-3.15"></path><polyline points="12 12 16 16"></polyline></svg>
+								)}
+								{item === "Global Ready" && (
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+								)}
+								{item}
+							</span>
+						</div>
 					))}
 				</div>
-				{/* <CertificationBadges /> */}
 			</div>
+
+			{/* Scroll Cue Chevron */}
+			<motion.div
+				initial={{ opacity: 0, y: -10 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: 1 }}
+				style={{
+					position: "absolute",
+					bottom: 32,
+					zIndex: 3,
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					gap: 8,
+					color: "var(--text-muted)",
+					opacity: 0.7,
+				}}
+			>
+				<span style={{ fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>Scroll</span>
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+					<polyline points="6 9 12 15 18 9"></polyline>
+				</svg>
+			</motion.div>
 
 		</section>
 	);

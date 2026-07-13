@@ -122,12 +122,14 @@ export async function POST(request, { params }) {
 			fs.writeFileSync(destination, buffer);
 			fileUrl = `/uploads/reports/${sanitizedFilename}`;
 		} else {
+			const extension = file.name.split(".").pop().toLowerCase();
+			const sanitizedBaseName = file.name.split(".")[0].replace(/[^a-zA-Z0-9\-_]/g, "");
 			const uploadResult = await new Promise((resolve, reject) => {
 				cloudinary.uploader.upload_stream(
 					{
-						resource_type: "raw",
+						resource_type: extension === "pdf" ? "image" : "raw",
 						folder: "aritaro_reports",
-						public_id: `${Date.now()}-${file.name.split(".")[0].replace(/[^a-zA-Z0-9\-_]/g, "")}`,
+						public_id: `${Date.now()}-${sanitizedBaseName}.${extension}`,
 					},
 					(error, result) => {
 						if (error) reject(error);

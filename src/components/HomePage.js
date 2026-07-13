@@ -537,13 +537,12 @@ export default function HomePage() {
             <span style={{ color: 'var(--cyan-primary)', fontWeight: 600 }}>Absolute defense. Unmatched precision.</span>
           </p>
 
-          {/* CTAs */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 42 }}>
-            <button className="btn-primary" style={{ fontSize: 11, padding: '14px 32px' }}>
-              START FREE AUDIT &nbsp;→
+            <button className="btn-primary" style={{ fontSize: 11, padding: '14px 32px' }} onClick={() => { const el = document.querySelector('#services'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>
+              REQUEST ASSESSMENT &nbsp;→
             </button>
-            <button className="btn-outline" style={{ fontSize: 11, padding: '13px 31px' }}>
-              WATCH DEMO &nbsp;▶
+            <button className="btn-outline" style={{ fontSize: 11, padding: '13px 31px' }} onClick={() => { const el = document.querySelector('#about'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>
+              LEARN MORE &nbsp;▶
             </button>
           </div>
 

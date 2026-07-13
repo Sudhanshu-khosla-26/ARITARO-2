@@ -1,5 +1,5 @@
 import connectDB from "@/lib/db";
-import { User, Service } from "@/models";
+import { User, Service, CaseStudy, JobOpportunity } from "@/models";
 
 const DEFAULT_SERVICES = [
 	{
@@ -205,6 +205,96 @@ const DEFAULT_SERVICES = [
 	},
 ];
 
+const DEFAULT_CASES = [
+	{
+		industry: "FinTech",
+		type: "API Penetration Testing",
+		challenge: "A Series-B funded Indian FinTech with 2M+ users needed to validate API security ahead of RBI compliance audit.",
+		findings: [
+			"4 Critical IDOR vulnerabilities exposing user financial data",
+			"2 High severity auth bypass via JWT confusion",
+			"Broken rate limiting allowing account enumeration",
+		],
+		impact: "All critical findings remediated within 5 business days. Successfully passed RBI compliance audit.",
+		stats: { vulns: "14", critical: "4", remediation: "5 days" },
+		color: "#3B82F6",
+		isPublished: true,
+	},
+	{
+		industry: "HealthTech",
+		type: "Web App + Cloud Security",
+		challenge: "A healthcare platform processing sensitive patient data needed HIPAA-aligned security testing before US market launch.",
+		findings: [
+			"Stored XSS in patient messaging module",
+			"S3 buckets with PHI accessible via object enumeration",
+			"Over-privileged IAM roles with admin-level access",
+		],
+		impact: "Successfully secured the platform for US launch. 0 security incidents reported post-remediation.",
+		stats: { vulns: "22", critical: "6", remediation: "8 days" },
+		color: "#6366F1",
+		isPublished: true,
+	},
+	{
+		industry: "E-Commerce",
+		type: "Web Application PT",
+		challenge: "A rapidly growing e-commerce platform with ₹50Cr+ GMV needed pen testing after observing suspicious API behaviour.",
+		findings: [
+			"Price manipulation via cart API — discounts applied without valid coupon codes",
+			"Mass assignment allowing users to modify order status",
+			"Admin panel accessible via URL enumeration",
+		],
+		impact: "Prevented potential ₹2Cr+ in fraudulent transactions. Admin panel hardened with MFA.",
+		stats: { vulns: "18", critical: "3", remediation: "7 days" },
+		color: "#818CF8",
+		isPublished: true,
+	},
+	{
+		industry: "SaaS / AI",
+		type: "AI Penetration Testing",
+		challenge: "An AI SaaS startup deploying an LLM-powered customer support agent needed to verify guardrails before enterprise rollout.",
+		findings: [
+			"System prompt extraction via multi-turn role-play attack",
+			"RAG poisoning allowing injection of malicious knowledge base entries",
+			"Excessive tool permissions enabling data exfiltration via function calling",
+		],
+		impact: "Guardrails strengthened, tool permissions scoped. Successfully onboarded 3 enterprise clients post-assessment.",
+		stats: { vulns: "9", critical: "5", remediation: "10 days" },
+		color: "#A855F7",
+		isPublished: true,
+	},
+];
+
+const DEFAULT_ROLES = [
+	{
+		title: "API Penetration Tester",
+		department: "Offensive Security",
+		location: "Remote / India",
+		type: "Full-Time",
+		isPublished: true,
+	},
+	{
+		title: "Web Application Pentester",
+		department: "Offensive Security",
+		location: "Remote / India",
+		type: "Full-Time",
+		isPublished: true,
+	},
+	{
+		title: "Cloud Security Assessment Lead",
+		department: "Offensive Security",
+		location: "Remote",
+		type: "Full-Time",
+		isPublished: true,
+	},
+	{
+		title: "AI/LLM Security Researcher",
+		department: "Research & Development",
+		location: "Remote",
+		type: "Full-Time",
+		isPublished: true,
+	}
+];
+
 export async function seedDatabase() {
 	const conn = await connectDB();
 	if (!conn) return;
@@ -229,5 +319,17 @@ export async function seedDatabase() {
 	if (serviceCount === 0) {
 		await Service.insertMany(DEFAULT_SERVICES);
 		console.log("✅ Default services seeded");
+	}
+
+	const caseCount = await CaseStudy.countDocuments();
+	if (caseCount === 0) {
+		await CaseStudy.insertMany(DEFAULT_CASES);
+		console.log("✅ Default case studies seeded");
+	}
+
+	const jobCount = await JobOpportunity.countDocuments();
+	if (jobCount === 0) {
+		await JobOpportunity.insertMany(DEFAULT_ROLES);
+		console.log("✅ Default job opportunities seeded");
 	}
 }

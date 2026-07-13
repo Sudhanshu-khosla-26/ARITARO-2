@@ -202,6 +202,9 @@ function SpringTiltCard({ service, cardRef: externalRef }) {
         transformStyle: 'preserve-3d',
         overflow: 'hidden',
         boxShadow: 'var(--service-card-shadow)',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
         /* border transition handled by CSS class */
       }}
       className="s-card"
@@ -234,37 +237,39 @@ function SpringTiltCard({ service, cardRef: externalRef }) {
       }} />
 
       {/* Card content */}
-      <div style={{ position: 'relative', zIndex: 1 }}>
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
 
-        {/* Number badge */}
-        <span style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 9, fontWeight: 700,
-          color: 'rgba(99,102,241,0.35)',
-          letterSpacing: '1px',
-          display: 'block',
-          marginBottom: 12,
-        }}>
-          {service.number}
-        </span>
+        {/* Top row: Icon & Number */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+          {/* Icon */}
+          <div
+            className="s-icon"
+            style={{
+              width: 44, height: 44,
+              borderRadius: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: service.color,
+              background: 'rgba(99,102,241,0.07)',
+              border: '1px solid rgba(99,102,241,0.15)',
+              transition: 'all 0.35s ease',
+            }}
+          >
+            {service.icon}
+          </div>
 
-        {/* Icon */}
-        <div
-          className="s-icon"
-          style={{
-            width: 44, height: 44,
-            borderRadius: 10,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: service.color,
-            background: 'rgba(99,102,241,0.07)',
-            border: '1px solid rgba(99,102,241,0.15)',
-            marginBottom: 16,
-            transition: 'all 0.35s ease',
-          }}
-        >
-          {service.icon}
+          {/* Number badge */}
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: 10, fontWeight: 700,
+            color: 'var(--text-muted)',
+            letterSpacing: '1px',
+            opacity: 0.5,
+            marginTop: 4,
+          }}>
+            {service.number}
+          </span>
         </div>
 
         {/* Title */}
@@ -304,7 +309,7 @@ function SpringTiltCard({ service, cardRef: externalRef }) {
 
         {/* Bottom accent line */}
         <div style={{
-          marginTop: 18, height: 1,
+          marginTop: 'auto', height: 1,
           background: 'linear-gradient(90deg, rgba(99,102,241,0.2), transparent 70%)',
           marginBottom: 14,
         }} />
@@ -421,7 +426,7 @@ export default function ServicesSection() {
       ref={sectionRef}
       style={{
         position: 'relative',
-        padding: '110px 0 120px',
+        padding: '64px 0',
         background: 'var(--bg-primary)',
         overflow: 'hidden',
       }}
@@ -491,8 +496,8 @@ export default function ServicesSection() {
             color: 'var(--text-muted)',
             fontSize: 16, lineHeight: 1.75,
           }}>
-            Expert penetration testing across APIs, web applications, cloud infrastructure, and AI systems 
-            certified, transparent, and built for India&apos;s most security-conscious enterprises.
+            Fast, actionable security assessments designed for modern engineering teams. 
+            No corporate fluff — just deep technical testing and clear remediation guidance.
           </p>
         </div>
 
@@ -502,7 +507,7 @@ export default function ServicesSection() {
             <a
               key={service.number}
               href={service.href}
-              style={{ textDecoration: 'none', color: 'inherit' }}
+              style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}
             >
               <SpringTiltCard
                 service={service}

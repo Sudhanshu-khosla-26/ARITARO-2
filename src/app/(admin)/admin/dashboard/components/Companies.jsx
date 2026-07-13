@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getCompanyDetail } from "@/actions/admin.actions";
 import { toast } from "sonner";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import FileUpload from "@/components/kokonutui/file-upload";
 
 const STAGES = [
 	"submitted",
@@ -40,6 +41,7 @@ export default function Companies({ clients, onSelectRequest }) {
 	const [uploading, setUploading] = useState(false);
 	const [file, setFile] = useState(null);
 	const [adminNotes, setAdminNotes] = useState("");
+	const [visibleReportsCount, setVisibleReportsCount] = useState(2);
 
 	useEffect(() => {
 		if (selectedCompanyId) {
@@ -249,7 +251,7 @@ export default function Companies({ clients, onSelectRequest }) {
 						</button>
 					</div>
 
-					<div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 24 }}>
+					<div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 24, alignItems: "start" }}>
 						{/* Left Column: Scope & Status details */}
 						<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 20 }}>
 							<h3 style={{ fontSize: 15, fontWeight: 700, color: "#F9FAFB", borderBottom: "1px solid #1C1F26", paddingBottom: 10, margin: 0 }}>Engagement Scope</h3>
@@ -357,20 +359,18 @@ export default function Companies({ clients, onSelectRequest }) {
 								
 								<form onSubmit={handleUploadReportLocal} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 									<div>
-										<label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#94A3B8", marginBottom: 6 }}>Select PDF Report Findings Draft</label>
-										<input
-											type="file"
-											accept=".pdf"
-											onChange={(e) => setFile(e.target.files?.[0] || null)}
-											style={{
-												width: "100%",
-												fontSize: 12.5,
-												color: "#CBD5E1",
-												background: "#020617",
-												border: "1px solid #1C1F26",
-												borderRadius: 8,
-												padding: 10,
-											}}
+										<label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#94A3B8", marginBottom: 6 }}>Select Report Findings Draft (PDF, Word, or PPT)</label>
+										<FileUpload
+											acceptedFileTypes={[
+												"application/pdf",
+												"application/msword",
+												"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+												"application/vnd.ms-powerpoint",
+												"application/vnd.openxmlformats-officedocument.presentationml.presentation"
+											]}
+											currentFile={file}
+											onUploadSuccess={(uploadedFile) => setFile(uploadedFile)}
+											onFileRemove={() => setFile(null)}
 										/>
 									</div>
 
@@ -425,111 +425,133 @@ export default function Companies({ clients, onSelectRequest }) {
 								) : requestReports.length === 0 ? (
 									<p style={{ color: "#6B7280", fontSize: 12 }}>No reports uploaded for this request yet.</p>
 								) : (
-									<div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-										{requestReports.map((rep) => (
-											<div
-												key={rep.id}
+									<div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+										<div style={{ display: "flex", flexDirection: "column", gap: 12, maxHeight: 380, overflowY: "auto", paddingRight: 4 }}>
+											{requestReports.slice(0, visibleReportsCount).map((rep) => (
+												<div
+													key={rep.id}
+													style={{
+														padding: 14,
+														background: "#151820",
+														border: "1px solid #1C1F26",
+														borderRadius: 12,
+														display: "flex",
+														flexDirection: "column",
+														gap: 10,
+													}}
+												>
+													<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+														<div>
+															<strong style={{ fontSize: 13, color: "#F9FAFB", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 200 }}>{rep.original_filename}</strong>
+															<span style={{ fontSize: 11, color: "#6B7280" }}>
+																v{rep.version} · Uploaded by {rep.uploaded_by?.name || "Admin"}
+															</span>
+														</div>
+														<a
+															href={rep.file_url}
+															target="_blank"
+															rel="noopener noreferrer"
+															style={{
+																fontSize: 12,
+																color: "#3B82F6",
+																fontWeight: 600,
+																textDecoration: "none",
+															}}
+														>
+															Open PDF
+														</a>
+													</div>
+
+													{rep.admin_notes && (
+														<p style={{ margin: 0, fontSize: 12, color: "#94A3B8", background: "rgba(255,255,255,0.01)", padding: 8, borderRadius: 6, border: "1px solid rgba(255,255,255,0.02)" }}>
+															Note: {rep.admin_notes}
+														</p>
+													)}
+
+													<div style={{ display: "flex", justifySelf: "flex-end", gap: 8, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 10 }}>
+														{rep.status === "draft" && (
+															<button
+																onClick={() => handleReportStatusChangeLocal(rep.id, "internal_review")}
+																style={{
+																	fontSize: 10.5,
+																	background: "rgba(99,102,241,0.1)",
+																	border: "1px solid rgba(99,102,241,0.2)",
+																	color: "#3B82F6",
+																	padding: "4px 8px",
+																	borderRadius: 4,
+																	cursor: "pointer",
+																	fontWeight: 600,
+																}}
+															>
+																Send to Internal QA
+															</button>
+														)}
+
+														{rep.status === "internal_review" && (
+															<button
+																onClick={() => handleReportStatusChangeLocal(rep.id, "approved")}
+																style={{
+																	fontSize: 10.5,
+																	background: "rgba(245,158,11,0.1)",
+																	border: "1px solid rgba(245,158,11,0.2)",
+																	color: "#F59E0B",
+																	padding: "4px 8px",
+																	borderRadius: 4,
+																	cursor: "pointer",
+																	fontWeight: 600,
+																}}
+															>
+																Approve Report
+															</button>
+														)}
+
+														{rep.status === "approved" && (
+															<button
+																onClick={() => handleReportStatusChangeLocal(rep.id, "released")}
+																style={{
+																	fontSize: 10.5,
+																	background: "rgba(16,185,129,0.1)",
+																	border: "1px solid rgba(16,185,129,0.2)",
+																	color: "#10B981",
+																	padding: "4px 8px",
+																	borderRadius: 4,
+																	cursor: "pointer",
+																	fontWeight: 700,
+																}}
+															>
+																Release findings to Client
+															</button>
+														)}
+
+														{rep.status === "released" && (
+															<span style={{ fontSize: 10.5, fontWeight: 700, color: "#10B981", background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.1)", padding: "2px 6px", borderRadius: 4 }}>
+																✓ RELEASED TO CLIENT
+															</span>
+														)}
+													</div>
+												</div>
+											))}
+										</div>
+										{requestReports.length > 2 && (
+											<button
+												type="button"
+												onClick={() => setVisibleReportsCount(prev => prev === 2 ? requestReports.length : 2)}
 												style={{
-													padding: 14,
-													background: "#151820",
-													border: "1px solid #1C1F26",
-													borderRadius: 12,
-													display: "flex",
-													flexDirection: "column",
-													gap: 10,
+													alignSelf: "center",
+													background: "transparent",
+													border: "none",
+													color: "#3B82F6",
+													fontSize: 12,
+													fontWeight: 600,
+													cursor: "pointer",
+													padding: "4px 8px",
+													marginTop: 8,
+													width: "fit-content"
 												}}
 											>
-												<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-													<div>
-														<strong style={{ fontSize: 13, color: "#F9FAFB", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 200 }}>{rep.original_filename}</strong>
-														<span style={{ fontSize: 11, color: "#6B7280" }}>
-															v{rep.version} · Uploaded by {rep.uploaded_by?.name || "Admin"}
-														</span>
-													</div>
-													<a
-														href={rep.file_url}
-														target="_blank"
-														rel="noopener noreferrer"
-														style={{
-															fontSize: 12,
-															color: "#3B82F6",
-															fontWeight: 600,
-															textDecoration: "none",
-														}}
-													>
-														Open PDF
-													</a>
-												</div>
-
-												{rep.admin_notes && (
-													<p style={{ margin: 0, fontSize: 12, color: "#94A3B8", background: "rgba(255,255,255,0.01)", padding: 8, borderRadius: 6, border: "1px solid rgba(255,255,255,0.02)" }}>
-														Note: {rep.admin_notes}
-													</p>
-												)}
-
-												<div style={{ display: "flex", justifySelf: "flex-end", gap: 8, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 10 }}>
-													{rep.status === "draft" && (
-														<button
-															onClick={() => handleReportStatusChangeLocal(rep.id, "internal_review")}
-															style={{
-																fontSize: 10.5,
-																background: "rgba(99,102,241,0.1)",
-																border: "1px solid rgba(99,102,241,0.2)",
-																color: "#3B82F6",
-																padding: "4px 8px",
-																borderRadius: 4,
-																cursor: "pointer",
-																fontWeight: 600,
-															}}
-														>
-															Send to Internal QA
-														</button>
-													)}
-
-													{rep.status === "internal_review" && (
-														<button
-															onClick={() => handleReportStatusChangeLocal(rep.id, "approved")}
-															style={{
-																fontSize: 10.5,
-																background: "rgba(245,158,11,0.1)",
-																border: "1px solid rgba(245,158,11,0.2)",
-																color: "#F59E0B",
-																padding: "4px 8px",
-																borderRadius: 4,
-																cursor: "pointer",
-																fontWeight: 600,
-															}}
-														>
-															Approve Report
-														</button>
-													)}
-
-													{rep.status === "approved" && (
-														<button
-															onClick={() => handleReportStatusChangeLocal(rep.id, "released")}
-															style={{
-																fontSize: 10.5,
-																background: "rgba(16,185,129,0.1)",
-																border: "1px solid rgba(16,185,129,0.2)",
-																color: "#10B981",
-																padding: "4px 8px",
-																borderRadius: 4,
-																cursor: "pointer",
-																fontWeight: 700,
-															}}
-														>
-															Release findings to Client
-														</button>
-													)}
-
-													{rep.status === "released" && (
-														<span style={{ fontSize: 10.5, fontWeight: 700, color: "#10B981", background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.1)", padding: "2px 6px", borderRadius: 4 }}>
-															✓ RELEASED TO CLIENT
-														</span>
-													)}
-												</div>
-											</div>
-										))}
+												{visibleReportsCount === 2 ? `Show All Versions (${requestReports.length})` : "Show Less"}
+											</button>
+										)}
 									</div>
 								)}
 							</div>

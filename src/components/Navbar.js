@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import GooeyNav from './GooeyNav';
 import { useSession } from 'next-auth/react';
 import { useCart } from './CartContext';
+import ProfileDropdown from './kokonutui/profile-dropdown';
 
 const megaServices = [
   {
@@ -30,7 +31,7 @@ const megaServices = [
     ),
     title: 'Web App PT',
     desc: 'OWASP Top 10 Coverage',
-    color: '#6366F1',
+    color: '#06B6D4',
     href: '/services/wap-pt',
   },
   {
@@ -41,7 +42,7 @@ const megaServices = [
     ),
     title: 'Cloud Security',
     desc: 'AWS · Azure · GCP Assessment',
-    color: '#818CF8',
+    color: '#3B82F6',
     href: '/services/cloud',
   },
   {
@@ -53,7 +54,7 @@ const megaServices = [
     ),
     title: 'AI Pen Testing',
     desc: 'LLM & ML Security Testing',
-    color: '#A855F7',
+    color: '#06B6D4',
     href: '/services/ai-pt',
   },
 ];
@@ -61,9 +62,8 @@ const megaServices = [
 const navLinks = [
   { label: 'About', href: '/about', isRoute: true },
   { label: 'Case Studies', href: '/case-studies', isRoute: true },
+  { label: 'Careers', href: '/careers', isRoute: true },
   { label: 'Blog', href: '/blog', isRoute: true },
-  { label: 'Request Assessment', href: '/request-assessment', isRoute: true },
-  { label: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar() {
@@ -121,10 +121,9 @@ export default function Navbar() {
         <div className="mega-menu">
           <div className="mega-header">
             <span className="mega-header-title">Our Services</span>
-            <span className="mega-header-count">{megaServices.length} services</span>
           </div>
           <div className="mega-grid">
-            {megaServices.map((s) => (
+            {megaServices.slice(0, 3).map((s) => (
               <Link key={s.title} href={s.href} className="mega-item" style={{ background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', width: '100%', textDecoration: 'none', color: 'inherit' }}>
                 <div className="mega-icon" style={{ color: s.color }}>{s.icon}</div>
                 <div>
@@ -134,13 +133,11 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
-          <div className="mega-footer">
-            <button className="mega-footer-btn" onClick={handleServicesClick} style={{ background: 'none', border: 'none', cursor: 'pointer', width: '100%' }}>
-              <span>View All Services</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
+          <div className="mega-footer" style={{ borderTop: '1px solid var(--border-subtle)', padding: '8px 14px', textAlign: 'right' }}>
+            <Link href="/services" onClick={handleServicesClick} style={{ fontSize: 11, fontWeight: 600, color: '#06B6D4', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, transition: 'color 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#3B82F6'} onMouseLeave={(e) => e.currentTarget.style.color = '#06B6D4'}>
+              <span>View all services</span>
+              <span>→</span>
+            </Link>
           </div>
         </div>
       )
@@ -222,16 +219,6 @@ export default function Navbar() {
                 }}>
                   ARITARO
                 </span>
-                <span style={{
-                  fontSize: 7.5,
-                  fontWeight: 500,
-                  letterSpacing: '0.12em',
-                  color: 'rgba(226, 232, 240, 0.45)',
-                  marginTop: 2.5,
-                  textTransform: 'uppercase',
-                }}>
-                  Advance Security Solutions
-                </span>
               </div>
             </button>
           </Link>
@@ -289,13 +276,14 @@ export default function Navbar() {
                     fontSize: 9,
                     fontWeight: 700,
                     borderRadius: '50%',
-                    width: 16,
-                    height: 16,
+                    width: 18,
+                    height: 18,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '2px solid #000',
+                    border: '1.5px solid #000',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                    paddingLeft: 1,
                   }}
                 >
                   {cartItems.length}
@@ -303,76 +291,51 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* Auth — Login or User avatar */}
+            {/* Auth — Login / Dashboard / CTA */}
             {user ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ProfileDropdown
+                data={{
+                  name: user.name,
+                  email: user.email || 'user@aritaro.com',
+                  avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name)}`,
+                  subscription: user.role === 'admin' ? 'ADMIN' : 'CLIENT',
+                  model: 'Default'
+                }}
+              />
+            ) : (
+              <>
                 <Link
-                  href={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
+                  href="/login"
                   style={{
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    background: 'rgba(99,102,241,0.08)',
-                    border: '1px solid rgba(99,102,241,0.2)',
-                    borderRadius: 100,
-                    padding: '4px 4px 4px 4px',
+                    fontSize: 13, fontWeight: 600,
+                    color: '#94A3B8',
+                    padding: '8px 16px',
+                    border: '1px solid rgba(51,65,85,0.6)',
+                    borderRadius: 10,
+                    transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                    fontFamily: 'var(--font-sans)',
+                    background: 'rgba(15,23,42,0.4)',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
                     textDecoration: 'none',
                   }}
-                  title="Go to Dashboard"
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(99,102,241,0.5)'; e.currentTarget.style.background = 'rgba(99,102,241,0.15)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(99,102,241,0.2)'; e.currentTarget.style.background = 'rgba(99,102,241,0.08)'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'; e.currentTarget.style.color = '#E2E8F0'; e.currentTarget.style.background = 'rgba(99,102,241,0.08)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(51,65,85,0.6)'; e.currentTarget.style.color = '#94A3B8'; e.currentTarget.style.background = 'rgba(15,23,42,0.4)'; }}
                 >
-                  <div style={{
-                    width: 28, height: 28, borderRadius: '50%',
-                    background: 'transparent',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#fff', fontSize: 12, fontWeight: 700, flexShrink: 0,
-                  }}>{user.avatar || user.name.charAt(0).toUpperCase()}</div>
-                  {/* <span style={{ fontSize: 13, color: '#E2E8F0', fontWeight: 500, fontFamily: 'var(--font-sans)', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</span> */}
+                  Login
                 </Link>
-                {/* <button
-                  onClick={logout}
-                  title="Logout"
-                  style={{ background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.2)', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', color: '#A855F7', display: 'flex', alignItems: 'center', transition: 'all 0.2s ease' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,61,90,0.14)'; e.currentTarget.style.borderColor = 'rgba(255,61,90,0.4)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,61,90,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,61,90,0.2)'; }}
+                <button
+                  onClick={() => handleNavClick('#contact')}
+                  className="btn-primary nav-cta-desktop"
+                  style={{
+                    fontSize: 13,
+                    padding: '9px 20px',
+                    cursor: 'pointer',
+                  }}
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></svg>
-                </button> */}
-              </div>
-            ) : (
-              <Link
-                href="/login"
-                style={{
-                  fontSize: 13, fontWeight: 600,
-                  color: '#94A3B8',
-                  padding: '8px 16px',
-                  border: '1px solid rgba(51,65,85,0.6)',
-                  borderRadius: 10,
-                  transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-                  fontFamily: 'var(--font-sans)',
-                  background: 'rgba(15,23,42,0.4)',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'; e.currentTarget.style.color = '#E2E8F0'; e.currentTarget.style.background = 'rgba(99,102,241,0.08)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(51,65,85,0.6)'; e.currentTarget.style.color = '#94A3B8'; e.currentTarget.style.background = 'rgba(15,23,42,0.4)'; }}
-              >
-                Login
-              </Link>
+                  Get Protected
+                </button>
+              </>
             )}
-
-            <button
-              onClick={() => handleNavClick('#contact')}
-              className="btn-primary nav-cta-desktop"
-              style={{
-                fontSize: 13,
-                padding: '9px 20px',
-                cursor: 'pointer',
-              }}
-            >
-              Get Protected
-            </button>
 
             {/* Hamburger */}
             <button
@@ -454,37 +417,47 @@ export default function Navbar() {
               )
             )}
 
-            {!user && (
+            {user ? (
               <Link
-                href="/login"
+                href={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
                 onClick={() => setMenuOpen(false)}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: '1px solid var(--border-subtle)',
-                  padding: '14px 0',
-                  fontSize: 16,
-                  fontWeight: 400,
-                  color: 'var(--cta)',
-                  textAlign: 'left',
-                  fontFamily: 'var(--font-sans)',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                }}
+                className="btn-primary"
+                style={{ marginTop: 16, width: '100%', justifyContent: 'center', textDecoration: 'none' }}
               >
-                Login
+                Dashboard
               </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    background: 'none',
+                    border: 'none',
+                    borderBottom: '1px solid var(--border-subtle)',
+                    padding: '14px 0',
+                    fontSize: 16,
+                    fontWeight: 400,
+                    color: 'var(--cta)',
+                    textAlign: 'left',
+                    fontFamily: 'var(--font-sans)',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                  }}
+                >
+                  Login
+                </Link>
+                <button
+                  onClick={() => handleNavClick('#contact')}
+                  className="btn-primary"
+                  style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}
+                >
+                  Get Protected
+                </button>
+              </>
             )}
-
-            <button
-              onClick={() => handleNavClick('#contact')}
-              className="btn-primary"
-              style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}
-            >
-              Get Protected
-            </button>
           </div>
         )}
 

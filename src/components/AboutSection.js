@@ -41,7 +41,7 @@ export default function AboutSection() {
       ref={sectionRef}
       style={{
         background: 'var(--bg-primary)',
-        padding: '110px 0 120px',
+        padding: '80px 0',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -81,9 +81,9 @@ export default function AboutSection() {
 
           <h2 style={{
             fontFamily: 'var(--font-orbitron), monospace',
-            fontSize: 'clamp(26px, 4.5vw, 52px)',
-            fontWeight: 900, color: 'var(--text-primary)',
-            letterSpacing: '-0.5px', lineHeight: 1.1,
+            fontSize: 'clamp(24px, 3.5vw, 36px)',
+            fontWeight: 600, color: 'var(--text-primary)',
+            letterSpacing: '-0.5px', lineHeight: 1.15,
           }}>
             Built on{' '}
             <span style={{
@@ -102,7 +102,7 @@ export default function AboutSection() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: 56,
+          gap: 36,
           alignItems: 'center',
         }} className="about-grid">
 

@@ -252,11 +252,7 @@ export default function SignupPage() {
 					</Link>
 				</div>
 
-				<div style={{ textAlign: "center", marginTop: 12 }}>
-					<Link href="/" style={{ fontSize: 12, color: "#475569", textDecoration: "none" }}>
-						← Back to homepage
-					</Link>
-				</div>
+
 			</div>
 		</div>
 	);

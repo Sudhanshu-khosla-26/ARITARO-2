@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import ContactClient from './ContactClient';
 
 export const metadata = {
@@ -7,5 +8,9 @@ export const metadata = {
 };
 
 export default function ContactPage() {
-  return <ContactClient />;
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: 'var(--bg-base)' }} />}>
+      <ContactClient />
+    </Suspense>
+  );
 }

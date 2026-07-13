@@ -27,10 +27,10 @@ export default function ServicePageLayout({
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }}>
       {/* Hero */}
       <section style={{
-        position: 'relative', padding: '80px 24px 60px', textAlign: 'center', overflow: 'hidden',
+        position: 'relative', padding: '60px 24px 48px', textAlign: 'center', overflow: 'hidden',
       }}>
         <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${accentColor}10 0%, transparent 70%)`, pointerEvents: 'none' }} />
-        <div className="cyber-grid" style={{ position: 'absolute', inset: 0, opacity: 0.2, pointerEvents: 'none' }} />
+        <div className="cyber-grid" style={{ position: 'absolute', inset: 0, opacity: 0.15, pointerEvents: 'none' }} />
         <div style={{ position: 'relative', zIndex: 1, maxWidth: 720, margin: '0 auto' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -40,10 +40,10 @@ export default function ServicePageLayout({
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: accentColor, boxShadow: `0 0 8px ${accentColor}80`, animation: 'pulse-glow 2s ease-in-out infinite' }} />
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '2.5px', color: accentColor, fontWeight: 600 }}>{tagline}</span>
           </div>
-          <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, lineHeight: 1.1, color: 'var(--text-primary)', marginBottom: 16 }}>
+          <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, lineHeight: 1.15, color: 'var(--text-primary)', marginBottom: 16, letterSpacing: '-1px' }}>
             {title}
           </h1>
-          <p style={{ maxWidth: 580, margin: '0 auto 32px', color: 'var(--text-muted)', fontSize: 16, lineHeight: 1.75 }}>
+          <p style={{ maxWidth: 580, margin: '0 auto 28px', color: 'var(--text-muted)', fontSize: 15, lineHeight: 1.7 }}>
             {subtitle}
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -60,7 +60,7 @@ export default function ServicePageLayout({
 
       {/* Why It Matters */}
       {whyItMatters && (
-        <section style={{ padding: '64px 24px', borderTop: '1px solid var(--border-subtle)' }}>
+        <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
           <div style={{ maxWidth: 900, margin: '0 auto' }}>
             <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 24, textAlign: 'center' }}>
               Why This Matters
@@ -68,11 +68,11 @@ export default function ServicePageLayout({
             <div className="why-matters-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
               {whyItMatters.map((item, i) => (
                 <div key={i} style={{
-                  padding: '24px 20px', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)',
-                  borderRadius: 14, textAlign: 'center', transition: 'all 0.2s ease',
+                  padding: '24px 20px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: 16, textAlign: 'center', transition: 'all 0.3s ease', backdropFilter: 'blur(12px)',
                 }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${accentColor}50`; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-subtle)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = `rgba(255, 255, 255, 0.2)`; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
                   <div style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 800, color: accentColor, marginBottom: 8, fontFamily: 'var(--font-mono)' }}>{item.stat}</div>
                   <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>{item.text}</p>
@@ -85,7 +85,7 @@ export default function ServicePageLayout({
 
       {/* Methodology Table */}
       {methodology && (
-        <section style={{ padding: '64px 24px', borderTop: '1px solid var(--border-subtle)' }}>
+        <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
           <div style={{ maxWidth: 1000, margin: '0 auto' }}>
             <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8, textAlign: 'center' }}>
               Our Methodology
@@ -97,9 +97,9 @@ export default function ServicePageLayout({
               {methodology.map((phase, i) => (
                 <div key={i} style={{
                   display: 'grid', gridTemplateColumns: '60px 1fr', gap: 20,
-                  padding: '22px 24px', background: 'var(--bg-surface)',
-                  border: '1px solid var(--border-subtle)', borderRadius: 14,
-                  transition: 'all 0.2s ease', alignItems: 'start',
+                  padding: '24px', background: 'rgba(15, 23, 42, 0.6)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16,
+                  transition: 'all 0.3s ease', alignItems: 'start', backdropFilter: 'blur(12px)',
                 }}
                   className="methodology-row"
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${accentColor}40`; }}
@@ -133,11 +133,11 @@ export default function ServicePageLayout({
       )}
 
       {/* Quick Info Cards: Standards, Deliverables, Timeline, Pricing */}
-      <section style={{ padding: '64px 24px', borderTop: '1px solid var(--border-subtle)' }}>
+      <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <div className="info-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
             {/* Standards */}
-            <div style={{ padding: '24px', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: 14 }}>
+            <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
               <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Standards & Frameworks</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {standards.map((s, i) => (
@@ -146,7 +146,7 @@ export default function ServicePageLayout({
               </div>
             </div>
             {/* Deliverables */}
-            <div style={{ padding: '24px', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: 14 }}>
+            <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
               <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Deliverables</h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {deliverables.map((d, i) => (
@@ -158,7 +158,7 @@ export default function ServicePageLayout({
               </ul>
             </div>
             {/* Timeline */}
-            <div style={{ padding: '24px', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: 14 }}>
+            <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
               <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Timeline</h3>
               <div style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 800, color: accentColor, fontFamily: 'var(--font-mono)' }}>{timeline}</div>
               <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>From scoping call to final report</p>
@@ -175,7 +175,7 @@ export default function ServicePageLayout({
 
       {/* Engagement Types */}
       {engagementTypes && (
-        <section style={{ padding: '64px 24px', borderTop: '1px solid var(--border-subtle)' }}>
+        <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
           <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
             <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 32 }}>Engagement Types</h2>
             <div className="engagement-grid" style={{ display: 'grid', gridTemplateColumns: `repeat(${engagementTypes.length}, 1fr)`, gap: 16 }}>
@@ -198,7 +198,7 @@ export default function ServicePageLayout({
 
       {/* FAQs (R15) */}
       {faqs && faqs.length > 0 && (
-        <section style={{ padding: '64px 24px', borderTop: '1px solid var(--border-subtle)' }}>
+        <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
           <div style={{ maxWidth: 720, margin: '0 auto' }}>
             <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 32, textAlign: 'center' }}>
               Frequently Asked Questions
@@ -244,7 +244,7 @@ export default function ServicePageLayout({
       {children}
 
       {/* CTA Banner */}
-      <section style={{ padding: '64px 24px', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
+      <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
         <div style={{ maxWidth: 600, margin: '0 auto' }}>
           <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 14 }}>
             Ready to secure your systems?
@@ -263,12 +263,7 @@ export default function ServicePageLayout({
         </div>
       </section>
 
-      {/* Back to home */}
-      <div style={{ textAlign: 'center', padding: '32px 24px 48px', background: 'var(--bg-base)' }}>
-        <Link href="/" style={{ fontSize: 14, color: 'var(--text-muted)', textDecoration: 'none', padding: '12px 24px', border: '1px solid var(--border-subtle)', borderRadius: 10, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-          ← Back to Home
-        </Link>
-      </div>
+
 
 
       <WhatsAppWidget />

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import Loader from "@/components/kokonutui/loader";
 
 const icons = {
 	"01": (
@@ -235,12 +236,11 @@ const icons = {
 	),
 };
 
+import BorderGlow from "@/components/BorderGlow";
+
 function ServiceCard({ service, index }) {
 	const ref = useRef(null);
-	const glowRef = useRef(null);
 	const [visible, setVisible] = useState(false);
-	const isThreat = false;
-	const rgb = isThreat ? "255,61,90" : "99,102,241";
 
 	useEffect(() => {
 		const obs = new IntersectionObserver(
@@ -253,243 +253,195 @@ function ServiceCard({ service, index }) {
 		return () => obs.disconnect();
 	}, []);
 
-	const handleMouseMove = (e) => {
-		if (!ref.current || !glowRef.current) return;
-		const r = ref.current.getBoundingClientRect();
-		const x = ((e.clientX - r.left) / r.width) * 100;
-		const y = ((e.clientY - r.top) / r.height) * 100;
-		glowRef.current.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(${rgb},0.12) 0%, transparent 60%)`;
-	};
-
-	const iconKey = icons[service.number] ? service.number : "07";
+	let iconKey = "07";
+	const slug = service.slug || "";
+	if (slug.includes("api")) iconKey = "01";
+	else if (slug.includes("web") || slug.includes("app")) iconKey = "06";
+	else if (slug.includes("cloud")) iconKey = "03";
+	else if (slug.includes("ai") || slug.includes("llm")) iconKey = "05";
 
 	return (
 		<div
 			ref={ref}
-			onMouseMove={handleMouseMove}
 			style={{
-				position: "relative",
-				background: "rgba(15,23,42,0.7)",
-				border: `1px solid rgba(${rgb},0.15)`,
-				borderRadius: 18,
-				padding: "28px 24px",
-				display: "flex",
-				flexDirection: "column",
-				backdropFilter: "blur(10px)",
-				WebkitBackdropFilter: "blur(10px)",
-				transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
 				opacity: visible ? 1 : 0,
 				transform: visible ? "translateY(0)" : "translateY(30px)",
+				transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
 				transitionDelay: `${(index % 4) * 0.07}s`,
 				minHeight: 380,
-				overflow: "hidden",
-				cursor: "default",
-			}}
-			onMouseEnter={(e) => {
-				e.currentTarget.style.borderColor = `rgba(${rgb},0.4)`;
-				e.currentTarget.style.transform = "translateY(-4px)";
-				e.currentTarget.style.boxShadow = `0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(${rgb},0.2)`;
-			}}
-			onMouseLeave={(e) => {
-				e.currentTarget.style.borderColor = `rgba(${rgb},0.15)`;
-				e.currentTarget.style.transform = "translateY(0)";
-				e.currentTarget.style.boxShadow = "none";
-				if (glowRef.current) glowRef.current.style.background = "none";
+				display: "flex",
+				flexDirection: "column",
 			}}
 		>
-			{/* Cursor glow */}
-			<div
-				ref={glowRef}
-				style={{
-					position: "absolute",
-					inset: 0,
-					borderRadius: "inherit",
-					pointerEvents: "none",
-					transition: "background 0.04s",
-				}}
-			/>
-
-			{/* Category tag */}
-			<span
-				style={{
-					position: "absolute",
-					top: 18,
-					right: 18,
-					fontSize: 9,
-					fontWeight: 700,
-					letterSpacing: "1.5px",
-					color: service.color,
-					background: `rgba(${rgb},0.08)`,
-					border: `1px solid rgba(${rgb},0.18)`,
-					borderRadius: 100,
-					padding: "3px 10px",
-					fontFamily: "var(--font-mono)",
-					textTransform: "uppercase",
-				}}
+			<BorderGlow
+				glowColor="190 80 80"
+				backgroundColor="#090E17"
+				borderRadius={14}
+				glowRadius={30}
+				glowIntensity={0.8}
+				coneSpread={20}
+				colors={["#3B82F6", "#06B6D4", "#141C2C"]}
+				className="w-full h-full"
 			>
-				{service.category}
-			</span>
-
-			<div
-				style={{
-					position: "relative",
-					zIndex: 1,
-					flex: 1,
-					display: "flex",
-					flexDirection: "column",
-				}}
-			>
-				<span
-					style={{
-						fontFamily: "var(--font-mono)",
-						fontSize: 9,
-						fontWeight: 700,
-						color: `rgba(${rgb},0.4)`,
-						letterSpacing: "1px",
-						marginBottom: 14,
-						display: "block",
-						textTransform: "uppercase",
-					}}
-				>
-					{service.slug.substring(0, 10)}...
-				</span>
-
-				{/* Icon */}
-				<div
-					style={{
-						width: 48,
-						height: 48,
-						borderRadius: 12,
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						color: service.color,
-						background: `rgba(${rgb},0.07)`,
-						border: `1px solid rgba(${rgb},0.1)`,
-						marginBottom: 20,
-					}}
-				>
-					{icons[iconKey]}
-				</div>
-
-				<h3
-					style={{
-						fontSize: 18,
-						fontWeight: 700,
-						color: "#F1F5F9",
-						marginBottom: 10,
-						letterSpacing: "-0.3px",
-						lineHeight: 1.25,
-					}}
-				>
-					{service.title}
-				</h3>
-
-				<p
-					style={{
-						fontSize: 13,
-						color: "#94A3B8",
-						lineHeight: 1.6,
-						marginBottom: 20,
-					}}
-				>
-					{service.desc}
-				</p>
-
-				{/* Features */}
-				<div
-					style={{
-						display: "flex",
-						flexWrap: "wrap",
-						gap: 6,
-						marginTop: "auto",
-						marginBottom: 28,
-					}}
-				>
-					{service.features.map((feat, fidx) => (
-						<span
-							key={fidx}
+				<div style={{ padding: "24px 20px", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+					<div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+						{/* Icon */}
+						<div
 							style={{
-								fontSize: 11,
-								color: "#94A3B8",
-								background: "rgba(255, 255, 255, 0.04)",
-								border: "1px solid rgba(255, 255, 255, 0.08)",
-								borderRadius: 8,
-								padding: "4px 10px",
-								fontWeight: 500,
+								width: 40,
+								height: 40,
+								borderRadius: 10,
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								color: service.color || "#3B82F6",
+								background: "rgba(255, 255, 255, 0.02)",
+								border: "1px solid rgba(255, 255, 255, 0.05)",
+								marginBottom: 16,
 							}}
 						>
-							{feat}
-						</span>
-					))}
-				</div>
-			</div>
+							{icons[iconKey]}
+						</div>
 
-			<div
-				style={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
-					borderTop: "1px solid rgba(255,255,255,0.06)",
-					paddingTop: 20,
-					marginTop: "auto",
-					position: "relative",
-					zIndex: 1,
-				}}
-			>
-				<div>
-					<span
-						style={{
-							fontSize: 10,
-							color: "#334155",
-							fontWeight: 600,
-							textTransform: "uppercase",
-							letterSpacing: "0.5px",
-							display: "block",
-							marginBottom: 4,
-						}}
-					>
-						Duration
-					</span>
+						<h3
+							style={{
+								fontSize: 18,
+								fontWeight: 700,
+								color: "#F1F5F9",
+								marginBottom: 10,
+								letterSpacing: "-0.3px",
+								lineHeight: 1.25,
+							}}
+						>
+							{service.title}
+						</h3>
+
+						<p
+							style={{
+								fontSize: 13,
+								color: "#94A3B8",
+								lineHeight: 1.6,
+								marginBottom: 16,
+								display: "-webkit-box",
+								WebkitLineClamp: 3,
+								WebkitBoxOrient: "vertical",
+								overflow: "hidden",
+							}}
+						>
+							{service.desc}
+						</p>
+
+						<ul
+							style={{
+								listStyle: "none",
+								padding: 0,
+								margin: "0 0 20px 0",
+								display: "flex",
+								flexDirection: "column",
+								gap: 6,
+								marginTop: "auto",
+							}}
+						>
+							{service.features.slice(0, 3).map((feat, fidx) => (
+								<li
+									key={fidx}
+									style={{
+										fontSize: 12,
+										color: "#94A3B8",
+										display: "flex",
+										alignItems: "center",
+										gap: 8,
+									}}
+								>
+									<span style={{ color: "#06B6D4", fontWeight: "bold" }}>•</span>
+									{feat}
+								</li>
+							))}
+						</ul>
+					</div>
+
 					<div
 						style={{
-							fontSize: 14,
-							fontWeight: 600,
-							color: "#CBD5E1",
-							fontFamily: "var(--font-sans)",
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "space-between",
+							borderTop: "1px solid rgba(255,255,255,0.06)",
+							paddingTop: 16,
+							marginTop: "auto",
+							position: "relative",
+							zIndex: 1,
 						}}
 					>
-						{service.duration || "2-4 weeks"}
+						<div>
+							<span
+								style={{
+									fontSize: 10,
+									color: "#334155",
+									fontWeight: 600,
+									textTransform: "uppercase",
+									letterSpacing: "0.5px",
+									display: "block",
+									marginBottom: 2,
+								}}
+							>
+								Duration
+							</span>
+							<div
+								style={{
+									fontSize: 12,
+									fontWeight: 600,
+									color: "#CBD5E1",
+									fontFamily: "var(--font-sans)",
+								}}
+							>
+								{service.duration || "2-4 weeks"}
+							</div>
+						</div>
+
+						<div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+							<Link
+								href={`/services/${service.slug}`}
+								style={{
+									fontSize: 12,
+									color: "#94A3B8",
+									textDecoration: "none",
+									fontWeight: 500,
+									transition: "color 0.2s ease",
+								}}
+								onMouseEnter={(e) => { e.currentTarget.style.color = "#F1F5F9"; }}
+								onMouseLeave={(e) => { e.currentTarget.style.color = "#94A3B8"; }}
+							>
+								Read More
+							</Link>
+							<Link
+								href={`/request-assessment?service=${
+									service.slug === "api-penetration-testing"
+										? "api_pt"
+										: service.slug === "web-application-penetration-testing"
+										? "wap_pt"
+										: service.slug === "cloud-security-assessment"
+										? "cloud_security"
+										: service.slug === "ai-penetration-testing"
+										? "ai_pt"
+										: "api_pt"
+								}`}
+								className="btn-primary"
+								style={{
+									fontSize: 11,
+									padding: "8px 12px",
+									display: "inline-flex",
+									alignItems: "center",
+									justifyContent: "center",
+									textDecoration: "none",
+									borderRadius: 6,
+								}}
+							>
+								Request Quote
+							</Link>
+						</div>
 					</div>
 				</div>
-
-				<Link
-					href={`/request-assessment?service=${
-						service.slug === "api-penetration-testing"
-							? "api_pt"
-							: service.slug === "web-application-penetration-testing"
-							? "wap_pt"
-							: service.slug === "cloud-security-assessment"
-							? "cloud_security"
-							: service.slug === "ai-penetration-testing"
-							? "ai_pt"
-							: "api_pt"
-					}`}
-					className="btn-primary"
-					style={{
-						fontSize: 12,
-						padding: "10px 18px",
-						display: "inline-flex",
-						alignItems: "center",
-						gap: 6,
-						minWidth: 124,
-						justifyContent: "center",
-						textDecoration: "none",
-					}}
-				>
-					Request Assessment
-				</Link>
-			</div>
+			</BorderGlow>
 		</div>
 	);
 }
@@ -528,20 +480,13 @@ export default function ServicesPage() {
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					background: "#020617",
+					background: "#030508",
 				}}
 			>
-				<div
-					style={{
-						width: 36,
-						height: 36,
-						border: "3px solid rgba(99,102,241,0.2)",
-						borderTopColor: "#6366F1",
-						borderRadius: "50%",
-						animation: "spin 0.7s linear infinite",
-					}}
+				<Loader
+					title="Loading Security Services..."
+					subtitle="Retrieving verified vulnerability assessment modules"
 				/>
-				<style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 			</div>
 		);
 
@@ -642,7 +587,7 @@ export default function ServicesPage() {
 				</div>
 				<h1
 					style={{
-						fontSize: "clamp(36px, 5vw, 56px)",
+						fontSize: "clamp(48px, 6.5vw, 76px)",
 						fontWeight: 900,
 						color: "#F1F5F9",
 						letterSpacing: "-1.5px",
@@ -650,7 +595,7 @@ export default function ServicesPage() {
 						lineHeight: 1.1,
 					}}
 				>
-					Our Specialized <span className="grad-indigo">Services</span>
+					ARITARO <span className="grad-indigo">Services</span>
 				</h1>
 				<p
 					style={{
@@ -800,41 +745,7 @@ export default function ServicesPage() {
 			</div>
 
 			{/* Back link */}
-			<div
-				style={{
-					textAlign: "center",
-					padding: "0 24px 60px",
-					position: "relative",
-					zIndex: 1,
-				}}
-			>
-				<Link
-					href="/"
-					style={{
-						display: "inline-flex",
-						alignItems: "center",
-						gap: 8,
-						fontSize: 13,
-						color: "#334155",
-						textDecoration: "none",
-						padding: "10px 22px",
-						border: "1px solid rgba(51,65,85,0.5)",
-						borderRadius: 10,
-						transition: "all 0.2s ease",
-						fontFamily: "var(--font-sans)",
-					}}
-					onMouseEnter={(e) => {
-						e.currentTarget.style.borderColor = "rgba(99,102,241,0.3)";
-						e.currentTarget.style.color = "#818CF8";
-					}}
-					onMouseLeave={(e) => {
-						e.currentTarget.style.borderColor = "rgba(51,65,85,0.5)";
-						e.currentTarget.style.color = "#334155";
-					}}
-				>
-					← Back to Home
-				</Link>
-			</div>
+
 
 
 

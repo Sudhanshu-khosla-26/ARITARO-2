@@ -255,14 +255,7 @@ function LoginContent() {
 					</Link>
 				</div>
 
-				<div style={{ textAlign: "center", marginTop: 12 }}>
-					<Link href="/" style={{ fontSize: 12.5, color: "#64748B", textDecoration: "none", transition: "color 0.2s" }}
-						onMouseEnter={(e) => e.currentTarget.style.color = "#CBD5E1"}
-						onMouseLeave={(e) => e.currentTarget.style.color = "#64748B"}
-					>
-						← Back to homepage
-					</Link>
-				</div>
+
 
 			</div>
 		</div>

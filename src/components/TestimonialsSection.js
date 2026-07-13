@@ -94,8 +94,8 @@ function TestimonialCard({ t }) {
         margin: '0 12px',
         borderRadius: '14px',
         padding: '24px',
-        background: '#151820',
-        border: '1px solid #1C1F26',
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--border-subtle)',
         position: 'relative',
         overflow: 'hidden',
         boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
@@ -153,7 +153,7 @@ function TestimonialCard({ t }) {
         alignItems: 'center',
         gap: '12px',
         paddingTop: '16px',
-        borderTop: '1px solid #1C1F26',
+        borderTop: '1px solid var(--border-subtle)',
       }}>
         <div style={{
           width: '36px', height: '36px',
@@ -197,10 +197,10 @@ export default function TestimonialsSection() {
       id="testimonials"
       style={{
         position: 'relative',
-        padding: 'clamp(48px, 8vw, 96px) 0',
-        background: '#020617',
+        padding: '80px 0',
+        background: 'var(--bg-base)',
         overflow: 'hidden',
-        borderBottom: '1px solid #1C1F26',
+        borderBottom: '1px solid var(--border-subtle)',
       }}
     >
       {/* Background radial soft light */}
@@ -213,7 +213,7 @@ export default function TestimonialsSection() {
       }} />
 
       {/* Header Container */}
-      <div style={{ textAlign: 'center', marginBottom: '56px', padding: '0 32px', position: 'relative', zIndex: 2 }}>
+      <div style={{ textAlign: 'center', marginBottom: '40px', padding: '0 32px', position: 'relative', zIndex: 2 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           background: 'rgba(99, 102, 241, 0.08)',
@@ -232,8 +232,8 @@ export default function TestimonialsSection() {
 
         <h2 style={{
           fontFamily: 'var(--font-sans)',
-          fontSize: 'clamp(24px, 4vw, 40px)',
-          fontWeight: '800', lineHeight: '1.2',
+          fontSize: 'clamp(22px, 3.5vw, 32px)',
+          fontWeight: '600', lineHeight: '1.2',
           color: '#F9FAFB', marginBottom: '14px',
         }}>
           Trusted by cybersecurity{' '}
@@ -260,13 +260,13 @@ export default function TestimonialsSection() {
         {/* Left Fade Overlay */}
         <div style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: '15%',
-          background: 'linear-gradient(90deg, #020617 0%, transparent 100%)',
+          background: 'linear-gradient(90deg, var(--bg-base) 0%, transparent 100%)',
           zIndex: 10, pointerEvents: 'none',
         }} />
         {/* Right Fade Overlay */}
         <div style={{
           position: 'absolute', right: 0, top: 0, bottom: 0, width: '15%',
-          background: 'linear-gradient(-90deg, #020617 0%, transparent 100%)',
+          background: 'linear-gradient(-90deg, var(--bg-base) 0%, transparent 100%)',
           zIndex: 10, pointerEvents: 'none',
         }} />
 
@@ -310,11 +310,6 @@ export default function TestimonialsSection() {
           display: flex;
           width: max-content;
           animation: marquee-right 45s linear infinite;
-        }
-        
-        .testimonials-wrapper:hover .marquee-track-left,
-        .testimonials-wrapper:hover .marquee-track-right {
-          animation-play-state: paused;
         }
 
         @media (max-width: 768px) {

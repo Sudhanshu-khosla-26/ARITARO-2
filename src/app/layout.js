@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
 		<html
 			lang="en"
 			data-theme="dark"
-			className={`${inter.variable} ${jetbrainsMono.variable}`}
+			className={`dark ${inter.variable} ${jetbrainsMono.variable}`}
 		>
 			<body
 				className="min-h-screen antialiased overflow-x-hidden"

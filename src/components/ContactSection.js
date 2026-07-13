@@ -165,7 +165,7 @@ export default function ContactSection() {
       id="contact"
       ref={sectionRef}
       style={{
-        padding: '96px 0',
+        padding: '72px 0',
         background: 'var(--bg-base)',
         position: 'relative',
       }}
@@ -178,12 +178,12 @@ export default function ContactSection() {
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px', position: 'relative', zIndex: 1 }}>
 
         {/* Heading */}
-        <div ref={headingRef} style={{ textAlign: 'center', marginBottom: 60 }}>
+        <div ref={headingRef} style={{ textAlign: 'center', marginBottom: 40 }}>
           <div className="section-label" style={{ display: 'inline-flex', justifyContent: 'center' }}>
             GET IN TOUCH
           </div>
           <h2 style={{
-            fontSize: 'clamp(26px, 4vw, 44px)',
+            fontSize: 'clamp(22px, 3.5vw, 32px)',
             fontWeight: 600,
             color: 'var(--text-primary)',
             lineHeight: 1.15,
@@ -232,7 +232,7 @@ export default function ContactSection() {
                   alignItems: 'center',
                   gap: 14,
                   padding: '14px 16px',
-                  background: '',
+                  background: 'var(--bg-surface)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: 10,
                   transition: 'all 0.2s ease',

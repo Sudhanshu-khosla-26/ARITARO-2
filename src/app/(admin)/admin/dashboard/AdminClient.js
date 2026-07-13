@@ -25,6 +25,8 @@ import ManageServices from "./components/ManageServices";
 import Companies from "./components/Companies";
 import ManageServiceRequests from "./components/ManageServiceRequests";
 import ManageAuditLogs from "./components/ManageAuditLogs";
+import ManageCaseStudies from "./components/ManageCaseStudies";
+import ManageCareers from "./components/ManageCareers";
 
 export default function AdminClient() {
 	const { data: session, status } = useSession();
@@ -265,6 +267,22 @@ export default function AdminClient() {
 						>
 							Manage Services
 						</button>
+						<button
+							type="button"
+							className={`dash-nav-item ${activeTab === "caseStudies" ? "active" : ""}`}
+							onClick={() => handleTabChange("caseStudies")}
+							style={{ width: "100%", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+						>
+							Manage Case Studies
+						</button>
+						<button
+							type="button"
+							className={`dash-nav-item ${activeTab === "careers" ? "active" : ""}`}
+							onClick={() => handleTabChange("careers")}
+							style={{ width: "100%", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+						>
+							Manage Careers
+						</button>
 
 						<div className="dash-nav-label" style={{ marginTop: 14 }}>System</div>
 						<button
@@ -312,14 +330,6 @@ export default function AdminClient() {
 				<main className="dash-main">
 					<div className="dash-main-bg" />
 					<div className="dash-content">
-						<div className="dash-header dash-animate dash-animate-1" style={{ borderBottom: "1px solid #1C1F26", paddingBottom: 20 }}>
-							<div className="dash-header-left">
-								<h1 style={{ fontSize: 26, fontWeight: 700, color: "#F9FAFB", letterSpacing: "-0.02em" }}>
-									Command Center
-								</h1>
-								<p style={{ color: "#6B7280", fontSize: 14, marginTop: 4 }}>Manage platform clients, audit scoping, reports, and administrative logs</p>
-							</div>
-						</div>
 
 						<div style={{ marginTop: 24 }}>
 							{activeTab === "overview" && (
@@ -368,6 +378,10 @@ export default function AdminClient() {
 							{activeTab === "blogs" && <ManageBlogs />}
 
 							{activeTab === "services" && <ManageServices />}
+
+							{activeTab === "caseStudies" && <ManageCaseStudies />}
+
+							{activeTab === "careers" && <ManageCareers />}
 						</div>
 					</div>
 				</main>
@@ -387,7 +401,7 @@ const inputStyle = {
 	width: "100%",
 	padding: "12px 14px",
 	borderRadius: 10,
-	border: "1px solid #1C1F26",
+	border: "1px solid var(--border-subtle)",
 	background: "rgba(17,19,24,0.5)",
 	color: "#E2E8F0",
 	fontSize: 14,

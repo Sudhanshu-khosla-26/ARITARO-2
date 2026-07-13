@@ -5,6 +5,8 @@ import ContactRequest from "@/models/ContactRequest";
 import ServiceRequest from "@/models/ServiceRequest";
 import Report from "@/models/Report";
 import AuditLog from "@/models/AuditLog";
+import CaseStudy from "@/models/CaseStudy";
+import JobOpportunity from "@/models/JobOpportunity";
 import { requireAdmin } from "@/lib/session";
 import { initApp } from "@/lib/init";
 import { sanitizeInput } from "@/lib/security";
@@ -349,4 +351,134 @@ export async function getCompanyDetail(companyId) {
 			createdAt: l.createdAt?.toISOString() ?? null,
 		})),
 	};
+}
+
+export async function listCaseStudies() {
+	if (!(await initApp())) return { success: false, error: "Database not connected" };
+	const cases = await CaseStudy.find({}).sort({ createdAt: -1 }).lean();
+	return {
+		success: true,
+		cases: cases.map((c) => ({
+			id: c._id.toString(),
+			industry: c.industry,
+			type: c.type,
+			challenge: c.challenge,
+			findings: c.findings || [],
+			impact: c.impact,
+			stats: c.stats || {},
+			color: c.color || "#3B82F6",
+			isPublished: c.isPublished,
+		})),
+	};
+}
+
+export async function createCaseStudy(formData) {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	const industry = sanitizeInput(String(formData.get("industry") || "").trim());
+	const type = sanitizeInput(String(formData.get("type") || "").trim());
+	const challenge = sanitizeInput(String(formData.get("challenge") || "").trim());
+	const findingsRaw = String(formData.get("findings") || "").trim();
+	const findings = findingsRaw ? findingsRaw.split("\n").map(f => f.trim()).filter(Boolean) : [];
+	const impact = sanitizeInput(String(formData.get("impact") || "").trim());
+	const vulns = sanitizeInput(String(formData.get("vulns") || "").trim());
+	const critical = sanitizeInput(String(formData.get("critical") || "").trim());
+	const remediation = sanitizeInput(String(formData.get("remediation") || "").trim());
+	const color = sanitizeInput(String(formData.get("color") || "#3B82F6").trim());
+
+	if (!industry || !type || !challenge || !impact) {
+		return { success: false, error: "Required fields are missing" };
+	}
+
+	const created = await CaseStudy.create({
+		industry,
+		type,
+		challenge,
+		findings,
+		impact,
+		stats: { vulns, critical, remediation },
+		color,
+		isPublished: true,
+	});
+
+	return { success: true, message: "Case study created successfully", id: created._id.toString() };
+}
+
+export async function removeCaseStudy(caseStudyId) {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	await CaseStudy.findByIdAndDelete(caseStudyId);
+	return { success: true, message: "Case study deleted successfully" };
+}
+
+export async function togglePublishCaseStudy(caseStudyId, isPublished) {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	await CaseStudy.findByIdAndUpdate(caseStudyId, { isPublished });
+	return { success: true, message: "Publication state updated" };
+}
+
+export async function listJobOpportunities() {
+	if (!(await initApp())) return { success: false, error: "Database not connected" };
+	const jobs = await JobOpportunity.find({}).sort({ createdAt: -1 }).lean();
+	return {
+		success: true,
+		jobs: jobs.map((j) => ({
+			id: j._id.toString(),
+			title: j.title,
+			department: j.department,
+			location: j.location,
+			type: j.type,
+			isPublished: j.isPublished,
+		})),
+	};
+}
+
+export async function createJobOpportunity(formData) {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	const title = sanitizeInput(String(formData.get("title") || "").trim());
+	const department = sanitizeInput(String(formData.get("department") || "").trim());
+	const location = sanitizeInput(String(formData.get("location") || "").trim());
+	const type = sanitizeInput(String(formData.get("type") || "Full-Time").trim());
+
+	if (!title || !department || !location) {
+		return { success: false, error: "Required fields are missing" };
+	}
+
+	const created = await JobOpportunity.create({
+		title,
+		department,
+		location,
+		type,
+		isPublished: true,
+	});
+
+	return { success: true, message: "Job opportunity created successfully", id: created._id.toString() };
+}
+
+export async function removeJobOpportunity(jobId) {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	await JobOpportunity.findByIdAndDelete(jobId);
+	return { success: true, message: "Job opportunity deleted successfully" };
+}
+
+export async function togglePublishJobOpportunity(jobId, isPublished) {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	await JobOpportunity.findByIdAndUpdate(jobId, { isPublished });
+	return { success: true, message: "Publication state updated" };
 }

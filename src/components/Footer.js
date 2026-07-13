@@ -9,16 +9,14 @@ const footerLinks = {
     { label: 'Cloud Security', href: '/services/cloud' },
     { label: 'AI Pen Testing', href: '/services/ai-pt' },
     { label: 'All Services', href: '/services' },
-    { label: 'Free Audit', href: '/free-audit' },
   ],
   Company: [
     { label: 'About Us', href: '/about' },
+    { label: 'Careers', href: '/careers' },
     { label: 'Case Studies', href: '/case-studies' },
     { label: 'Blog', href: '/blog' },
-    { label: 'Contact', href: '/#contact' },
   ],
   Resources: [
-    { label: 'Free Security Audit', href: '/free-audit' },
     { label: 'Case Studies', href: '/case-studies' },
     { label: 'Blog', href: '/blog' },
   ],
@@ -45,7 +43,7 @@ export default function Footer() {
       <div style={{
         background: 'var(--bg-surface)',
         borderBottom: '1px solid var(--border-subtle)',
-        padding: '64px 32px',
+        padding: '48px 32px',
         textAlign: 'center',
       }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
@@ -67,12 +65,12 @@ export default function Footer() {
             marginBottom: 32,
             lineHeight: 1.7,
           }}>
-            Book a free 30-minute security assessment with our elite team.
+            Book a 30-minute security assessment with our elite team.
             No sales pressure — just expertise.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <button className="btn-primary" onClick={() => { const el = document.querySelector('#contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>
-              Schedule Free Assessment
+              Request Assessment
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
@@ -85,7 +83,7 @@ export default function Footer() {
       </div>
 
       {/* Main grid */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 32px 36px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px 28px' }}>
         <div
           style={{
             display: 'grid',
@@ -140,7 +138,7 @@ export default function Footer() {
               marginBottom: 20,
             }}>
               Elite cybersecurity for enterprises that can&apos;t afford to fail.
-              Defending digital assets since 2014.
+              Defending digital assets since 2026.
             </p>
 
             {/* Cert badges */}
@@ -208,20 +206,8 @@ export default function Footer() {
           gap: 12,
         }}>
           <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-            © 2025 Aritaro Pvt Limited. All rights reserved.
+            © 2026 Aritaro Pvt Limited. All rights reserved.
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{
-              width: 6, height: 6,
-              borderRadius: '50%',
-              background: 'var(--c-green)',
-              boxShadow: '0 0 8px var(--c-green)',
-              animation: 'pulse-glow 2s ease-in-out infinite',
-            }} />
-            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-              All systems operational
-            </span>
-          </div>
         </div>
       </div>
 
