@@ -251,7 +251,7 @@ export default function Companies({ clients, onSelectRequest }) {
 						</button>
 					</div>
 
-					<div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 24, alignItems: "start" }}>
+					<div className="companies-request-grid" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 24, alignItems: "start" }}>
 						{/* Left Column: Scope & Status details */}
 						<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 20 }}>
 							<h3 style={{ fontSize: 15, fontWeight: 700, color: "#F9FAFB", borderBottom: "1px solid #1C1F26", paddingBottom: 10, margin: 0 }}>Engagement Scope</h3>
@@ -556,6 +556,19 @@ export default function Companies({ clients, onSelectRequest }) {
 								)}
 							</div>
 						</div>
+						<style>{`
+							.companies-request-grid {
+								display: grid;
+								grid-template-columns: 1.2fr 1fr;
+								gap: 24px;
+								align-items: start;
+							}
+							@media (max-width: 768px) {
+								.companies-request-grid {
+									grid-template-columns: 1fr !important;
+								}
+							}
+						`}</style>
 					</div>
 				</div>
 			);
@@ -592,7 +605,7 @@ export default function Companies({ clients, onSelectRequest }) {
 					</button>
 				</div>
 
-				<div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 24 }}>
+				<div className="companies-detail-grid" style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 24 }}>
 					{/* Left: Requests */}
 					<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24 }}>
 						<h3 style={{ fontSize: 15, fontWeight: 700, color: "#F9FAFB", marginBottom: 16 }}>Service Engagements</h3>
@@ -715,8 +728,20 @@ export default function Companies({ clients, onSelectRequest }) {
 						</div>
 
 					</div>
+						<style>{`
+							.companies-detail-grid {
+								display: grid;
+								grid-template-columns: 1.5fr 1fr;
+								gap: 24px;
+							}
+							@media (max-width: 768px) {
+								.companies-detail-grid {
+									grid-template-columns: 1fr !important;
+								}
+							}
+						`}</style>
+					</div>
 				</div>
-			</div>
 		);
 	}
 
@@ -756,7 +781,8 @@ export default function Companies({ clients, onSelectRequest }) {
 				<p style={{ color: "#6B7280", fontSize: 13 }}>No companies match your search query.</p>
 			) : (
 				<>
-					<div style={{ overflowX: "auto" }}>
+					{/* Desktop Table View */}
+					<div className="desktop-only-table" style={{ overflowX: "auto" }}>
 						<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
 							<thead>
 								<tr style={{ borderBottom: "1px solid #1C1F26" }}>
@@ -796,6 +822,57 @@ export default function Companies({ clients, onSelectRequest }) {
 							</tbody>
 						</table>
 					</div>
+
+					{/* Mobile Card List View */}
+					<div className="mobile-only-list" style={{ display: "none", flexDirection: "column", gap: 14 }}>
+						{filteredClients.slice(0, visibleCount).map((c) => (
+							<div
+								key={c.id}
+								style={{
+									padding: 16,
+									background: "rgba(255,255,255,0.02)",
+									border: "1px solid #1C1F26",
+									borderRadius: 12,
+									display: "flex",
+									flexDirection: "column",
+									gap: 12
+								}}
+							>
+								<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									<span style={{ fontWeight: 700, color: "#F9FAFB", fontSize: 14 }}>{c.company}</span>
+									<button
+										onClick={() => handleViewCompany(c.id)}
+										style={{
+											background: "rgba(59,130,246,0.06)",
+											border: "1px solid rgba(59,130,246,0.2)",
+											color: "#60A5FA",
+											fontSize: 11.5,
+											padding: "4px 10px",
+											borderRadius: 6,
+											cursor: "pointer",
+											fontWeight: 600,
+										}}
+									>
+										View Workspace
+									</button>
+								</div>
+								<div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12.5 }}>
+									<div style={{ display: "flex", justifyContent: "space-between" }}>
+										<span style={{ color: "#6B7280" }}>Industry:</span>
+										<span style={{ color: "#CBD5E1" }}>{c.industry}</span>
+									</div>
+									<div style={{ display: "flex", justifyContent: "space-between" }}>
+										<span style={{ color: "#6B7280" }}>Contact:</span>
+										<span style={{ color: "#CBD5E1" }}>{c.name}</span>
+									</div>
+									<div style={{ display: "flex", justifyContent: "space-between" }}>
+										<span style={{ color: "#6B7280" }}>Email:</span>
+										<span style={{ color: "#6B7280" }}>{c.email}</span>
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
 					{visibleCount < filteredClients.length && (
 						<div style={{ textAlign: "center", marginTop: 20 }}>
 							<span style={{ fontSize: 12, color: "#6B7280", marginRight: 12 }}>
@@ -821,6 +898,16 @@ export default function Companies({ clients, onSelectRequest }) {
 					)}
 				</>
 			)}
+			<style>{`
+				@media (max-width: 768px) {
+					.desktop-only-table {
+						display: none !important;
+					}
+					.mobile-only-list {
+						display: flex !important;
+					}
+				}
+			`}</style>
 		</div>
 	);
 }

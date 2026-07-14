@@ -194,66 +194,150 @@ export default function ManageCareers() {
 				) : jobs.length === 0 ? (
 					<div style={{ textAlign: "center", padding: 40, border: "1px dashed rgba(51,65,85,0.4)", borderRadius: 14, color: "#6B7280" }}>No opportunities found.</div>
 				) : (
-					<div style={{ overflowX: "auto" }}>
-						<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-							<thead>
-								<tr>
-									<th style={thStyle}>Job Title</th>
-									<th style={thStyle}>Department</th>
-									<th style={thStyle}>Location</th>
-									<th style={thStyle}>Type</th>
-									<th style={thStyle}>Status</th>
-									<th style={thStyle}>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{jobs.map((job) => (
-									<tr key={job.id} style={{ borderBottom: "1px solid rgba(51,65,85,0.2)" }}>
-										<td style={{ ...tdStyle, fontWeight: 600, color: "#fff" }}>{job.title}</td>
-										<td style={tdStyle}>{job.department}</td>
-										<td style={tdStyle}>{job.location}</td>
-										<td style={tdStyle}>{job.type}</td>
-										<td style={tdStyle}>
-											<StatusBadge isPublished={job.isPublished} />
-										</td>
-										<td style={tdStyle}>
-											<div style={{ display: "flex", gap: 8 }}>
-												<button
-													onClick={() => handleTogglePublish(job.id, job.isPublished)}
-													style={{
-														padding: "4px 8px",
-														fontSize: 11,
-														borderRadius: 4,
-														cursor: "pointer",
-														background: job.isPublished ? "rgba(100,116,139,0.15)" : "rgba(16,185,129,0.12)",
-														border: `1px solid ${job.isPublished ? "rgba(100,116,139,0.3)" : "rgba(16,185,129,0.3)"}`,
-														color: job.isPublished ? "#94A3B8" : "#10B981",
-													}}
-												>
-													{job.isPublished ? "Close" : "Open"}
-												</button>
-												<button
-													onClick={() => handleDelete(job.id, job.title)}
-													style={{
-														padding: "4px 8px",
-														fontSize: 11,
-														borderRadius: 4,
-														cursor: "pointer",
-														background: "rgba(239,68,68,0.1)",
-														border: "1px solid rgba(239,68,68,0.3)",
-														color: "#F87171",
-													}}
-												>
-													Delete
-												</button>
-											</div>
-										</td>
+					<>
+						{/* Desktop Table View */}
+						<div className="desktop-only-table" style={{ overflowX: "auto" }}>
+							<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+								<thead>
+									<tr>
+										<th style={thStyle}>Job Title</th>
+										<th style={thStyle}>Department</th>
+										<th style={thStyle}>Location</th>
+										<th style={thStyle}>Type</th>
+										<th style={thStyle}>Status</th>
+										<th style={thStyle}>Actions</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
+								</thead>
+								<tbody>
+									{jobs.map((job) => (
+										<tr key={job.id} style={{ borderBottom: "1px solid rgba(51,65,85,0.2)" }}>
+											<td style={{ ...tdStyle, fontWeight: 600, color: "#fff" }}>{job.title}</td>
+											<td style={tdStyle}>{job.department}</td>
+											<td style={tdStyle}>{job.location}</td>
+											<td style={tdStyle}>{job.type}</td>
+											<td style={tdStyle}>
+												<StatusBadge isPublished={job.isPublished} />
+											</td>
+											<td style={tdStyle}>
+												<div style={{ display: "flex", gap: 8 }}>
+													<button
+														onClick={() => handleTogglePublish(job.id, job.isPublished)}
+														style={{
+															padding: "4px 8px",
+															fontSize: 11,
+															borderRadius: 4,
+															cursor: "pointer",
+															background: job.isPublished ? "rgba(100,116,139,0.15)" : "rgba(16,185,129,0.12)",
+															border: `1px solid ${job.isPublished ? "rgba(100,116,139,0.3)" : "rgba(16,185,129,0.3)"}`,
+															color: job.isPublished ? "#94A3B8" : "#10B981",
+														}}
+													>
+														{job.isPublished ? "Close" : "Open"}
+													</button>
+													<button
+														onClick={() => handleDelete(job.id, job.title)}
+														style={{
+															padding: "4px 8px",
+															fontSize: 11,
+															borderRadius: 4,
+															cursor: "pointer",
+															background: "rgba(239,68,68,0.1)",
+															border: "1px solid rgba(239,68,68,0.3)",
+															color: "#F87171",
+														}}
+													>
+														Delete
+													</button>
+												</div>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+
+						{/* Mobile Card List View */}
+						<div className="mobile-only-list" style={{ display: "none", flexDirection: "column", gap: 14 }}>
+							{jobs.map((job) => (
+								<div
+									key={job.id}
+									style={{
+										padding: 16,
+										background: "rgba(255,255,255,0.02)",
+										border: "1px solid #1C1F26",
+										borderRadius: 12,
+										display: "flex",
+										flexDirection: "column",
+										gap: 12
+									}}
+								>
+									<div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
+										<span style={{ fontWeight: 700, color: "#fff", fontSize: 14 }}>{job.title}</span>
+										<StatusBadge isPublished={job.isPublished} />
+									</div>
+									<div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12.5 }}>
+										<div style={{ display: "flex", justifyContent: "space-between" }}>
+											<span style={{ color: "#6B7280" }}>Department:</span>
+											<span style={{ color: "#CBD5E1" }}>{job.department}</span>
+										</div>
+										<div style={{ display: "flex", justifyContent: "space-between" }}>
+											<span style={{ color: "#6B7280" }}>Location:</span>
+											<span style={{ color: "#CBD5E1" }}>{job.location}</span>
+										</div>
+										<div style={{ display: "flex", justifyContent: "space-between" }}>
+											<span style={{ color: "#6B7280" }}>Type:</span>
+											<span style={{ color: "#CBD5E1" }}>{job.type}</span>
+										</div>
+									</div>
+									<div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+										<button
+											onClick={() => handleTogglePublish(job.id, job.isPublished)}
+											style={{
+												flex: 1,
+												padding: "8px",
+												fontSize: 12,
+												borderRadius: 6,
+												cursor: "pointer",
+												background: job.isPublished ? "rgba(100,116,139,0.15)" : "rgba(16,185,129,0.12)",
+												border: `1px solid ${job.isPublished ? "rgba(100,116,139,0.3)" : "rgba(16,185,129,0.3)"}`,
+												color: job.isPublished ? "#94A3B8" : "#10B981",
+												fontWeight: 600
+											}}
+										>
+											{job.isPublished ? "Close" : "Open"}
+										</button>
+										<button
+											onClick={() => handleDelete(job.id, job.title)}
+											style={{
+												flex: 1,
+												padding: "8px",
+												fontSize: 12,
+												borderRadius: 6,
+												cursor: "pointer",
+												background: "rgba(239,68,68,0.1)",
+												border: "1px solid rgba(239,68,68,0.3)",
+												color: "#F87171",
+												fontWeight: 600
+											}}
+										>
+											Delete
+										</button>
+									</div>
+								</div>
+							))}
+						</div>
+					</>
 				)}
+				<style>{`
+					@media (max-width: 768px) {
+						.desktop-only-table {
+							display: none !important;
+						}
+						.mobile-only-list {
+							display: flex !important;
+						}
+					}
+				`}</style>
 			</div>
 		</>
 	);

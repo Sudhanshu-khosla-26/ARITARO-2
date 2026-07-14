@@ -97,7 +97,7 @@ export default function UserManagement({
 			</div>
 
 			{subTab === "clients" ? (
-				<div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 24, alignItems: "start" }}>
+				<div className="user-management-grid" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 24, alignItems: "start" }}>
 					
 					{/* Add Client Form */}
 					<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24 }}>
@@ -193,52 +193,106 @@ export default function UserManagement({
 						) : clients.length === 0 ? (
 							<p style={{ color: "#6B7280", fontSize: 13 }}>No client accounts registered.</p>
 						) : (
-							<div style={{ overflowX: "auto" }}>
-								<table style={{ width: "100%", borderCollapse: "collapse" }}>
-									<thead>
-										<tr>
-											{["Name", "Email", "Joined", "Last Login", ""].map((h) => (
-												<th key={h} style={thStyle}>{h}</th>
-											))}
-										</tr>
-									</thead>
-									<tbody>
-										{clients.map((client) => (
-											<tr key={client.id}>
-												<td style={tdStyle}>{client.name}</td>
-												<td style={tdStyle}>{client.email}</td>
-												<td style={tdStyle}>{formatDate(client.createdAt)}</td>
-												<td style={tdStyle}>{formatDate(client.lastLogin)}</td>
-												<td style={tdStyle}>
-													<button
-														type="button"
-														onClick={() => onRemoveClient(client.id)}
-														style={{
-															background: "rgba(239,68,68,0.08)",
-															border: "1px solid rgba(239,68,68,0.25)",
-															color: "#F87171",
-															borderRadius: 8,
-															padding: "6px 12px",
-															fontSize: 12,
-															cursor: "pointer",
-															fontWeight: 600,
-															transition: "all 0.2s"
-														}}
-													>
-														Delete
-													</button>
-												</td>
+							<>
+								<div className="desktop-only-table" style={{ overflowX: "auto" }}>
+									<table style={{ width: "100%", borderCollapse: "collapse" }}>
+										<thead>
+											<tr>
+												{["Name", "Email", "Joined", "Last Login", ""].map((h) => (
+													<th key={h} style={thStyle}>{h}</th>
+												))}
 											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
+										</thead>
+										<tbody>
+											{clients.map((client) => (
+												<tr key={client.id}>
+													<td style={tdStyle}>{client.name}</td>
+													<td style={tdStyle}>{client.email}</td>
+													<td style={tdStyle}>{formatDate(client.createdAt)}</td>
+													<td style={tdStyle}>{formatDate(client.lastLogin)}</td>
+													<td style={tdStyle}>
+														<button
+															type="button"
+															onClick={() => onRemoveClient(client.id)}
+															style={{
+																background: "rgba(239,68,68,0.08)",
+																border: "1px solid rgba(239,68,68,0.25)",
+																color: "#F87171",
+																borderRadius: 8,
+																padding: "6px 12px",
+																fontSize: 12,
+																cursor: "pointer",
+																fontWeight: 600,
+																transition: "all 0.2s"
+															}}
+														>
+															Delete
+														</button>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+
+								<div className="mobile-only-list" style={{ display: "none", flexDirection: "column", gap: 14 }}>
+									{clients.map((client) => (
+										<div
+											key={client.id}
+											style={{
+												padding: 16,
+												background: "rgba(255,255,255,0.02)",
+												border: "1px solid #1C1F26",
+												borderRadius: 12,
+												display: "flex",
+												flexDirection: "column",
+												gap: 12
+											}}
+										>
+											<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+												<span style={{ fontWeight: 700, color: "#F9FAFB", fontSize: 14 }}>{client.name}</span>
+												<button
+													type="button"
+													onClick={() => onRemoveClient(client.id)}
+													style={{
+														background: "rgba(239,68,68,0.08)",
+														border: "1px solid rgba(239,68,68,0.25)",
+														color: "#F87171",
+														borderRadius: 8,
+														padding: "4px 10px",
+														fontSize: 11.5,
+														cursor: "pointer",
+														fontWeight: 600,
+														transition: "all 0.2s"
+													}}
+												>
+													Delete
+												</button>
+											</div>
+											<div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12.5 }}>
+												<div style={{ display: "flex", justifyContent: "space-between" }}>
+													<span style={{ color: "#6B7280" }}>Email:</span>
+													<span style={{ color: "#CBD5E1" }}>{client.email}</span>
+												</div>
+												<div style={{ display: "flex", justifyContent: "space-between" }}>
+													<span style={{ color: "#6B7280" }}>Joined:</span>
+													<span style={{ color: "#CBD5E1" }}>{formatDate(client.createdAt)}</span>
+												</div>
+												<div style={{ display: "flex", justifyContent: "space-between" }}>
+													<span style={{ color: "#6B7280" }}>Last Login:</span>
+													<span style={{ color: "#CBD5E1" }}>{formatDate(client.lastLogin)}</span>
+												</div>
+											</div>
+										</div>
+									))}
+								</div>
+							</>
 						)}
 					</div>
 
 				</div>
 			) : (
-				<div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 24, alignItems: "start" }}>
+				<div className="user-management-grid" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 24, alignItems: "start" }}>
 					
 					{/* Add Admin Form */}
 					<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24 }}>
@@ -318,55 +372,126 @@ export default function UserManagement({
 						) : admins.length === 0 ? (
 							<p style={{ color: "#6B7280", fontSize: 13 }}>No admins found.</p>
 						) : (
-							<div style={{ overflowX: "auto" }}>
-								<table style={{ width: "100%", borderCollapse: "collapse" }}>
-									<thead>
-										<tr>
-											{["Name", "Email", "Joined", "Last Login", ""].map((h) => (
-												<th key={h} style={thStyle}>{h}</th>
-											))}
-										</tr>
-									</thead>
-									<tbody>
-										{admins.map((admin) => (
-											<tr key={admin.id}>
-												<td style={tdStyle}>{admin.name}</td>
-												<td style={tdStyle}>{admin.email}</td>
-												<td style={tdStyle}>{formatDate(admin.createdAt)}</td>
-												<td style={tdStyle}>{formatDate(admin.lastLogin)}</td>
-												<td style={tdStyle}>
-													{admin.id !== currentUserId ? (
-														<button
-															type="button"
-															onClick={() => onRemoveAdmin(admin.id)}
-															style={{
-																background: "rgba(239,68,68,0.08)",
-																border: "1px solid rgba(239,68,68,0.25)",
-																color: "#F87171",
-																borderRadius: 8,
-																padding: "6px 12px",
-																fontSize: 12,
-																cursor: "pointer",
-																fontWeight: 600,
-																transition: "all 0.2s"
-															}}
-														>
-															Remove
-														</button>
-													) : (
-														<span style={{ fontSize: 12.5, color: "#6B7280" }}>You</span>
-													)}
-												</td>
+							<>
+								<div className="desktop-only-table" style={{ overflowX: "auto" }}>
+									<table style={{ width: "100%", borderCollapse: "collapse" }}>
+										<thead>
+											<tr>
+												{["Name", "Email", "Joined", "Last Login", ""].map((h) => (
+													<th key={h} style={thStyle}>{h}</th>
+												))}
 											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
+										</thead>
+										<tbody>
+											{admins.map((admin) => (
+												<tr key={admin.id}>
+													<td style={tdStyle}>{admin.name}</td>
+													<td style={tdStyle}>{admin.email}</td>
+													<td style={tdStyle}>{formatDate(admin.createdAt)}</td>
+													<td style={tdStyle}>{formatDate(admin.lastLogin)}</td>
+													<td style={tdStyle}>
+														{admin.id !== currentUserId ? (
+															<button
+																type="button"
+																onClick={() => onRemoveAdmin(admin.id)}
+																style={{
+																	background: "rgba(239,68,68,0.08)",
+																	border: "1px solid rgba(239,68,68,0.25)",
+																	color: "#F87171",
+																	borderRadius: 8,
+																	padding: "6px 12px",
+																	fontSize: 12,
+																	cursor: "pointer",
+																	fontWeight: 600,
+																	transition: "all 0.2s"
+																}}
+															>
+																Remove
+															</button>
+														) : (
+															<span style={{ fontSize: 12.5, color: "#6B7280" }}>You</span>
+														)}
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+
+								<div className="mobile-only-list" style={{ display: "none", flexDirection: "column", gap: 14 }}>
+									{admins.map((admin) => (
+										<div
+											key={admin.id}
+											style={{
+												padding: 16,
+												background: "rgba(255,255,255,0.02)",
+												border: "1px solid #1C1F26",
+												borderRadius: 12,
+												display: "flex",
+												flexDirection: "column",
+												gap: 12
+											}}
+										>
+											<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+												<span style={{ fontWeight: 700, color: "#F9FAFB", fontSize: 14 }}>{admin.name}</span>
+												{admin.id !== currentUserId ? (
+													<button
+														type="button"
+														onClick={() => onRemoveAdmin(admin.id)}
+														style={{
+															background: "rgba(239,68,68,0.08)",
+															border: "1px solid rgba(239,68,68,0.25)",
+															color: "#F87171",
+															borderRadius: 8,
+															padding: "4px 10px",
+															fontSize: 11.5,
+															cursor: "pointer",
+															fontWeight: 600,
+															transition: "all 0.2s"
+														}}
+													>
+														Remove
+													</button>
+												) : (
+													<span style={{ fontSize: 12.5, color: "#6B7280" }}>You</span>
+												)}
+											</div>
+											<div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12.5 }}>
+												<div style={{ display: "flex", justifyContent: "space-between" }}>
+													<span style={{ color: "#6B7280" }}>Email:</span>
+													<span style={{ color: "#CBD5E1" }}>{admin.email}</span>
+												</div>
+												<div style={{ display: "flex", justifyContent: "space-between" }}>
+													<span style={{ color: "#6B7280" }}>Joined:</span>
+													<span style={{ color: "#CBD5E1" }}>{formatDate(admin.createdAt)}</span>
+												</div>
+												<div style={{ display: "flex", justifyContent: "space-between" }}>
+													<span style={{ color: "#6B7280" }}>Last Login:</span>
+													<span style={{ color: "#CBD5E1" }}>{formatDate(admin.lastLogin)}</span>
+												</div>
+											</div>
+										</div>
+									))}
+								</div>
+							</>
 						)}
 					</div>
 
 				</div>
 			)}
+			<style>{`
+				@media (max-width: 768px) {
+					.desktop-only-table {
+						display: none !important;
+					}
+					.mobile-only-list {
+						display: flex !important;
+					}
+					.user-management-grid {
+						grid-template-columns: 1fr !important;
+					}
+				}
+			`}</style>
 		</div>
 	);
 }

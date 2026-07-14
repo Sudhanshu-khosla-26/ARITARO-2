@@ -214,7 +214,7 @@ export default function ManageServiceRequests({ initialSelectedId }) {
 					</button>
 				</div>
 
-				<div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 24, alignItems: "start" }}>
+				<div className="service-requests-detail-grid" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 24, alignItems: "start" }}>
 					{/* Left Column: Scope & Status details */}
 					<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 20 }}>
 						<h3 style={{ fontSize: 15, fontWeight: 700, color: "#F9FAFB", borderBottom: "1px solid #1C1F26", paddingBottom: 10, margin: 0 }}>Engagement Scope</h3>
@@ -724,12 +724,21 @@ export default function ManageServiceRequests({ initialSelectedId }) {
 				</>
 			)}
 			<style>{`
+				.service-requests-detail-grid {
+					display: grid;
+					grid-template-columns: 1.2fr 1fr;
+					gap: 24px;
+					align-items: start;
+				}
 				@media (max-width: 768px) {
 					.desktop-only-table {
 						display: none !important;
 					}
 					.mobile-only-list {
 						display: flex !important;
+					}
+					.service-requests-detail-grid {
+						grid-template-columns: 1fr !important;
 					}
 				}
 			`}</style>
