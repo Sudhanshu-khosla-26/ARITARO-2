@@ -173,7 +173,7 @@ function IntakeFormContent() {
                   <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 24 }}>
                     Please log in to submit a security scoping request and receive formal PDF audits.
                   </p>
-                  <Link href="/login?redirect=/request-assessment" className="btn-primary" style={{ display: 'inline-flex', padding: '12px 24px', textDecoration: 'none', background: 'var(--primary)', color: '#fff', borderRadius: 8, fontWeight: 600 }}>
+                  <Link href="/login?redirect=/request-assessment" className="btn-primary" style={{ display: 'inline-flex', padding: '12px 24px', textDecoration: 'none', background: 'linear-gradient(135deg, #3B82F6, #1D4ED8)', color: '#fff', borderRadius: 8, fontWeight: 600 }}>
                     Log In to Continue
                   </Link>
                 </div>
@@ -185,7 +185,7 @@ function IntakeFormContent() {
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>Request Submitted Successfully!</h3>
                   <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>We have generated a ticket for your service request. You can monitor the scope approvals in your client panel.</p>
                   <div style={{ marginTop: 24 }}>
-                    <Link href="/dashboard" className="btn-primary" style={{ display: 'inline-flex', padding: '10px 20px', textDecoration: 'none', background: 'var(--primary)', color: '#fff', borderRadius: 8, fontWeight: 600 }}>
+                    <Link href="/dashboard" className="btn-primary" style={{ display: 'inline-flex', padding: '10px 20px', textDecoration: 'none', background: 'linear-gradient(135deg, #3B82F6, #1D4ED8)', color: '#fff', borderRadius: 8, fontWeight: 600 }}>
                       Go to Dashboard
                     </Link>
                   </div>
@@ -372,7 +372,7 @@ function IntakeFormContent() {
                     </label>
                   </div>
 
-                  <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: 12, padding: '14px', fontSize: 14, width: '100%', justifyContent: 'center', background: 'var(--primary)', border: 'none', color: '#fff', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}>
+                  <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: 12, padding: '14px', fontSize: 14, width: '100%', justifyContent: 'center', background: 'linear-gradient(135deg, #3B82F6, #1D4ED8)', border: 'none', color: '#fff', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}>
                     {loading ? 'Submitting Request...' : 'Submit Scoping Request'}
                   </button>
                 </form>
