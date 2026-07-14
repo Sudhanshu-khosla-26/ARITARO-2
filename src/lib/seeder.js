@@ -1,5 +1,5 @@
 import connectDB from "@/lib/db";
-import { User, Service, CaseStudy, JobOpportunity } from "@/models";
+import { User, Service, CaseStudy, JobOpportunity, Setting } from "@/models";
 
 const DEFAULT_SERVICES = [
 	{
@@ -331,5 +331,20 @@ export async function seedDatabase() {
 	if (jobCount === 0) {
 		await JobOpportunity.insertMany(DEFAULT_ROLES);
 		console.log("✅ Default job opportunities seeded");
+	}
+
+	const settingCount = await Setting.countDocuments({ key: "smtp" });
+	if (settingCount === 0) {
+		await Setting.create({
+			key: "smtp",
+			value: {
+				host: process.env.SMTP_HOST || "smtp.gmail.com",
+				port: Number(process.env.SMTP_PORT) || 587,
+				user: process.env.SMTP_USER || "your-email@example.com",
+				pass: process.env.SMTP_PASSWORD || "your-app-password",
+				from: process.env.SMTP_FROM || "aritaro <noreply@aritaro.com>",
+			},
+		});
+		console.log("✅ Default SMTP settings seeded");
 	}
 }

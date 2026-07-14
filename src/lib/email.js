@@ -1,23 +1,43 @@
 import nodemailer from "nodemailer";
-
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+import connectDB from "@/lib/db";
+import { Setting } from "@/models";
 
 export async function sendEmail({ to, subject, html }) {
-  if (!process.env.SMTP_USER) {
+  await connectDB();
+
+  const smtpSetting = await Setting.findOne({ key: "smtp" });
+
+  let host = process.env.SMTP_HOST;
+  let port = Number(process.env.SMTP_PORT) || 587;
+  let user = process.env.SMTP_USER;
+  let pass = process.env.SMTP_PASSWORD;
+  let from = process.env.SMTP_FROM || "aritaro <noreply@aritaro.com>";
+
+  if (smtpSetting && smtpSetting.value) {
+    if (smtpSetting.value.host) host = smtpSetting.value.host;
+    if (smtpSetting.value.port) port = Number(smtpSetting.value.port);
+    if (smtpSetting.value.user) user = smtpSetting.value.user;
+    if (smtpSetting.value.pass) pass = smtpSetting.value.pass;
+    if (smtpSetting.value.from) from = smtpSetting.value.from;
+  }
+
+  if (!user) {
     console.log(`[Email Mock] To: ${to}, Subject: ${subject}`);
     return { success: true, mock: true };
   }
 
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465,
+    auth: {
+      user,
+      pass,
+    },
+  });
+
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || "aritaro <noreply@aritaro.com>",
+    from,
     to,
     subject,
     html,

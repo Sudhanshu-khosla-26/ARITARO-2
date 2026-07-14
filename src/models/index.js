@@ -10,3 +10,4 @@ export { default as ContactRequest } from "./ContactRequest";
 export { default as ServiceRequest } from "./ServiceRequest";
 export { default as Report } from "./Report";
 export { default as AuditLog } from "./AuditLog";
+export { default as Setting } from "./Setting";
