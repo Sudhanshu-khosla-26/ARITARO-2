@@ -520,6 +520,19 @@ export default function ManageServiceRequests({ initialSelectedId }) {
 						</div>
 					</div>
 				</div>
+				<style>{`
+					.service-requests-detail-grid {
+						display: grid;
+						grid-template-columns: 1.2fr 1fr;
+						gap: 24px;
+						align-items: start;
+					}
+					@media (max-width: 768px) {
+						.service-requests-detail-grid {
+							grid-template-columns: 1fr !important;
+						}
+					}
+				`}</style>
 			</div>
 		);
 	}
