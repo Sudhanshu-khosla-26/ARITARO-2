@@ -326,29 +326,29 @@ export default function DashboardPage() {
 										<tbody>
 											{requests.slice(0, 5).map((r) => (
 												<tr key={r.id} style={{ borderBottom: "1px solid rgba(30,41,59,0.5)", fontSize: 13.5 }}>
-													<td style={{ padding: "14px 8px", fontWeight: 700, color: "#F1F5F9" }}>{r.ticket_ref}</td>
-													<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</td>
+													<td style={{ padding: "14px 8px", fontWeight: 700, color: "#F1F5F9" }}>{r.ticket_ref || ""}</td>
+													<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{(r.service_type || "").toUpperCase().replace("_", " ")}</td>
 													<td style={{ padding: "14px 8px" }}>
 														<span style={{
 															fontSize: 10.5,
 															fontWeight: 700,
 															padding: "3px 8px",
 															borderRadius: 4,
-															background: r.status === "closed" ? "rgba(74,222,128,0.1)" : r.status === "in_progress" ? "rgba(99,102,241,0.1)" : "rgba(245,158,11,0.1)",
-															color: r.status === "closed" ? "#4ADE80" : r.status === "in_progress" ? "#818CF8" : "#FBBF24",
-															border: `1px solid ${r.status === "closed" ? "rgba(74,222,128,0.2)" : r.status === "in_progress" ? "rgba(99,102,241,0.2)" : "rgba(245,158,11,0.2)"}`,
+															background: (r.status || "") === "closed" ? "rgba(74,222,128,0.1)" : (r.status || "") === "in_progress" ? "rgba(99,102,241,0.1)" : "rgba(245,158,11,0.1)",
+															color: (r.status || "") === "closed" ? "#4ADE80" : (r.status || "") === "in_progress" ? "#818CF8" : "#FBBF24",
+															border: `1px solid ${(r.status || "") === "closed" ? "rgba(74,222,128,0.2)" : (r.status || "") === "in_progress" ? "rgba(99,102,241,0.2)" : "rgba(245,158,11,0.2)"}`,
 															textTransform: "uppercase"
 														}}>
-															{r.status.replace("_", " ")}
+															{(r.status || "").replace("_", " ")}
 														</span>
 													</td>
 													<td style={{ padding: "14px 8px" }}>
 														<span style={{
 															fontSize: 11,
 															fontWeight: 600,
-															color: r.priority === "critical" || r.priority === "high" ? "#EF4444" : "#94A3B8"
+															color: (r.priority || "") === "critical" || (r.priority || "") === "high" ? "#EF4444" : "#94A3B8"
 														}}>
-															{r.priority.toUpperCase()}
+															{(r.priority || "").toUpperCase()}
 														</span>
 													</td>
 													<td style={{ padding: "14px 8px", color: "#64748B" }}>
@@ -376,27 +376,27 @@ export default function DashboardPage() {
 											}}
 										>
 											<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-												<span style={{ fontWeight: 700, color: "#F1F5F9", fontSize: 13.5 }}>{r.ticket_ref}</span>
+												<span style={{ fontWeight: 700, color: "#F1F5F9", fontSize: 13.5 }}>{r.ticket_ref || ""}</span>
 												<span style={{
 													fontSize: 9.5,
 													fontWeight: 700,
 													padding: "2px 6px",
 													borderRadius: 4,
-													background: r.status === "closed" ? "rgba(74,222,128,0.1)" : r.status === "in_progress" ? "rgba(99,102,241,0.1)" : "rgba(245,158,11,0.1)",
-													color: r.status === "closed" ? "#4ADE80" : r.status === "in_progress" ? "#818CF8" : "#FBBF24",
-													border: `1px solid ${r.status === "closed" ? "rgba(74,222,128,0.2)" : r.status === "in_progress" ? "rgba(99,102,241,0.2)" : "rgba(245,158,11,0.2)"}`,
+													background: (r.status || "") === "closed" ? "rgba(74,222,128,0.1)" : (r.status || "") === "in_progress" ? "rgba(99,102,241,0.1)" : "rgba(245,158,11,0.1)",
+													color: (r.status || "") === "closed" ? "#4ADE80" : (r.status || "") === "in_progress" ? "#818CF8" : "#FBBF24",
+													border: `1px solid ${(r.status || "") === "closed" ? "rgba(74,222,128,0.2)" : (r.status || "") === "in_progress" ? "rgba(99,102,241,0.2)" : "rgba(245,158,11,0.2)"}`,
 													textTransform: "uppercase"
 												}}>
-													{r.status.replace("_", " ")}
+													{(r.status || "").replace("_", " ")}
 												</span>
 											</div>
 											<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12.5 }}>
-												<span style={{ color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</span>
+												<span style={{ color: "#CBD5E1" }}>{(r.service_type || "").toUpperCase().replace("_", " ")}</span>
 												<span style={{
 													fontWeight: 600,
-													color: r.priority === "critical" || r.priority === "high" ? "#EF4444" : "#94A3B8"
+													color: (r.priority || "") === "critical" || (r.priority || "") === "high" ? "#EF4444" : "#94A3B8"
 												}}>
-													{r.priority.toUpperCase()}
+													{(r.priority || "").toUpperCase()}
 												</span>
 											</div>
 										</div>
