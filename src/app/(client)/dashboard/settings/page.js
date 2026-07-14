@@ -42,7 +42,7 @@ export default function SettingsPage() {
 					</h2>
 
 					<form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-						<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+						<div className="dash-settings-grid">
 							<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
 								<label style={{ fontSize: 12, fontWeight: 600, color: "#94A3B8" }}>Contact Name</label>
 								<input
@@ -82,7 +82,7 @@ export default function SettingsPage() {
 							</div>
 						</div>
 
-						<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+						<div className="dash-settings-grid">
 							<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
 								<label style={{ fontSize: 12, fontWeight: 600, color: "#94A3B8" }}>Company Name</label>
 								<input

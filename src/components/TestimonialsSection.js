@@ -255,7 +255,7 @@ export default function TestimonialsSection() {
         </p>
       </div>
 
-      {/* Marquee Wrapper */}
+      {/* Marquee Wrapper (Desktop only) */}
       <div className="testimonials-wrapper" style={{ position: 'relative', zIndex: 2 }}>
         {/* Left Fade Overlay */}
         <div style={{
@@ -289,6 +289,25 @@ export default function TestimonialsSection() {
         </div>
       </div>
 
+      {/* Mobile Swipeable Track (Visible only on mobile) */}
+      <div className="mobile-only-track" style={{ position: 'relative', zIndex: 2, display: 'none' }}>
+        <div style={{
+          display: 'flex',
+          overflowX: 'auto',
+          scrollSnapType: 'x mandatory',
+          gap: '16px',
+          padding: '0 24px 20px',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none', // Hide standard firefox scrollbar
+        }} className="no-scrollbar">
+          {testimonials.map((t, i) => (
+            <div key={`mob-${i}`} style={{ scrollSnapAlign: 'center', flexShrink: 0 }}>
+              <TestimonialCard t={t} />
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* CSS Keyframes declaration */}
       <style>{`
         @keyframes marquee-left {
@@ -312,12 +331,17 @@ export default function TestimonialsSection() {
           animation: marquee-right 45s linear infinite;
         }
 
-        @media (max-width: 768px) {
-          .testimonials-wrapper { padding: 0 8px; }
-          .testimonials-wrapper > div { gap: 12px !important; }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
         }
-        @media (max-width: 480px) {
-          .testimonials-wrapper > div > div:last-child { display: none; }
+
+        @media (max-width: 768px) {
+          .testimonials-wrapper {
+            display: none !important;
+          }
+          .mobile-only-track {
+            display: block !important;
+          }
         }
       `}</style>
     </section>

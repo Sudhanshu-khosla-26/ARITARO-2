@@ -35,6 +35,7 @@ export default function ManageServiceRequests({ initialSelectedId }) {
 	const [adminNotes, setAdminNotes] = useState("");
 	const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 	const [visibleReportsCount, setVisibleReportsCount] = useState(2);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	const loadRequests = async () => {
 		try {
@@ -523,68 +524,184 @@ export default function ManageServiceRequests({ initialSelectedId }) {
 		);
 	}
 
+	const filteredRequests = requests.filter(r => {
+		const query = searchQuery.toLowerCase();
+		return (
+			r.ticket_ref.toLowerCase().includes(query) ||
+			r.company_name.toLowerCase().includes(query) ||
+			r.service_type.toLowerCase().includes(query) ||
+			r.status.toLowerCase().includes(query)
+		);
+	});
+
+	const displayedRequests = filteredRequests.slice(0, visibleCount);
+
 	return (
-		<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24, overflowX: "auto" }}>
+		<div style={{ background: "#111318", border: "1px solid #1C1F26", borderRadius: 16, padding: 24 }}>
 			<h2 style={{ fontSize: 16, fontWeight: 700, color: "#F9FAFB", marginBottom: 18 }}>Global Service Requests</h2>
-			{requests.length === 0 ? (
-				<p style={{ color: "#6B7280", fontSize: 13 }}>No requests received yet.</p>
+			
+			{/* Search Input Box */}
+			<div style={{ marginBottom: 20, position: "relative" }}>
+				<input
+					type="text"
+					placeholder="Search requests by ticket, company, service, status..."
+					value={searchQuery}
+					onChange={(e) => {
+						setSearchQuery(e.target.value);
+						setVisibleCount(PAGE_SIZE);
+					}}
+					style={{
+						width: "100%",
+						padding: "12px 16px 12px 42px",
+						background: "rgba(255,255,255,0.02)",
+						border: "1px solid #1C1F26",
+						borderRadius: 10,
+						color: "#F9FAFB",
+						fontSize: 14,
+						outline: "none",
+						boxSizing: "border-box"
+					}}
+				/>
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="#6B7280"
+					strokeWidth="2"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}
+				>
+					<circle cx="11" cy="11" r="8" />
+					<line x1="21" y1="21" x2="16.65" y2="16.65" />
+				</svg>
+			</div>
+
+			{filteredRequests.length === 0 ? (
+				<p style={{ color: "#6B7280", fontSize: 13, textAlign: "center", padding: "24px 0" }}>No requests found.</p>
 			) : (
 				<>
-					<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-						<thead>
-							<tr style={{ borderBottom: "1px solid #1C1F26" }}>
-								<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>TICKET</th>
-								<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>COMPANY</th>
-								<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>SERVICE</th>
-								<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>STATUS</th>
-								<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600, textAlign: "right" }}>ACTION</th>
-							</tr>
-						</thead>
-						<tbody>
-							{requests.slice(0, visibleCount).map((r) => (
-								<tr key={r.id} style={{ borderBottom: "1px solid rgba(51,65,85,0.2)", fontSize: 13.5 }}>
-									<td style={{ padding: "14px 8px", fontWeight: 700, color: "#F9FAFB" }}>{r.ticket_ref}</td>
-									<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{r.company_name}</td>
-									<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</td>
-									<td style={{ padding: "14px 8px" }}>
-										<span style={{
-											fontSize: 10,
-											fontWeight: 700,
-											padding: "3px 8px",
-											borderRadius: 4,
-											background: r.status === "closed" ? "rgba(74,222,128,0.1)" : "rgba(245,158,11,0.1)",
-											color: r.status === "closed" ? "#4ADE80" : "#FBBF24",
-											border: `1px solid ${r.status === "closed" ? "rgba(74,222,128,0.2)" : "rgba(245,158,11,0.2)"}`,
-											textTransform: "uppercase"
-										}}>
-											{r.status}
-										</span>
-									</td>
-									<td style={{ padding: "14px 8px", textAlign: "right" }}>
-										<button
-											onClick={() => handleSelectRequest(r)}
-											style={{
-												background: "rgba(99,102,241,0.1)",
-												border: "1px solid rgba(99,102,241,0.2)",
-												color: "#3B82F6",
-												fontSize: 11.5,
-												padding: "6px 12px",
-												borderRadius: 6,
-												cursor: "pointer",
-												fontWeight: 600,
-											}}
-										>
-											Track Details
-										</button>
-									</td>
+					{/* Desktop Table View */}
+					<div className="desktop-only-table" style={{ overflowX: "auto" }}>
+						<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+							<thead>
+								<tr style={{ borderBottom: "1px solid #1C1F26" }}>
+									<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>TICKET</th>
+									<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>COMPANY</th>
+									<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>SERVICE</th>
+									<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600 }}>STATUS</th>
+									<th style={{ padding: "12px 8px", fontSize: 11, color: "#6B7280", fontWeight: 600, textAlign: "right" }}>ACTION</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
-					{visibleCount < requests.length && (
+							</thead>
+							<tbody>
+								{displayedRequests.map((r) => (
+									<tr key={r.id} style={{ borderBottom: "1px solid rgba(51,65,85,0.2)", fontSize: 13.5 }}>
+										<td style={{ padding: "14px 8px", fontWeight: 700, color: "#F9FAFB" }}>{r.ticket_ref}</td>
+										<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{r.company_name}</td>
+										<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</td>
+										<td style={{ padding: "14px 8px" }}>
+											<span style={{
+												fontSize: 10,
+												fontWeight: 700,
+												padding: "3px 8px",
+												borderRadius: 4,
+												background: r.status === "closed" ? "rgba(74,222,128,0.1)" : "rgba(245,158,11,0.1)",
+												color: r.status === "closed" ? "#4ADE80" : "#FBBF24",
+												border: `1px solid ${r.status === "closed" ? "rgba(74,222,128,0.2)" : "rgba(245,158,11,0.2)"}`,
+												textTransform: "uppercase"
+											}}>
+												{r.status}
+											</span>
+										</td>
+										<td style={{ padding: "14px 8px", textAlign: "right" }}>
+											<button
+												onClick={() => handleSelectRequest(r)}
+												style={{
+													background: "rgba(99,102,241,0.1)",
+													border: "1px solid rgba(99,102,241,0.2)",
+													color: "#3B82F6",
+													fontSize: 11.5,
+													padding: "6px 12px",
+													borderRadius: 6,
+													cursor: "pointer",
+													fontWeight: 600,
+												}}
+											>
+												Track Details
+											</button>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+
+					{/* Mobile Card List View */}
+					<div className="mobile-only-list" style={{ display: "none", flexDirection: "column", gap: 16 }}>
+						{displayedRequests.map((r) => (
+							<div
+								key={r.id}
+								style={{
+									padding: 16,
+									background: "rgba(255,255,255,0.02)",
+									border: "1px solid #1C1F26",
+									borderRadius: 12,
+									display: "flex",
+									flexDirection: "column",
+									gap: 12
+								}}
+							>
+								<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									<span style={{ fontWeight: 700, color: "#F9FAFB", fontSize: 14 }}>{r.ticket_ref}</span>
+									<span style={{
+										fontSize: 10,
+										fontWeight: 700,
+										padding: "2px 8px",
+										borderRadius: 4,
+										background: r.status === "closed" ? "rgba(74,222,128,0.1)" : "rgba(245,158,11,0.1)",
+										color: r.status === "closed" ? "#4ADE80" : "#FBBF24",
+										border: `1px solid ${r.status === "closed" ? "rgba(74,222,128,0.2)" : "rgba(245,158,11,0.2)"}`,
+										textTransform: "uppercase"
+									}}>
+										{r.status}
+									</span>
+								</div>
+								<div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 13 }}>
+									<div style={{ display: "flex", justifyContent: "space-between" }}>
+										<span style={{ color: "#6B7280" }}>Company:</span>
+										<span style={{ color: "#CBD5E1" }}>{r.company_name}</span>
+									</div>
+									<div style={{ display: "flex", justifyContent: "space-between" }}>
+										<span style={{ color: "#6B7280" }}>Service:</span>
+										<span style={{ color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</span>
+									</div>
+								</div>
+								<button
+									onClick={() => handleSelectRequest(r)}
+									style={{
+										width: "100%",
+										background: "rgba(99,102,241,0.1)",
+										border: "1px solid rgba(99,102,241,0.2)",
+										color: "#3B82F6",
+										fontSize: 13,
+										padding: "10px",
+										borderRadius: 8,
+										cursor: "pointer",
+										fontWeight: 600
+									}}
+								>
+									Track Details
+								</button>
+							</div>
+						))}
+					</div>
+
+					{/* Load More Pagination */}
+					{filteredRequests.length > visibleCount && (
 						<div style={{ textAlign: "center", marginTop: 20 }}>
 							<span style={{ fontSize: 12, color: "#6B7280", marginRight: 12 }}>
-								Showing {Math.min(visibleCount, requests.length)} of {requests.length}
+								Showing {Math.min(visibleCount, filteredRequests.length)} of {filteredRequests.length}
 							</span>
 							<button
 								onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)}
@@ -606,6 +723,16 @@ export default function ManageServiceRequests({ initialSelectedId }) {
 					)}
 				</>
 			)}
+			<style>{`
+				@media (max-width: 768px) {
+					.desktop-only-table {
+						display: none !important;
+					}
+					.mobile-only-list {
+						display: flex !important;
+					}
+				}
+			`}</style>
 		</div>
 	);
 }

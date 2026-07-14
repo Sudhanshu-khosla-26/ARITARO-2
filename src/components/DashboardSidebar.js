@@ -54,6 +54,52 @@ const DashboardSidebar = () => {
 
 	return (
 		<>
+			{/* Mobile Header Bar */}
+			<div className="dash-mobile-header" style={{
+				position: "fixed",
+				top: 0,
+				left: 0,
+				right: 0,
+				height: 60,
+				background: "rgba(17, 19, 24, 0.9)",
+				borderBottom: "1px solid var(--border-subtle)",
+				backdropFilter: "blur(12px)",
+				WebkitBackdropFilter: "blur(12px)",
+				display: "none",
+				alignItems: "center",
+				justifyContent: "space-between",
+				padding: "0 16px",
+				zIndex: 199,
+			}}>
+				<button
+					style={{
+						background: "none",
+						border: "none",
+						color: "#F9FAFB",
+						cursor: "pointer",
+						padding: 4,
+						display: "flex",
+						alignItems: "center",
+					}}
+					onClick={() => setSidebarOpen(!sidebarOpen)}
+				>
+					{Icons.menu}
+				</button>
+				<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+					<div style={{ width: 24, height: 24, position: "relative" }}>
+						<Image
+							src="/aritaro-logo.png"
+							alt="Aritaro"
+							fill
+							sizes="24px"
+							style={{ objectFit: "contain" }}
+						/>
+					</div>
+					<span style={{ fontSize: 13, fontWeight: 700, letterSpacing: "1px", color: "#F9FAFB" }}>ARITARO</span>
+				</div>
+				<div style={{ width: 28 }}>{/* Spacer for centering */}</div>
+			</div>
+
 			{/* Mobile menu toggle */}
 			<button
 				className="dash-mobile-toggle"

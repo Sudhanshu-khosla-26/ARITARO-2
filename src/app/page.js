@@ -8,7 +8,6 @@ import AboutSection from '@/components/AboutSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
-import LeadPopup from '@/components/LeadPopup';
 import WhatsAppWidget from '@/components/WhatsAppWidget';
 
 export default function Home() {
@@ -23,7 +22,6 @@ export default function Home() {
         <TestimonialsSection />
         <ContactSection />
         <Footer />
-        <LeadPopup />
         <WhatsAppWidget />
       </main>
     </SmoothScrollProvider>

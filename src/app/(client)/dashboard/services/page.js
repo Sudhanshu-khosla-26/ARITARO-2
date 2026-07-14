@@ -81,6 +81,21 @@ export default function MyRequestsPage() {
 		);
 	}
 
+	const [searchQuery, setSearchQuery] = useState("");
+	const [visibleCount, setVisibleCount] = useState(5);
+
+	const filteredRequests = requests.filter(r => {
+		const query = searchQuery.toLowerCase();
+		return (
+			r.ticket_ref.toLowerCase().includes(query) ||
+			r.service_type.toLowerCase().includes(query) ||
+			r.status.toLowerCase().includes(query) ||
+			r.priority.toLowerCase().includes(query)
+		);
+	});
+
+	const visibleRequests = filteredRequests.slice(0, visibleCount);
+
 	return (
 		<main className="dash-main" style={{ background: "#090D16" }}>
 			<div className="dash-content">
@@ -105,34 +120,138 @@ export default function MyRequestsPage() {
 					</Link>
 				</div>
 
-				<div style={{ display: "grid", gridTemplateColumns: selectedRequest ? "1.2fr 1fr" : "1fr", gap: 24 }}>
+				<div className={selectedRequest ? "client-service-details-grid" : ""} style={{ display: "grid", gridTemplateColumns: selectedRequest ? undefined : "1fr", gap: 24 }}>
 					
 					{/* Left: Requests Table */}
-					<div style={{ background: "#0E1422", border: "1px solid #1E293B", borderRadius: 16, padding: 24, overflowX: "auto" }}>
+					<div style={{ background: "#0E1422", border: "1px solid #1E293B", borderRadius: 16, padding: 24 }}>
 						<h2 style={{ fontSize: 15, fontWeight: 700, color: "#E2E8F0", marginBottom: 16 }}>All Requests</h2>
-						{requests.length === 0 ? (
+						
+						{/* Search Input Box */}
+						<div style={{ marginBottom: 20, position: "relative" }}>
+							<input
+								type="text"
+								placeholder="Search requests by ticket ref, service, status..."
+								value={searchQuery}
+								onChange={(e) => {
+									setSearchQuery(e.target.value);
+									setVisibleCount(5);
+								}}
+								style={{
+									width: "100%",
+									padding: "12px 16px 12px 42px",
+									background: "rgba(255,255,255,0.02)",
+									border: "1px solid var(--border-subtle)",
+									borderRadius: 10,
+									color: "#F1F5F9",
+									fontSize: 14,
+									outline: "none",
+									boxSizing: "border-box"
+								}}
+							/>
+							<svg
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#64748B"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}
+							>
+								<circle cx="11" cy="11" r="8" />
+								<line x1="21" y1="21" x2="16.65" y2="16.65" />
+							</svg>
+						</div>
+
+						{filteredRequests.length === 0 ? (
 							<p style={{ color: "#64748B", textAlign: "center", padding: "32px 0", fontSize: 14 }}>No requests found.</p>
 						) : (
-							<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-								<thead>
-									<tr style={{ borderBottom: "1px solid #1E293B" }}>
-										<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>TICKET REF</th>
-										<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>SERVICE TYPE</th>
-										<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>STATUS</th>
-										<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>PRIORITY</th>
-										<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>ACTIONS</th>
-									</tr>
-								</thead>
-								<tbody>
-									{requests.map((r) => (
-										<tr key={r.id} style={{ borderBottom: "1px solid rgba(30,41,59,0.5)", fontSize: 13.5 }}>
-											<td style={{ padding: "14px 8px", fontWeight: 700, color: "#F1F5F9" }}>{r.ticket_ref}</td>
-											<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</td>
-											<td style={{ padding: "14px 8px" }}>
+							<>
+								{/* Desktop Table View */}
+								<div className="desktop-only-table" style={{ overflowX: "auto" }}>
+									<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+										<thead>
+											<tr style={{ borderBottom: "1px solid #1E293B" }}>
+												<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>TICKET REF</th>
+												<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>SERVICE TYPE</th>
+												<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>STATUS</th>
+												<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>PRIORITY</th>
+												<th style={{ padding: "12px 8px", fontSize: 12, color: "#64748B", fontWeight: 600 }}>ACTIONS</th>
+											</tr>
+										</thead>
+										<tbody>
+											{visibleRequests.map((r) => (
+												<tr key={r.id} style={{ borderBottom: "1px solid rgba(30,41,59,0.5)", fontSize: 13.5 }}>
+													<td style={{ padding: "14px 8px", fontWeight: 700, color: "#F1F5F9" }}>{r.ticket_ref}</td>
+													<td style={{ padding: "14px 8px", color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</td>
+													<td style={{ padding: "14px 8px" }}>
+														<span style={{
+															fontSize: 10,
+															fontWeight: 700,
+															padding: "3px 8px",
+															borderRadius: 4,
+															background: r.status === "closed" ? "rgba(74,222,128,0.1)" : r.status === "in_progress" ? "rgba(99,102,241,0.1)" : "rgba(245,158,11,0.1)",
+															color: r.status === "closed" ? "#4ADE80" : r.status === "in_progress" ? "#818CF8" : "#FBBF24",
+															border: `1px solid ${r.status === "closed" ? "rgba(74,222,128,0.2)" : r.status === "in_progress" ? "rgba(99,102,241,0.2)" : "rgba(245,158,11,0.2)"}`,
+															textTransform: "uppercase"
+														}}>
+															{r.status.replace("_", " ")}
+														</span>
+													</td>
+													<td style={{ padding: "14px 8px" }}>
+														<span style={{
+															fontSize: 11,
+															fontWeight: 600,
+															color: r.priority === "critical" || r.priority === "high" ? "#EF4444" : "#94A3B8"
+														}}>
+															{r.priority.toUpperCase()}
+														</span>
+													</td>
+													<td style={{ padding: "14px 8px" }}>
+														<button
+															onClick={() => handleSelectRequest(r)}
+															style={{
+																background: "rgba(99,102,241,0.1)",
+																border: "1px solid rgba(99,102,241,0.2)",
+																color: "#818CF8",
+																fontSize: 11.5,
+																padding: "6px 12px",
+																borderRadius: 6,
+																cursor: "pointer",
+																fontWeight: 600
+															}}
+														>
+															Track Request
+														</button>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+
+								{/* Mobile Card List View */}
+								<div className="mobile-only-list" style={{ display: "none", flexDirection: "column", gap: 16 }}>
+									{visibleRequests.map((r) => (
+										<div
+											key={r.id}
+											style={{
+												padding: 16,
+												background: "rgba(255,255,255,0.02)",
+												border: "1px solid var(--border-subtle)",
+												borderRadius: 12,
+												display: "flex",
+												flexDirection: "column",
+												gap: 12
+											}}
+										>
+											<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+												<span style={{ fontWeight: 700, color: "#F1F5F9", fontSize: 14 }}>{r.ticket_ref}</span>
 												<span style={{
 													fontSize: 10,
 													fontWeight: 700,
-													padding: "3px 8px",
+													padding: "2px 8px",
 													borderRadius: 4,
 													background: r.status === "closed" ? "rgba(74,222,128,0.1)" : r.status === "in_progress" ? "rgba(99,102,241,0.1)" : "rgba(245,158,11,0.1)",
 													color: r.status === "closed" ? "#4ADE80" : r.status === "in_progress" ? "#818CF8" : "#FBBF24",
@@ -141,37 +260,63 @@ export default function MyRequestsPage() {
 												}}>
 													{r.status.replace("_", " ")}
 												</span>
-											</td>
-											<td style={{ padding: "14px 8px" }}>
+											</div>
+											<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13 }}>
+												<span style={{ color: "#CBD5E1" }}>{r.service_type.toUpperCase().replace("_", " ")}</span>
 												<span style={{
-													fontSize: 11,
 													fontWeight: 600,
 													color: r.priority === "critical" || r.priority === "high" ? "#EF4444" : "#94A3B8"
 												}}>
 													{r.priority.toUpperCase()}
 												</span>
-											</td>
-											<td style={{ padding: "14px 8px" }}>
-												<button
-													onClick={() => handleSelectRequest(r)}
-													style={{
-														background: "rgba(99,102,241,0.1)",
-														border: "1px solid rgba(99,102,241,0.2)",
-														color: "#818CF8",
-														fontSize: 11.5,
-														padding: "6px 12px",
-														borderRadius: 6,
-														cursor: "pointer",
-														fontWeight: 600
-													}}
-												>
-													Track Request
-												</button>
-											</td>
-										</tr>
+											</div>
+											<button
+												onClick={() => handleSelectRequest(r)}
+												style={{
+													width: "100%",
+													background: "rgba(99,102,241,0.1)",
+													border: "1px solid rgba(99,102,241,0.2)",
+													color: "#818CF8",
+													fontSize: 13,
+													padding: "10px",
+													borderRadius: 8,
+													cursor: "pointer",
+													fontWeight: 600
+												}}
+											>
+												Track Request
+											</button>
+										</div>
 									))}
-								</tbody>
-							</table>
+								</div>
+
+								{/* Load More Pagination */}
+								{filteredRequests.length > visibleCount && (
+									<div style={{ marginTop: 20, textAlign: "center" }}>
+										<span style={{ fontSize: 11, color: "#64748B", display: "block", marginBottom: 8 }}>
+											Showing {Math.min(visibleCount, filteredRequests.length)} of {filteredRequests.length} requests
+										</span>
+										<button
+											onClick={() => setVisibleCount(prev => prev + 5)}
+											style={{
+												background: "rgba(255, 255, 255, 0.05)",
+												border: "1px solid var(--border-subtle)",
+												color: "#E2E8F0",
+												fontSize: 13,
+												padding: "8px 24px",
+												borderRadius: 8,
+												cursor: "pointer",
+												fontWeight: 600,
+												transition: "all 0.2s"
+											}}
+											onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)"}
+											onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)"}
+										>
+											Load More
+										</button>
+									</div>
+								)}
+							</>
 						)}
 					</div>
 
@@ -279,6 +424,16 @@ export default function MyRequestsPage() {
 					)}
 				</div>
 			</div>
+			<style>{`
+				@media (max-width: 768px) {
+					.desktop-only-table {
+						display: none !important;
+					}
+					.mobile-only-list {
+						display: flex !important;
+					}
+				}
+			`}</style>
 		</main>
 	);
 }

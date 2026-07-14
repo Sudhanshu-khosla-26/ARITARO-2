@@ -33,7 +33,7 @@ export default function ContactClient() {
 					minHeight: "100vh",
 					display: "flex",
 					alignItems: "center",
-					padding: "120px 32px 80px",
+					padding: "clamp(90px, 8vw, 120px) clamp(16px, 3vw, 32px) 60px",
 					position: "relative",
 				}}
 			>
@@ -66,7 +66,7 @@ export default function ContactClient() {
 						margin: "0 auto",
 						display: "grid",
 						gridTemplateColumns: "1fr 1.4fr",
-						gap: 128,
+						gap: "clamp(32px, 8vw, 128px)",
 						alignItems: "center",
 					}}
 				>
@@ -191,7 +191,7 @@ export default function ContactClient() {
 					{/* Right — form */}
 					<div
 						style={{
-							padding: "36px",
+							padding: "clamp(18px, 4vw, 36px)",
 							background: "var(--bg-surface)",
 							border: "1px solid var(--border-subtle)",
 							borderRadius: 16,

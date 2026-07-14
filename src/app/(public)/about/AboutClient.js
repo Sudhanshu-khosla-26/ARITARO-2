@@ -8,22 +8,16 @@ import WhatsAppWidget from "@/components/WhatsAppWidget";
 
 const TEAM = [
 	{
-		name: "Sudhanshu Khosla",
-		role: "Founder & Lead Security Researcher",
-		certs: ["OSCP", "CEH", "AWS Security"],
-		bio: "Former red team operator with 5+ years in offensive security. Passionate about making enterprise security accessible to growing Indian businesses.",
+		name: "Manasvi",
+		role: "CEO",
+		certs: ["OSCP", "Web Security"],
+		bio: "Specialized in web penetration testing and secure software development lifecycle methodologies.",
 	},
 	{
-		name: "Security Team",
-		role: "Offensive Security Engineers",
-		certs: ["OSEP", "BSCP", "CKS"],
-		bio: "A team of certified security professionals specialising in API, Web App, Cloud, and AI penetration testing.",
-	},
-	{
-		name: "Cloud Team",
-		role: "Cloud Security Architects",
-		certs: ["AWS Security", "SC-200", "PCSAE"],
-		bio: "Deep expertise in AWS, Azure, and GCP security assessments, IAM reviews, and infrastructure hardening.",
+		name: "Hardik",
+		role: "Founder, CEO & CTO",
+		certs: ["OSCP", "Cloud Security", "AI Security"],
+		bio: "Specialized in Web pentesting, cloud security, and AI security assessments.",
 	},
 ];
 
@@ -245,7 +239,7 @@ export default function AboutPage() {
 						className="team-grid"
 						style={{
 							display: "grid",
-							gridTemplateColumns: "repeat(3, 1fr)",
+							gridTemplateColumns: "repeat(2, 1fr)",
 							gap: 16,
 						}}
 					>
