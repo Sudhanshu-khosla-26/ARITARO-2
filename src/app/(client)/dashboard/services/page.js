@@ -10,6 +10,8 @@ export default function MyRequestsPage() {
 	const [selectedRequest, setSelectedRequest] = useState(null);
 	const [selectedReports, setSelectedReports] = useState([]);
 	const [loadingReports, setLoadingReports] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
+	const [visibleCount, setVisibleCount] = useState(5);
 
 	// Fetch requests
 	const loadRequests = async () => {
@@ -80,9 +82,6 @@ export default function MyRequestsPage() {
 			</div>
 		);
 	}
-
-	const [searchQuery, setSearchQuery] = useState("");
-	const [visibleCount, setVisibleCount] = useState(5);
 
 	const filteredRequests = requests.filter(r => {
 		const query = searchQuery.toLowerCase();
