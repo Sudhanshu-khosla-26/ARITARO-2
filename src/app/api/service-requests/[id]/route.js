@@ -103,7 +103,7 @@ export async function PATCH(request, { params }) {
 		const dbUser = await User.findById(session.user.id);
 		const userRole = dbUser?.role || session.user.role;
 		const isAdmin = ["admin", "super_admin", "tester"].includes(userRole);
-		const isOwner = serviceRequest.company_id.toString() === session.user.id;
+		const isOwner = (serviceRequest.company_id?._id || serviceRequest.company_id)?.toString() === session.user.id;
 
 		if (!isAdmin && !isOwner) {
 			return Response.json({ message: "Forbidden" }, { status: 403 });

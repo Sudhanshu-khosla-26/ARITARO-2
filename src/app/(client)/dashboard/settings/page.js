@@ -106,7 +106,7 @@ export default function SettingsPage() {
 								<label style={{ fontSize: 12, fontWeight: 600, color: "#94A3B8" }}>Phone Number</label>
 								<input
 									type="text"
-									placeholder="+1 (555) 000-0000"
+									placeholder="+91 99999 99999"
 									value={form.phone}
 									onChange={(e) => setForm({ ...form, phone: e.target.value })}
 									style={{

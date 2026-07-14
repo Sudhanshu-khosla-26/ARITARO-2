@@ -88,7 +88,7 @@ export default function ReportsPage() {
 													<td style={{ padding: "16px 24px", fontFamily: "var(--font-mono)", fontSize: 13 }}>{rep.ticket_ref}</td>
 													<td style={{ padding: "16px 24px" }}>
 														<span style={{ fontSize: 11, background: "rgba(99,102,241,0.08)", color: "#818CF8", padding: "2px 8px", borderRadius: 4, fontWeight: 600 }}>
-															{rep.service_type.toUpperCase().replace("_", " ")}
+															{(rep.service_type || "").toUpperCase().replace("_", " ")}
 														</span>
 													</td>
 													<td style={{ padding: "16px 24px" }}>{rep.createdAt ? new Date(rep.createdAt).toLocaleDateString() : "-"}</td>
@@ -146,7 +146,7 @@ export default function ReportsPage() {
 											</div>
 											<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13 }}>
 												<span style={{ fontSize: 11, background: "rgba(99,102,241,0.08)", color: "#818CF8", padding: "2px 8px", borderRadius: 4, fontWeight: 600 }}>
-													{rep.service_type.toUpperCase().replace("_", " ")}
+													{(rep.service_type || "").toUpperCase().replace("_", " ")}
 												</span>
 												<span style={{ color: "#64748B" }}>
 													{rep.createdAt ? new Date(rep.createdAt).toLocaleDateString() : "-"}
