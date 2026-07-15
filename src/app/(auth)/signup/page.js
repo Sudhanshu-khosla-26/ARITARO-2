@@ -111,13 +111,13 @@ export default function SignupPage() {
 			<div
 				style={{
 					width: "90%",
-					maxWidth: 440,
+					maxWidth: 600,
 					background: "rgba(6, 8, 14, 0.72)",
 					backdropFilter: "blur(24px)",
 					WebkitBackdropFilter: "blur(24px)",
 					border: "1px solid rgba(255, 255, 255, 0.08)",
 					borderRadius: 24,
-					padding: "36px 32px",
+					padding: "36px 40px",
 					boxShadow: "0 24px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
 					position: "relative",
 					zIndex: 10,
@@ -178,75 +178,79 @@ export default function SignupPage() {
 				)}
 
 				<form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-					<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-						<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
-							Contact Name
-						</label>
-						<input
-							type="text"
-							placeholder="John Doe"
-							style={inputStyle("name")}
-							onFocus={() => setFocused("name")}
-							onBlur={() => setFocused(null)}
-							{...register("name", { required: "Name is required" })}
-						/>
-						{errors.name && (
-							<span style={{ fontSize: 11, color: "#F87171", marginTop: 2 }}>
-								{errors.name.message}
-							</span>
-						)}
+					<div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+						<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+							<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
+								Contact Name
+							</label>
+							<input
+								type="text"
+								placeholder="John Doe"
+								style={inputStyle("name")}
+								onFocus={() => setFocused("name")}
+								onBlur={() => setFocused(null)}
+								{...register("name", { required: "Name is required" })}
+							/>
+							{errors.name && (
+								<span style={{ fontSize: 11, color: "#F87171", marginTop: 2 }}>
+									{errors.name.message}
+								</span>
+							)}
+						</div>
+
+						<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+							<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
+								Work Email Address
+							</label>
+							<input
+								type="email"
+								placeholder="name@company.com"
+								style={inputStyle("email")}
+								onFocus={() => setFocused("email")}
+								onBlur={() => setFocused(null)}
+								{...register("email", { required: "Email is required" })}
+							/>
+							{errors.email && (
+								<span style={{ fontSize: 11, color: "#F87171", marginTop: 2 }}>
+									{errors.email.message}
+								</span>
+							)}
+						</div>
 					</div>
 
-					<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-						<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
-							Work Email Address
-						</label>
-						<input
-							type="email"
-							placeholder="name@company.com"
-							style={inputStyle("email")}
-							onFocus={() => setFocused("email")}
-							onBlur={() => setFocused(null)}
-							{...register("email", { required: "Email is required" })}
-						/>
-						{errors.email && (
-							<span style={{ fontSize: 11, color: "#F87171", marginTop: 2 }}>
-								{errors.email.message}
-							</span>
-						)}
-					</div>
+					<div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+						<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+							<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
+								Company Name
+							</label>
+							<input
+								type="text"
+								placeholder="Acme Corp"
+								style={inputStyle("company")}
+								onFocus={() => setFocused("company")}
+								onBlur={() => setFocused(null)}
+								{...register("company", { required: "Company name is required" })}
+							/>
+							{errors.company && (
+								<span style={{ fontSize: 11, color: "#F87171", marginTop: 2 }}>
+									{errors.company.message}
+								</span>
+							)}
+						</div>
 
-					<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-						<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
-							Company Name
-						</label>
-						<input
-							type="text"
-							placeholder="Acme Corp"
-							style={inputStyle("company")}
-							onFocus={() => setFocused("company")}
-							onBlur={() => setFocused(null)}
-							{...register("company", { required: "Company name is required" })}
-						/>
-						{errors.company && (
-							<span style={{ fontSize: 11, color: "#F87171", marginTop: 2 }}>
-								{errors.company.message}
-							</span>
-						)}
-					</div>
-
-					<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-						<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
-							Industry
-						</label>
-						<input
-							type="text"
-							placeholder="e.g. Finance, Tech, Healthcare"
-							style={inputStyle("industry")}
-							onFocus={() => setFocused("industry")}
-							onBlur={() => setFocused(null)}
-							{...register("industry")}
-						/>
+						<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+							<label style={{ fontSize: 11.5, fontWeight: 600, color: "#94A3B8" }}>
+								Industry
+							</label>
+							<input
+								type="text"
+								placeholder="e.g. Finance, Tech, Healthcare"
+								style={inputStyle("industry")}
+								onFocus={() => setFocused("industry")}
+								onBlur={() => setFocused(null)}
+								{...register("industry")}
+							/>
+						</div>
 					</div>
 
 					<div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
@@ -302,6 +306,15 @@ export default function SignupPage() {
 					</Link>
 				</div>
 			</div>
+
+			<style>{`
+				@media (max-width: 600px) {
+					.form-grid {
+						grid-template-columns: 1fr !important;
+						gap: 12px !important;
+					}
+				}
+			`}</style>
 		</div>
 	);
 }
