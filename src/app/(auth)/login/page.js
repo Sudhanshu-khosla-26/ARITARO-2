@@ -60,23 +60,23 @@ function LoginContent() {
 
 	const inputStyle = (field) => ({
 		width: "100%",
-		padding: "12px 14px",
+		padding: "12px 16px",
 		borderRadius: 10,
 		border: `1px solid ${focused === field ? "#3B82F6" : "rgba(255,255,255,0.08)"}`,
-		background: "rgba(2,6,23,0.7)",
+		background: "rgba(2, 4, 10, 0.8)",
 		color: "#F8FAFC",
 		fontSize: 14,
 		fontFamily: "var(--font-sans)",
 		outline: "none",
 		transition: "all 0.2s ease-in-out",
-		boxShadow: focused === field ? "0 0 0 3px rgba(59, 130, 246, 0.15)" : "none",
+		boxShadow: focused === field ? "0 0 0 3px rgba(59, 130, 246, 0.2)" : "none",
 		boxSizing: "border-box",
 	});
 
 	if (status === "loading") {
 		return (
-			<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#020617" }}>
-				<div style={{ width: 32, height: 32, border: "3px solid rgba(99,102,241,0.1)", borderTopColor: "#6366F1", borderRadius: "50%", animation: "spin 0.6s linear infinite" }} />
+			<div style={{ height: "100vh", width: "100vw", display: "flex", alignItems: "center", justifyContent: "center", background: "#02040a", overflow: "hidden" }}>
+				<div style={{ width: 32, height: 32, border: "3px solid rgba(59,130,246,0.1)", borderTopColor: "#3B82F6", borderRadius: "50%", animation: "spin 0.6s linear infinite" }} />
 				<style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 			</div>
 		);
@@ -85,17 +85,15 @@ function LoginContent() {
 	return (
 		<div
 			style={{
-				minHeight: "100vh",
-				width: "100%",
+				height: "100vh",
+				width: "100vw",
 				display: "flex",
-				flexDirection: "column",
 				alignItems: "center",
 				justifyContent: "center",
 				background: "#02040a",
 				fontFamily: "var(--font-sans)",
 				position: "relative",
-				overflowY: "auto",
-				padding: "48px 24px",
+				overflow: "hidden",
 				boxSizing: "border-box",
 			}}
 		>
@@ -111,71 +109,69 @@ function LoginContent() {
 				}}
 			/>
 
-			{/* Centered WebGL Eye Background (no cropping/cutting, perfectly seamless) */}
+			{/* Full-screen centered WebGL Eye Background (No clipping, matches screen coordinates) */}
 			<div
 				style={{
 					position: "absolute",
-					top: "50%",
-					left: "50%",
-					transform: "translate(-50%, -50%)",
-					width: "min(650px, 95vw)",
-					height: "min(650px, 95vw)",
+					top: 0,
+					left: 0,
+					width: "100vw",
+					height: "100vh",
 					zIndex: 1,
 					pointerEvents: "none",
-					opacity: 0.8,
 				}}
 			>
 				<EvilEye
 					eyeColor="#3B82F6"
 					backgroundColor="#02040a"
-					intensity={1.8}
-					scale={0.75}
-					glowIntensity={0.5}
-					flameSpeed={0.8}
+					intensity={1.9}
+					scale={0.55}
+					glowIntensity={0.65}
+					flameSpeed={0.7}
 				/>
 			</div>
 
-			{/* Glassmorphic Auth Form Card */}
+			{/* Premium Glassmorphic Card */}
 			<div
 				style={{
-					width: "100%",
-					maxWidth: 420,
-					background: "rgba(10, 12, 18, 0.75)",
-					backdropFilter: "blur(20px)",
-					WebkitBackdropFilter: "blur(20px)",
-					border: "1px solid rgba(255, 255, 255, 0.06)",
+					width: "90%",
+					maxWidth: 400,
+					background: "rgba(6, 8, 14, 0.72)",
+					backdropFilter: "blur(24px)",
+					WebkitBackdropFilter: "blur(24px)",
+					border: "1px solid rgba(255, 255, 255, 0.08)",
 					borderRadius: 24,
-					padding: "40px 32px",
-					boxShadow: "0 24px 50px rgba(0, 0, 0, 0.6)",
+					padding: "36px 32px",
+					boxShadow: "0 24px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
 					position: "relative",
 					zIndex: 10,
 					boxSizing: "border-box",
 				}}
 			>
 				{/* Brand Logo */}
-				<div style={{ display: "flex", justifyContent: "center", marginBottom: 28 }}>
+				<div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
 					<Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-						<div style={{ width: 36, height: 36, position: "relative" }}>
+						<div style={{ width: 32, height: 32, position: "relative" }}>
 							<Image
 								src="/aritaro-logo.png"
 								alt="Aritaro"
 								fill
-								sizes="36px"
+								sizes="32px"
 								style={{ objectFit: "contain" }}
 								priority
 							/>
 						</div>
-						<span style={{ fontFamily: "var(--font-sans)", fontSize: 16, fontWeight: 700, letterSpacing: "1px", color: "#F8FAFC" }}>
+						<span style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 700, letterSpacing: "1.5px", color: "#F8FAFC" }}>
 							ARITARO
 						</span>
 					</Link>
 				</div>
 
 				<div style={{ textAlign: "center", marginBottom: 24 }}>
-					<h2 style={{ fontSize: 20, fontWeight: 800, color: "#F8FAFC", marginBottom: 6 }}>
+					<h2 style={{ fontSize: 20, fontWeight: 800, color: "#F8FAFC", marginBottom: 6, letterSpacing: "-0.01em" }}>
 						Security Portal Login
 					</h2>
-					<p style={{ fontSize: 13.5, color: "#94A3B8" }}>
+					<p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.4 }}>
 						Enter credentials to access client or auditor workspaces
 					</p>
 				</div>
@@ -311,8 +307,8 @@ function LoginContent() {
 export default function LoginPage() {
 	return (
 		<Suspense fallback={
-			<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#020617" }}>
-				<div style={{ width: 32, height: 32, border: "3px solid rgba(99,102,241,0.1)", borderTopColor: "#6366F1", borderRadius: "50%", animation: "spin 0.6s linear infinite" }} />
+			<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#02040a" }}>
+				<div style={{ width: 32, height: 32, border: "3px solid rgba(59,130,246,0.1)", borderTopColor: "#3B82F6", borderRadius: "50%", animation: "spin 0.6s linear infinite" }} />
 			</div>
 		}>
 			<LoginContent />
