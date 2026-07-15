@@ -9,15 +9,15 @@ import WhatsAppWidget from "@/components/WhatsAppWidget";
 const TEAM = [
 	{
 		name: "Hardik Arora",
-		role: "Founder & CEO",
-		certs: ["OSCP", "Cloud Security", "AI Security"],
+		role: "Co-Founder & CEO",
+		certs: ["Cloud Security", "AI Security"],
 		bio: "Specialized in Web pentesting, cloud security, and AI security assessments.",
 		linkedin: "https://www.linkedin.com/in/hardikarora-cyber/",
 	},
 	{
 		name: "Manasvi Bhardwaj",
 		role: "Co-Founder & CEO",
-		certs: ["OSCP", "Web Security"],
+		certs: ["Web Security"],
 		bio: "Specialized in web penetration testing and secure software development lifecycle methodologies.",
 		linkedin: "https://www.linkedin.com/in/manasvi-bhardwaj-70820535b/",
 	},
