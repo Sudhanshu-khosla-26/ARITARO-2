@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import EvilEye from "@/components/EvilEye";
 
 export default function SignupPage() {
 	const {
@@ -46,14 +47,14 @@ export default function SignupPage() {
 		width: "100%",
 		padding: "12px 14px",
 		borderRadius: 10,
-		border: `1px solid ${focused === field ? "#4F46E5" : "#1E293B"}`,
-		background: "#090D1A",
+		border: `1px solid ${focused === field ? "#3B82F6" : "rgba(255,255,255,0.08)"}`,
+		background: "rgba(2,6,23,0.7)",
 		color: "#F8FAFC",
 		fontSize: 14,
 		fontFamily: "var(--font-sans)",
 		outline: "none",
 		transition: "all 0.2s ease-in-out",
-		boxShadow: focused === field ? "0 0 0 3px rgba(79, 70, 229, 0.15)" : "none",
+		boxShadow: focused === field ? "0 0 0 3px rgba(59, 130, 246, 0.15)" : "none",
 		boxSizing: "border-box",
 	});
 
@@ -61,22 +62,70 @@ export default function SignupPage() {
 		<div
 			style={{
 				minHeight: "100vh",
+				width: "100%",
 				display: "flex",
+				flexDirection: "column",
 				alignItems: "center",
 				justifyContent: "center",
-				background: "#020617",
-				padding: "24px 16px",
+				background: "#02040a",
+				fontFamily: "var(--font-sans)",
+				position: "relative",
+				overflowY: "auto",
+				padding: "48px 24px",
+				boxSizing: "border-box",
 			}}
 		>
+			{/* High-tech grid overlay */}
+			<div
+				style={{
+					position: "absolute",
+					inset: 0,
+					backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.015) 1px, transparent 0)",
+					backgroundSize: "32px 32px",
+					pointerEvents: "none",
+					zIndex: 0,
+				}}
+			/>
+
+			{/* Centered WebGL Eye Background (no cropping/cutting, perfectly seamless) */}
+			<div
+				style={{
+					position: "absolute",
+					top: "50%",
+					left: "50%",
+					transform: "translate(-50%, -50%)",
+					width: "min(650px, 95vw)",
+					height: "min(650px, 95vw)",
+					zIndex: 1,
+					pointerEvents: "none",
+					opacity: 0.8,
+				}}
+			>
+				<EvilEye
+					eyeColor="#3B82F6"
+					backgroundColor="#02040a"
+					intensity={1.8}
+					scale={0.75}
+					glowIntensity={0.5}
+					flameSpeed={0.8}
+				/>
+			</div>
+
+			{/* Glassmorphic Auth Form Card */}
 			<div
 				style={{
 					width: "100%",
-					maxWidth: 460,
-					background: "#0B0F19",
-					border: "1px solid #1E293B",
-					borderRadius: 16,
+					maxWidth: 440,
+					background: "rgba(10, 12, 18, 0.75)",
+					backdropFilter: "blur(20px)",
+					WebkitBackdropFilter: "blur(20px)",
+					border: "1px solid rgba(255, 255, 255, 0.06)",
+					borderRadius: 24,
 					padding: "36px 32px",
-					boxShadow: "0 12px 30px rgba(0, 0, 0, 0.3)",
+					boxShadow: "0 24px 50px rgba(0, 0, 0, 0.6)",
+					position: "relative",
+					zIndex: 10,
+					boxSizing: "border-box",
 				}}
 			>
 				{/* Brand Logo */}
@@ -123,6 +172,11 @@ export default function SignupPage() {
 							gap: 8,
 						}}
 					>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+							<circle cx="12" cy="12" r="10" />
+							<line x1="12" y1="8" x2="12" y2="12" />
+							<line x1="12" y1="16" x2="12.01" y2="16" />
+						</svg>
 						{error}
 					</div>
 				)}
@@ -226,8 +280,8 @@ export default function SignupPage() {
 						disabled={isSubmitting}
 						style={{
 							marginTop: 8,
-							padding: "11px",
-							background: "linear-gradient(135deg, #4F46E5 0%, #6366F1 100%)",
+							padding: "13px",
+							background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
 							border: "none",
 							borderRadius: 10,
 							color: "#FFFFFF",
@@ -245,14 +299,12 @@ export default function SignupPage() {
 					</button>
 				</form>
 
-				<div style={{ textAlign: "center", marginTop: 20, borderTop: "1px solid #1E293B", paddingTop: 14, fontSize: 13, color: "#64748B" }}>
+				<div style={{ textAlign: "center", marginTop: 20, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 14, fontSize: 13, color: "#64748B" }}>
 					Already have an account?{" "}
 					<Link href="/login" style={{ color: "#818CF8", textDecoration: "none", fontWeight: 600 }}>
 						Log In
 					</Link>
 				</div>
-
-
 			</div>
 		</div>
 	);
