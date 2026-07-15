@@ -9,15 +9,17 @@ import WhatsAppWidget from "@/components/WhatsAppWidget";
 const TEAM = [
 	{
 		name: "Hardik Arora",
-		role: "Founder & CTO",
+		role: "Founder & CEO",
 		certs: ["OSCP", "Cloud Security", "AI Security"],
 		bio: "Specialized in Web pentesting, cloud security, and AI security assessments.",
+		linkedin: "https://www.linkedin.com/in/hardikarora-cyber/",
 	},
 	{
-		name: "Manasvi",
+		name: "Manasvi Bhardwaj",
 		role: "Co-Founder & CEO",
 		certs: ["OSCP", "Web Security"],
 		bio: "Specialized in web penetration testing and secure software development lifecycle methodologies.",
+		linkedin: "https://www.linkedin.com/in/manasvi-bhardwaj-70820535b/",
 	},
 ];
 
@@ -289,16 +291,40 @@ export default function AboutPage() {
 								>
 									{member.name}
 								</h3>
-								<p
-									style={{
-										fontSize: 12,
-										color: "var(--accent)",
-										fontWeight: 600,
-										marginBottom: 12,
-									}}
-								>
-									{member.role}
-								</p>
+								<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+									<p
+										style={{
+											fontSize: 12,
+											color: "var(--accent)",
+											fontWeight: 600,
+											margin: 0,
+										}}
+									>
+										{member.role}
+									</p>
+									{member.linkedin && (
+										<a
+											href={member.linkedin}
+											target="_blank"
+											rel="noopener noreferrer"
+											style={{
+												color: "var(--accent)",
+												opacity: 0.8,
+												transition: "opacity 0.2s",
+												display: "flex",
+												alignItems: "center",
+											}}
+											onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; }}
+											onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.8"; }}
+										>
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+												<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+												<rect x="2" y="9" width="4" height="12" />
+												<circle cx="4" cy="4" r="2" />
+											</svg>
+										</a>
+									)}
+								</div>
 								<p
 									style={{
 										fontSize: 13,
