@@ -1,93 +1,33 @@
 import Link from "next/link";
+import AnalyticsPanel from "./AnalyticsPanel";
+
+const statCards = [
+  ["Admins", "adminCount", "Access control"],
+  ["Companies", "clientCount", "Active accounts"],
+  ["Contact requests", "contactCount", "Inbound interest"],
+  ["Service requests", "requestCount", "Total pipeline"],
+];
 
 export default function Overview({ stats, loading, setActiveTab }) {
-	const statCards = [
-		{
-			label: "Admins",
-			value: stats?.adminCount ?? "—",
-			color: "#3B82F6",
-			bg: "rgba(59,130,246,0.12)",
-		},
-		{
-			label: "Clients / Companies",
-			value: stats?.clientCount ?? "—",
-			color: "#10B981",
-			bg: "rgba(16,185,129,0.12)",
-		},
-		{
-			label: "Contact Requests",
-			value: stats?.contactCount ?? "—",
-			color: "#06B6D4",
-			bg: "rgba(6,182,212,0.12)",
-		},
-		{
-			label: "Service Requests",
-			value: stats?.requestCount ?? "—",
-			color: "#F59E0B",
-			bg: "rgba(245,158,11,0.12)",
-		},
-	];
+  return (
+    <div className="dash-overview">
+      <header className="dash-header dash-animate dash-animate-1">
+        <div className="dash-header-left"><span className="dash-eyebrow">Operations cockpit</span><h1>Good morning, {"admin"}.</h1><p>Here&apos;s the latest signal across your security delivery pipeline.</p></div>
+        <div className="dash-header-actions"><span className="dash-live-pill"><i /> Live data</span><Link href="/" className="dash-btn-outline">View homepage</Link></div>
+      </header>
 
-	return (
-		<>
-			<div className="dash-stats">
-				{statCards.map((s, i) => (
-					<div
-						key={s.label}
-						className={`dash-stat-card dash-animate dash-animate-${i + 2}`}
-						style={{ background: "#151820", border: "1px solid #1C1F26", borderRadius: 16, padding: 20 }}
-					>
-						<div className="dash-stat-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-							<div
-								className="dash-stat-icon"
-								style={{ width: 38, height: 38, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: s.bg, color: s.color }}
-							>
-								<svg
-									width="18"
-									height="18"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="1.8"
-								>
-									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-								</svg>
-							</div>
-						</div>
-						<div className="dash-stat-value" style={{ fontSize: 28, fontWeight: 800, color: "#F9FAFB", fontFamily: "var(--font-mono)" }}>
-							{loading ? "…" : s.value}
-						</div>
-						<div className="dash-stat-label" style={{ fontSize: 13, color: "#6B7280", marginTop: 4 }}>{s.label}</div>
-					</div>
-				))}
-			</div>
+      <section className="dash-stats">
+        {statCards.map(([label, key, note], index) => <article className={`dash-stat-card dash-animate dash-animate-${index + 2}`} key={key}><div className="dash-stat-top"><span className="dash-stat-kicker">{note}</span><span className="dash-stat-orb" /></div><strong>{loading ? "…" : stats?.[key] ?? 0}</strong><span>{label}</span></article>)}
+      </section>
 
-			<div className="dash-panel dash-animate dash-animate-5" style={{ background: "#151820", border: "1px solid #1C1F26", borderRadius: 18, padding: 24, marginTop: 24 }}>
-				<div className="dash-panel-header" style={{ marginBottom: 16 }}>
-					<h2 className="dash-panel-title" style={{ fontSize: 15, fontWeight: 700, color: "#F9FAFB" }}>Quick Actions</h2>
-				</div>
-				<div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-					<button
-						type="button"
-						className="dash-btn-primary"
-						onClick={() => setActiveTab("users")}
-						style={{ cursor: "pointer" }}
-					>
-						User Management Console
-					</button>
-					<button
-						type="button"
-						className="dash-btn-primary"
-						onClick={() => setActiveTab("requests")}
-						style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)", color: "#34D399", cursor: "pointer" }}
-					>
-						Track Service Requests
-					</button>
-					<Link href="/" className="dash-btn-outline" style={{ textDecoration: "none", border: "1px solid #1C1F26", padding: "8px 16px", borderRadius: 8, color: "#CBD5E1" }}>
-						View Homepage
-					</Link>
-				</div>
-			</div>
-		</>
-	);
+      <AnalyticsPanel stats={stats} />
+
+      <section className="dash-bottom-grid dash-animate dash-animate-6">
+        <div className="dash-panel dash-activity-panel"><div className="dash-panel-header"><div><span className="dash-eyebrow">Latest movement</span><h2 className="dash-panel-title">Recent requests</h2></div><button type="button" className="dash-text-button" onClick={() => setActiveTab("requests")}>View all</button></div>{stats?.recentRequests?.length ? <div className="dash-activity-list">{stats.recentRequests.map((request) => <div className="dash-activity-row" key={request.id}><span className="dash-activity-dot" /><div><b>{request.ticket_ref || "New request"}</b><span>{request.service_type?.replaceAll("_", " ") || "Security service"}</span></div><em>{request.status?.replaceAll("_", " ")}</em></div>)}</div> : <EmptyCopy />}</div>
+        <div className="dash-panel dash-action-panel"><span className="dash-eyebrow">Shortcuts</span><h2 className="dash-panel-title">Keep the pipeline moving.</h2><p>Jump into the areas that need your attention today.</p><div className="dash-action-list"><button type="button" onClick={() => setActiveTab("requests")}><span>Track service requests</span><b>→</b></button><button type="button" onClick={() => setActiveTab("users")}><span>Manage users and access</span><b>→</b></button><Link href="/" className="dash-btn-primary">Open public site</Link></div></div>
+      </section>
+    </div>
+  );
 }
+
+function EmptyCopy() { return <div className="dash-empty-state">No recent requests to display.</div>; }

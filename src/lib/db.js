@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 async function connectDB() {
 	if (mongoose.connection.readyState >= 1) return mongoose.connection;
-	await mongoose.connect(process.env.MONGODB_URI);
+	const uri = process.env.MONGODB_URI || process.env.MONGODB_CONNECTION_STRING;
+	if (!uri) throw new Error("MongoDB connection string is not configured");
+	await mongoose.connect(uri);
 	return mongoose.connection;
 }
 
