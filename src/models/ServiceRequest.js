@@ -68,6 +68,10 @@ serviceRequestSchema.pre("save", async function () {
 	}
 });
 
+serviceRequestSchema.index({ company_id: 1, createdAt: -1 });
+serviceRequestSchema.index({ company_id: 1, status: 1 });
+serviceRequestSchema.index({ status: 1 });
+
 const ServiceRequest =
 	mongoose.models.ServiceRequest ||
 	mongoose.model("ServiceRequest", serviceRequestSchema);

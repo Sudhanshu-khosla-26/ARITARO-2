@@ -133,178 +133,178 @@ export default function SecuredSection() {
       <section
         id="secured"
         ref={sectionRef}
-      style={{
-        position: 'relative',
-        padding: '120px 0',
-        background: 'linear-gradient(180deg, #020407 0%, #040d08 50%, #020407 100%)',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Background decorations */}
-      <div style={{
-        position: 'absolute',
-        top: '10%',
-        left: '-10%',
-        width: '600px',
-        height: '600px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(0,255,127,0.04) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-      <div style={{
-        position: 'absolute',
-        bottom: '10%',
-        right: '-10%',
-        width: '500px',
-        height: '500px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,45,85,0.04) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
+        style={{
+          position: 'relative',
+          padding: '120px 0',
+          background: 'linear-gradient(180deg, #020407 0%, #040d08 50%, #020407 100%)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Background decorations */}
+        <div style={{
+          position: 'absolute',
+          top: '10%',
+          left: '-10%',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(0,255,127,0.04) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute',
+          bottom: '10%',
+          right: '-10%',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,45,85,0.04) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
 
-      {/* Grid */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: 'linear-gradient(rgba(0,255,127,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,127,0.02) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
-        pointerEvents: 'none',
-      }} />
+        {/* Grid */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'linear-gradient(rgba(0,255,127,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,127,0.02) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+          pointerEvents: 'none',
+        }} />
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px', position: 'relative', zIndex: 1 }}>
-        {/* Heading */}
-        <div ref={headingRef} style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'rgba(0, 255, 127, 0.06)',
-            border: '1px solid rgba(0, 255, 127, 0.15)',
-            borderRadius: '100px',
-            padding: '6px 16px',
-            marginBottom: '24px',
-          }}>
-            <span style={{
-              fontFamily: 'var(--font-orbitron), monospace',
-              fontSize: '10px',
-              letterSpacing: '2.5px',
-              color: '#00ff7f',
-              fontWeight: '600',
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px', position: 'relative', zIndex: 1 }}>
+          {/* Heading */}
+          <div ref={headingRef} style={{ textAlign: 'center', marginBottom: '80px' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(0, 255, 127, 0.06)',
+              border: '1px solid rgba(0, 255, 127, 0.15)',
+              borderRadius: '100px',
+              padding: '6px 16px',
+              marginBottom: '24px',
             }}>
-              END-TO-END SECURED
-            </span>
+              <span style={{
+                fontFamily: 'var(--font-orbitron), monospace',
+                fontSize: '10px',
+                letterSpacing: '2.5px',
+                color: '#00ff7f',
+                fontWeight: '600',
+              }}>
+                END-TO-END SECURED
+              </span>
+            </div>
+
+            <h2 style={{
+              fontFamily: 'var(--font-orbitron), monospace',
+              fontSize: 'clamp(32px, 5vw, 64px)',
+              fontWeight: '800',
+              lineHeight: '1.1',
+              letterSpacing: '-0.5px',
+              marginBottom: '20px',
+            }}>
+              <span style={{ color: '#f0fff4' }}>Security that</span>{' '}
+              <span style={{
+                background: 'linear-gradient(135deg, #00ff7f 0%, #00c45a 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>never sleeps</span>
+            </h2>
+
+            <p style={{
+              maxWidth: '580px',
+              margin: '0 auto',
+              color: 'rgba(240,255,244,0.6)',
+              fontSize: '17px',
+              lineHeight: '1.7',
+              fontFamily: 'var(--font-space-grotesk), sans-serif',
+            }}>
+              From perimeter defense to endpoint protection, we cover every attack surface with layered, adaptive security controls.
+            </p>
           </div>
 
-          <h2 style={{
-            fontFamily: 'var(--font-orbitron), monospace',
-            fontSize: 'clamp(32px, 5vw, 64px)',
-            fontWeight: '800',
-            lineHeight: '1.1',
-            letterSpacing: '-0.5px',
-            marginBottom: '20px',
+          {/* Cards Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '20px',
           }}>
-            <span style={{ color: '#f0fff4' }}>Security that</span>{' '}
-            <span style={{
-              background: 'linear-gradient(135deg, #00ff7f 0%, #00c45a 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>never sleeps</span>
-          </h2>
-
-          <p style={{
-            maxWidth: '580px',
-            margin: '0 auto',
-            color: 'rgba(240,255,244,0.6)',
-            fontSize: '17px',
-            lineHeight: '1.7',
-            fontFamily: 'var(--font-space-grotesk), sans-serif',
-          }}>
-            From perimeter defense to endpoint protection, we cover every attack surface with layered, adaptive security controls.
-          </p>
-        </div>
-
-        {/* Cards Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '20px',
-        }}>
-          {securityFeatures.map((feature, i) => (
-            <div
-              key={feature.title}
-              ref={(el) => { cardsRef.current[i] = el; }}
-              className="liquid-glass"
-              style={{
-                borderRadius: '12px',
-                padding: '32px',
-                cursor: 'default',
-                transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px)';
-                e.currentTarget.style.borderColor = 'rgba(0,255,127,0.3)';
-                e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,255,127,0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'rgba(0,255,127,0.2)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              {/* Tag */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                <div style={{
-                  background: i === 4 ? 'rgba(255,45,85,0.1)' : 'rgba(0,255,127,0.07)',
-                  border: `1px solid ${i === 4 ? 'rgba(255,45,85,0.2)' : 'rgba(0,255,127,0.15)'}`,
-                  borderRadius: '4px',
-                  padding: '3px 10px',
-                }}>
-                  <span style={{
-                    fontFamily: 'var(--font-orbitron), monospace',
-                    fontSize: '9px',
-                    letterSpacing: '1.5px',
-                    color: i === 4 ? '#ff2d55' : '#00ff7f',
-                    fontWeight: '600',
+            {securityFeatures.map((feature, i) => (
+              <div
+                key={feature.title}
+                ref={(el) => { cardsRef.current[i] = el; }}
+                className="liquid-glass"
+                style={{
+                  borderRadius: '12px',
+                  padding: '32px',
+                  cursor: 'default',
+                  transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.borderColor = 'rgba(0,255,127,0.3)';
+                  e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,255,127,0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(0,255,127,0.2)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                {/* Tag */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+                  <div style={{
+                    background: i === 4 ? 'rgba(255,45,85,0.1)' : 'rgba(0,255,127,0.07)',
+                    border: `1px solid ${i === 4 ? 'rgba(255,45,85,0.2)' : 'rgba(0,255,127,0.15)'}`,
+                    borderRadius: '4px',
+                    padding: '3px 10px',
                   }}>
-                    {feature.tag}
-                  </span>
+                    <span style={{
+                      fontFamily: 'var(--font-orbitron), monospace',
+                      fontSize: '9px',
+                      letterSpacing: '1.5px',
+                      color: i === 4 ? '#ff2d55' : '#00ff7f',
+                      fontWeight: '600',
+                    }}>
+                      {feature.tag}
+                    </span>
+                  </div>
+                  {feature.icon}
                 </div>
-                {feature.icon}
+
+                <h3 style={{
+                  fontFamily: 'var(--font-orbitron), monospace',
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  letterSpacing: '0.5px',
+                  color: '#f0fff4',
+                  marginBottom: '12px',
+                }}>
+                  {feature.title}
+                </h3>
+
+                <p style={{
+                  fontFamily: 'var(--font-space-grotesk), sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '1.7',
+                  color: 'rgba(240,255,244,0.6)',
+                }}>
+                  {feature.desc}
+                </p>
+
+                {/* Bottom border accent */}
+                <div style={{
+                  marginTop: '24px',
+                  height: '1px',
+                  background: i === 4
+                    ? 'linear-gradient(90deg, rgba(255,45,85,0.3), transparent)'
+                    : 'linear-gradient(90deg, rgba(0,255,127,0.3), transparent)',
+                }} />
               </div>
-
-              <h3 style={{
-                fontFamily: 'var(--font-orbitron), monospace',
-                fontSize: '16px',
-                fontWeight: '700',
-                letterSpacing: '0.5px',
-                color: '#f0fff4',
-                marginBottom: '12px',
-              }}>
-                {feature.title}
-              </h3>
-
-              <p style={{
-                fontFamily: 'var(--font-space-grotesk), sans-serif',
-                fontSize: '14px',
-                lineHeight: '1.7',
-                color: 'rgba(240,255,244,0.6)',
-              }}>
-                {feature.desc}
-              </p>
-
-              {/* Bottom border accent */}
-              <div style={{
-                marginTop: '24px',
-                height: '1px',
-                background: i === 4
-                  ? 'linear-gradient(90deg, rgba(255,45,85,0.3), transparent)'
-                  : 'linear-gradient(90deg, rgba(0,255,127,0.3), transparent)',
-              }} />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </>
   );
 }

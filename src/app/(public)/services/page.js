@@ -283,8 +283,28 @@ function ServiceCard({ service, index }) {
 				colors={["#3B82F6", "#06B6D4", "#141C2C"]}
 				className="w-full h-full"
 			>
-				<div style={{ padding: "24px 20px", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
-					<div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+				<div
+					style={{
+						padding: "24px 20px",
+						display: "flex",
+						flexDirection: "column",
+						height: "100%",
+						justifyContent: "space-between",
+						position: "relative",
+					}}
+				>
+					{/* Clickable body linking to service explanation page */}
+					<Link
+						href={`/services/${service.slug}`}
+						style={{
+							textDecoration: "none",
+							color: "inherit",
+							flex: 1,
+							display: "flex",
+							flexDirection: "column",
+							cursor: "pointer",
+						}}
+					>
 						{/* Icon */}
 						<div
 							style={{
@@ -311,7 +331,9 @@ function ServiceCard({ service, index }) {
 								marginBottom: 10,
 								letterSpacing: "-0.3px",
 								lineHeight: 1.25,
+								transition: "color 0.2s ease",
 							}}
+							className="service-card-title"
 						>
 							{service.title}
 						</h3>
@@ -358,7 +380,7 @@ function ServiceCard({ service, index }) {
 								</li>
 							))}
 						</ul>
-					</div>
+					</Link>
 
 					<div
 						style={{
@@ -369,7 +391,7 @@ function ServiceCard({ service, index }) {
 							paddingTop: 16,
 							marginTop: "auto",
 							position: "relative",
-							zIndex: 1,
+							zIndex: 2,
 						}}
 					>
 						<div>
@@ -411,7 +433,7 @@ function ServiceCard({ service, index }) {
 								onMouseEnter={(e) => { e.currentTarget.style.color = "#F1F5F9"; }}
 								onMouseLeave={(e) => { e.currentTarget.style.color = "#94A3B8"; }}
 							>
-								Read More
+								Explore →
 							</Link>
 							<Link
 								href={`/request-assessment?service=${
@@ -426,6 +448,7 @@ function ServiceCard({ service, index }) {
 										: "api_pt"
 								}`}
 								className="btn-primary"
+								onClick={(e) => e.stopPropagation()}
 								style={{
 									fontSize: 11,
 									padding: "8px 12px",
@@ -446,49 +469,75 @@ function ServiceCard({ service, index }) {
 	);
 }
 
+const DEFAULT_SERVICES_LIST = [
+	{
+		_id: 'api-pt',
+		number: 'api-penetration-testing',
+		slug: 'api-pt',
+		title: 'API Penetration Testing',
+		desc: 'Deep, manual and automated security testing of REST, GraphQL, gRPC & SOAP APIs. OWASP API Top 10 coverage.',
+		features: ['REST & GraphQL APIs', 'BOLA / IDOR Exploits', 'OAuth / JWT Flaws', 'Business Logic Testing'],
+		color: '#3B82F6',
+		category: 'Cybersecurity',
+		duration: '1-2 weeks',
+	},
+	{
+		_id: 'wap-pt',
+		number: 'web-application-penetration-testing',
+		slug: 'wap-pt',
+		title: 'Web Application Penetration Testing',
+		desc: 'Comprehensive manual and automated assessment of web apps. Defend against SQLi, XSS, CSRF, and broken access controls.',
+		features: ['OWASP Top 10 Coverage', 'Authentication Testing', 'Privilege Escalation', 'Code Remediation Guidance'],
+		color: '#06B6D4',
+		category: 'Cybersecurity',
+		duration: '2-3 weeks',
+	},
+	{
+		_id: 'cloud',
+		number: 'cloud-security-assessment',
+		slug: 'cloud',
+		title: 'Cloud Security Assessment',
+		desc: 'Full-scope posture audit of AWS, Azure, and GCP configurations. Identify IAM risks, public buckets, and attack paths.',
+		features: ['AWS / Azure / GCP Audits', 'IAM & Policy Hardening', 'CIS Benchmark Scans', 'Data Leak Prevention'],
+		color: '#818CF8',
+		category: 'Cybersecurity',
+		duration: '1-3 weeks',
+	},
+	{
+		_id: 'ai-pt',
+		number: 'ai-penetration-testing',
+		slug: 'ai-pt',
+		title: 'AI & LLM Penetration Testing',
+		desc: 'Adversarial testing of LLM applications, chatbots, and AI workflows. Prompt injection, data poisoning, and agent jailbreaking.',
+		features: ['OWASP Top 10 for LLMs', 'Prompt Injection Testing', 'RAG Data Exfiltration', 'Tool Calling Safety'],
+		color: '#A855F7',
+		category: 'AI & Automation',
+		duration: '2-4 weeks',
+	},
+];
+
 export default function ServicesPage() {
 	const { data: session } = useSession();
 	const user = session?.user;
-	const [servicesList, setServicesList] = useState([]);
-	const [categoriesList, setCategoriesList] = useState(["All"]);
-	const [servicesLoading, setServicesLoading] = useState(true);
+	const [servicesList, setServicesList] = useState(DEFAULT_SERVICES_LIST);
+	const [categoriesList, setCategoriesList] = useState(["All", "Cybersecurity", "AI & Automation"]);
 	const [activeCategory, setActiveCategory] = useState("All");
-	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
-		setMounted(true);
 		const fetchServices = async () => {
 			try {
 				const res = await fetch("/api/services");
 				const data = await res.json();
-				setServicesList(data.services || []);
-				setCategoriesList(data.categories || ["All"]);
+				if (data.services && data.services.length > 0) {
+					setServicesList(data.services);
+					if (data.categories) setCategoriesList(data.categories);
+				}
 			} catch (err) {
-				console.error("Error fetching services:", err);
-			} finally {
-				setServicesLoading(false);
+				// Keep default list on error
 			}
 		};
 		fetchServices();
 	}, []);
-
-	if (!mounted || servicesLoading)
-		return (
-			<div
-				style={{
-					minHeight: "100vh",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					background: "#030508",
-				}}
-			>
-				<Loader
-					title="Loading Security Services..."
-					subtitle="Retrieving verified vulnerability assessment modules"
-				/>
-			</div>
-		);
 
 	const filtered =
 		activeCategory === "All"

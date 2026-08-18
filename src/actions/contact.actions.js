@@ -41,11 +41,6 @@ const dbUnavailable = {
 };
 
 export async function submitContact(formData) {
-	const session = await getSession();
-	if (!session || !session.user) {
-		return { success: false, error: "You must be logged in to submit a contact request." };
-	}
-
 	const raw = {
 		name: formData.get("name"),
 		email: formData.get("email"),
@@ -62,17 +57,36 @@ export async function submitContact(formData) {
 
 	if (!(await initApp())) return dbUnavailable;
 
-	await ContactRequest.create({
-		type: "contact",
-		name: sanitizeInput(parsed.data.name),
-		email: parsed.data.email,
-		company: parsed.data.company ? sanitizeInput(parsed.data.company) : undefined,
-		phone: parsed.data.phone,
-		subject: sanitizeInput(parsed.data.subject),
-		message: sanitizeInput(parsed.data.message),
-	});
+	try {
+		await ContactRequest.create({
+			type: "contact",
+			name: sanitizeInput(parsed.data.name),
+			email: parsed.data.email,
+			company: parsed.data.company ? sanitizeInput(parsed.data.company) : undefined,
+			phone: parsed.data.phone,
+			subject: sanitizeInput(parsed.data.subject),
+			message: sanitizeInput(parsed.data.message),
+		});
 
-	return { success: true, message: "Message sent! We'll respond within 24 hours." };
+		// Trigger email via nodemailer
+		try {
+			const { sendMail, buildContactEmailHtml, buildContactEmailText } = await import("@/lib/mailer");
+			const adminEmail = process.env.ADMIN_EMAIL || "info@aritaro.in";
+			await sendMail({
+				to: adminEmail,
+				subject: `[Aritaro Contact] ${parsed.data.subject} — from ${parsed.data.name}`,
+				html: buildContactEmailHtml(parsed.data),
+				text: buildContactEmailText(parsed.data),
+			});
+		} catch (mailErr) {
+			console.error("Nodemailer dispatch failed (non-blocking):", mailErr);
+		}
+
+		return { success: true, message: "Message sent! We'll respond within 24 hours." };
+	} catch (err) {
+		console.error("Contact request creation error:", err);
+		return { success: false, error: "Failed to submit message. Please try again." };
+	}
 }
 
 export async function submitCareerApplication(formData) {

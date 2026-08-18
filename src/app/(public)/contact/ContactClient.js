@@ -1,27 +1,34 @@
 "use client";
 
+import { Mail, MapPin, Phone } from "lucide-react";
+import { toast } from "sonner";
 import { ContactForm } from "@/components/forms/contact-form";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
-import { Mail, MapPin, Phone } from "lucide-react";
 
 const contactMethods = [
 	{
-		icon: <Mail />,
+		icon: <Mail size={18} />,
 		label: "Email",
 		value: "info@aritaro.in",
 		sub: "Response within 2 hours",
+		type: "email",
+		href: "mailto:info@aritaro.in",
 	},
 	{
-		icon: <Phone />,
+		icon: <Phone size={18} />,
 		label: "Call Us",
 		value: "+91 96258 94393",
 		sub: "Mon–Sat, 9AM–7PM IST",
+		type: "tel",
+		href: "tel:+919625894393",
 	},
 	{
-		icon: <MapPin />,
-		label: "Office",
-		value: "New Delhi, India",
-		sub: "By appointment only",
+		icon: <MapPin size={18} />,
+		label: "Office Location",
+		value: "Sector 63, Noida (NCR), India",
+		sub: "A-14, Sector 63, Noida, UP 201301 • Open in Google Maps ↗",
+		type: "map",
+		href: "https://www.google.com/maps/search/?api=1&query=A-14+Sector+63+Noida+Uttar+Pradesh+201301",
 	},
 ];
 
@@ -119,72 +126,92 @@ export default function ContactClient() {
 						</p>
 
 						<div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-							{contactMethods.map((method) => (
-								<div
-									key={method.label}
-									style={{
-										display: "flex",
-										alignItems: "center",
-										gap: 14,
-										padding: "14px 16px",
-										border: "1px solid var(--border-subtle)",
-										borderRadius: 10,
-										transition: "all 0.2s ease",
-									}}
-									onMouseEnter={(e) => {
-										e.currentTarget.style.borderColor = "rgba(59,130,246,0.4)";
-										e.currentTarget.style.background =
-											"rgba(59, 130, 246, 0.08)";
-									}}
-									onMouseLeave={(e) => {
-										e.currentTarget.style.borderColor = "var(--border-subtle)";
-										e.currentTarget.style.background = "";
-									}}
-								>
-									<div
+							{contactMethods.map((method) => {
+								const handleClick = (e) => {
+									if (method.type === "email") {
+										try {
+											if (typeof navigator !== "undefined" && navigator.clipboard) {
+												navigator.clipboard.writeText(method.value);
+												toast.success(`Copied email to clipboard: ${method.value}`);
+											}
+										} catch (err) {}
+									}
+								};
+
+								return (
+									<a
+										key={method.label}
+										href={method.href}
+										target={method.href.startsWith("http") ? "_blank" : undefined}
+										rel={method.href.startsWith("http") ? "noopener noreferrer" : undefined}
+										onClick={handleClick}
 										style={{
-											width: 38,
-											height: 38,
-											borderRadius: 8,
-											flexShrink: 0,
-											background: "rgba(59,130,246,0.1)",
-											border: "1px solid rgba(59,130,246,0.2)",
 											display: "flex",
 											alignItems: "center",
-											justifyContent: "center",
-											color: "var(--cta)",
+											gap: 14,
+											padding: "14px 16px",
+											border: "1px solid var(--border-subtle)",
+											borderRadius: 10,
+											transition: "all 0.2s ease",
+											textDecoration: "none",
+											color: "inherit",
+											background: "var(--bg-surface)",
+											cursor: "pointer",
+										}}
+										onMouseEnter={(e) => {
+											e.currentTarget.style.borderColor = "rgba(59,130,246,0.4)";
+											e.currentTarget.style.background = "rgba(59, 130, 246, 0.08)";
+										}}
+										onMouseLeave={(e) => {
+											e.currentTarget.style.borderColor = "var(--border-subtle)";
+											e.currentTarget.style.background = "var(--bg-surface)";
 										}}
 									>
-										{method.icon}
-									</div>
-									<div>
 										<div
 											style={{
-												fontSize: 11,
-												fontWeight: 500,
-												color: "var(--text-muted)",
-												marginBottom: 1,
-												textTransform: "uppercase",
-												letterSpacing: "0.06em",
+												width: 38,
+												height: 38,
+												borderRadius: 8,
+												flexShrink: 0,
+												background: "rgba(59,130,246,0.1)",
+												border: "1px solid rgba(59,130,246,0.2)",
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+												color: "var(--cta)",
 											}}
 										>
-											{method.label}
+											{method.icon}
 										</div>
-										<div
-											style={{
-												fontSize: 14,
-												fontWeight: 500,
-												color: "var(--text-primary)",
-											}}
-										>
-											{method.value}
+										<div>
+											<div
+												style={{
+													fontSize: 11,
+													fontWeight: 500,
+													color: "var(--text-muted)",
+													marginBottom: 1,
+													textTransform: "uppercase",
+													letterSpacing: "0.06em",
+												}}
+											>
+												{method.label}
+											</div>
+											<div
+												style={{
+													fontSize: 14,
+													fontWeight: 500,
+													color: "var(--text-primary)",
+												}}
+											>
+												{method.value}
+											</div>
+											<div style={{ fontSize: 12, color: "var(--text-muted)" }}>
+												{method.sub}
+											</div>
 										</div>
-										<div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-											{method.sub}
-										</div>
-									</div>
-								</div>
-							))}
+									</a>
+								);
+							})}
 						</div>
 					</div>
 

@@ -1,6 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const reasons = [
   {
@@ -329,36 +334,43 @@ export default function WhyChooseUs() {
   const cardsRef = useRef([]);
   const [hoveredIdx, setHoveredIdx] = useState(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
 
-    if (headingRef.current) {
-      headingRef.current.style.opacity = '0';
-      headingRef.current.style.transform = 'translateY(24px)';
-      headingRef.current.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
-      observer.observe(headingRef.current);
-    }
+      // Heading reveal
+      gsap.fromTo(
+        headingRef.current,
+        { y: 30, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.75, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: 'top 88%',
+            once: true,
+          },
+        }
+      );
 
-    cardsRef.current.forEach((card, i) => {
-      if (!card) return;
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(32px)';
-      card.style.transition = `opacity 0.6s ease ${i * 0.07}s, transform 0.6s ease ${i * 0.07}s`;
-      observer.observe(card);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+      // Cards staggered reveal — GPU only (transform + opacity)
+      gsap.fromTo(
+        '.why-card-item',
+        { y: 40, opacity: 0, scale: 0.97 },
+        {
+          y: 0, opacity: 1, scale: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: '.why-grid',
+            start: 'top 85%',
+            once: true,
+          },
+        }
+      );
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <section
@@ -412,6 +424,7 @@ export default function WhyChooseUs() {
           {reasons.map((reason, i) => (
             <div
               key={i}
+              className="why-card-item"
               ref={(el) => { cardsRef.current[i] = el; }}
             >
               <TiltCard

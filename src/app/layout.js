@@ -37,6 +37,15 @@ export const metadata = {
 	alternates: {
 		canonical: defaultBaseUrl,
 	},
+	icons: {
+		icon: [
+			{ url: "/aritaro-logo.png", type: "image/png", sizes: "any" },
+		],
+		apple: [
+			{ url: "/aritaro-logo.png" },
+		],
+		shortcut: "/aritaro-logo.png",
+	},
 	openGraph: {
 		title: "Aritaro Pvt Limited | Enterprise Cybersecurity & AI Automation",
 		description:
@@ -56,6 +65,10 @@ export default function RootLayout({ children }) {
 			data-theme="dark"
 			className={`dark ${inter.variable} ${jetbrainsMono.variable}`}
 		>
+			<head>
+				<link rel="icon" href="/aritaro-logo.png" type="image/png" />
+				<link rel="shortcut icon" href="/aritaro-logo.png" type="image/png" />
+			</head>
 			<body
 				suppressHydrationWarning
 				className="min-h-screen antialiased overflow-x-hidden"

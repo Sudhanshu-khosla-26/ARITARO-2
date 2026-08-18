@@ -38,50 +38,6 @@ export default function Footer() {
         overflow: 'hidden',
       }}
     >
-
-      {/* CTA Banner */}
-      <div style={{
-        background: 'var(--bg-surface)',
-        borderBottom: '1px solid var(--border-subtle)',
-        padding: '48px 32px',
-        textAlign: 'center',
-      }}>
-        <div style={{ maxWidth: 640, margin: '0 auto' }}>
-          <h2 style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: 'clamp(22px, 4vw, 40px)',
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-            marginBottom: 14,
-            lineHeight: 1.2,
-          }}>
-            Ready to{' '}
-            <span style={{ color: 'var(--accent)' }}>secure</span>{' '}
-            your organization?
-          </h2>
-          <p style={{
-            fontSize: 16,
-            color: 'var(--text-muted)',
-            marginBottom: 32,
-            lineHeight: 1.7,
-          }}>
-            Book a 30-minute security assessment with our elite team.
-            No sales pressure — just expertise.
-          </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="btn-primary" onClick={() => { const el = document.querySelector('#contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>
-              Request Assessment
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-            <button className="btn-ghost" onClick={() => { const el = document.querySelector('#contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}>
-              Talk to an Expert
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Main grid */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px 28px' }}>
         <div
@@ -141,7 +97,7 @@ export default function Footer() {
               Defending digital assets since 2026.
             </p>
 
-            {/* Cert badges */}
+            {/* Cert badges
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
               {['ISO 27001', 'SOC 2 Type II', 'GDPR'].map((cert) => (
                 <span key={cert} style={{
@@ -156,7 +112,7 @@ export default function Footer() {
                   {cert}
                 </span>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Link columns */}

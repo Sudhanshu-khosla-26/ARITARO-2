@@ -15,8 +15,11 @@ const reportSchema = new Schema(
 		approved_by: { type: Schema.Types.ObjectId, ref: "User" },
 		admin_notes: { type: String },
 	},
-	{ timestamps: true },
+	{ timestamps: true }
 );
+
+reportSchema.index({ request_id: 1, status: 1 });
+reportSchema.index({ status: 1 });
 
 const Report = mongoose.models.Report || mongoose.model("Report", reportSchema);
 

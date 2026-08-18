@@ -64,6 +64,7 @@ const navLinks = [
   { label: 'Case Studies', href: '/case-studies', isRoute: true },
   { label: 'Careers', href: '/careers', isRoute: true },
   { label: 'Blog', href: '/blog', isRoute: true },
+  { label: 'Contact', href: '/contact', isRoute: true },
 ];
 
 export default function Navbar() {
@@ -118,26 +119,28 @@ export default function Navbar() {
       href: '/services',
       className: 'nav-services',
       dropdown: (
-        <div className="mega-menu">
-          <div className="mega-header">
-            <span className="mega-header-title">Our Services</span>
-          </div>
-          <div className="mega-grid">
-            {megaServices.slice(0, 3).map((s) => (
-              <Link key={s.title} href={s.href} className="mega-item" style={{ background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', width: '100%', textDecoration: 'none', color: 'inherit' }}>
-                <div className="mega-icon" style={{ color: s.color }}>{s.icon}</div>
-                <div>
-                  <div className="mega-item-title">{s.title}</div>
-                  <div className="mega-item-desc">{s.desc}</div>
-                </div>
+        <div className="mega-menu-container">
+          <div className="mega-menu">
+            <div className="mega-header">
+              <span className="mega-header-title">Our Services</span>
+            </div>
+            <div className="mega-grid">
+              {megaServices.slice(0, 3).map((s) => (
+                <Link key={s.title} href={s.href} className="mega-item" style={{ background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', width: '100%', textDecoration: 'none', color: 'inherit' }}>
+                  <div className="mega-icon" style={{ color: s.color }}>{s.icon}</div>
+                  <div>
+                    <div className="mega-item-title">{s.title}</div>
+                    <div className="mega-item-desc">{s.desc}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="mega-footer" style={{ borderTop: '1px solid var(--border-subtle)', padding: '8px 14px', textAlign: 'right' }}>
+              <Link href="/services" onClick={handleServicesClick} style={{ fontSize: 11, fontWeight: 600, color: '#06B6D4', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, transition: 'color 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#3B82F6'} onMouseLeave={(e) => e.currentTarget.style.color = '#06B6D4'}>
+                <span>View all services</span>
+                <span>→</span>
               </Link>
-            ))}
-          </div>
-          <div className="mega-footer" style={{ borderTop: '1px solid var(--border-subtle)', padding: '8px 14px', textAlign: 'right' }}>
-            <Link href="/services" onClick={handleServicesClick} style={{ fontSize: 11, fontWeight: 600, color: '#06B6D4', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, transition: 'color 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#3B82F6'} onMouseLeave={(e) => e.currentTarget.style.color = '#06B6D4'}>
-              <span>View all services</span>
-              <span>→</span>
-            </Link>
+            </div>
           </div>
         </div>
       )

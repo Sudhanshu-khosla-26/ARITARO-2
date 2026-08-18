@@ -5,6 +5,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Lenis smooth scrolling */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 /* ═══════════════════════════════════════════════════
    ARITARO — DESIGN SYSTEM v2.0
    Guidelines: guildlines.md
@@ -677,38 +698,42 @@ h6 {
   background: var(--bg-elevated) !important;
 }
 
-.nav-services:hover .nav-chevron {
-  transform: rotate(180deg);
-  transition: transform 0.25s ease;
-}
-
 .nav-chevron {
   transition: transform 0.25s ease;
 }
 
-.mega-menu {
+.mega-menu-container {
   position: absolute;
-  top: calc(100% + 8px);
-  left: -50px;
-  width: 220px;
-  background: #090E17;
-  border: 1px solid #141C2C;
-  border-radius: 14px;
-  padding: 0;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  top: 100%;
+  left: -40px;
+  padding-top: 12px;
   z-index: 200;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.25s ease 0.15s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
 }
 
-.nav-services:hover .mega-menu,
-.mega-menu:hover {
+.nav-services:hover .mega-menu-container,
+.mega-menu-container:hover {
   opacity: 1;
   transform: translateY(0);
-  pointer-events: all;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.nav-services:hover .nav-chevron {
+  transform: rotate(180deg);
+}
+
+.mega-menu {
+  width: 230px;
+  background: #090E17;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 0;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  overflow: hidden;
 }
 
 /* Header */

@@ -335,7 +335,7 @@ export default function HeroSection() {
 						alignItems: "center",
 					}}
 				>
-					{["ISO 27001", "SOC 2 Type II", "GDPR"].map((item, i) => (
+					{/* {["ISO 27001", "SOC 2 Type II", "GDPR"].map((item, i) => (
 						<div key={i} style={{ display: "flex", alignItems: "center" }}>
 							{i > 0 && (
 								<span
@@ -371,7 +371,7 @@ export default function HeroSection() {
 								{item}
 							</span>
 						</div>
-					))}
+					))} */}
 				</div>
 			</div>
 

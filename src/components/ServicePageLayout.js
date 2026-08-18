@@ -9,19 +9,48 @@ import WhatsAppWidget from '@/components/WhatsAppWidget';
 export default function ServicePageLayout({
   title,
   subtitle,
+  overview,
+  scope,
+  sampleFindings,
   tagline,
   accentColor = '#3B82F6',
   methodology,
-  standards,
-  deliverables,
+  standards = [],
+  deliverables = [],
   timeline,
   pricing,
   engagementTypes,
   whyItMatters,
-  faqs,
+  faqs = [],
   children,
 }) {
   const [openFaq, setOpenFaq] = useState(null);
+
+  // Normalize methodology to support both array of strings and array of objects
+  const normalizedMethodology = Array.isArray(methodology)
+    ? methodology.map((item) => {
+        if (typeof item === 'string') {
+          return {
+            title: item,
+            focus: 'Assessment & execution phase',
+            activities: ['Scoping', 'Security Verification', 'Actionable Report'],
+          };
+        }
+        return {
+          title: item.title || item.name || 'Assessment Phase',
+          focus: item.focus || item.description || '',
+          activities: Array.isArray(item.activities) ? item.activities : [],
+        };
+      })
+    : [];
+
+  // Normalize FAQs to support { q, a } or { question, answer }
+  const normalizedFaqs = Array.isArray(faqs)
+    ? faqs.map((faq) => ({
+        q: faq.q || faq.question || '',
+        a: faq.a || faq.answer || '',
+      })).filter((f) => f.q && f.a)
+    : [];
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }}>
@@ -83,8 +112,47 @@ export default function ServicePageLayout({
         </section>
       )}
 
+      {/* Overview Section if present */}
+      {overview && (
+        <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 16, textAlign: 'center' }}>
+              Service Overview
+            </h2>
+            <div style={{
+              padding: '28px 32px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: 16, backdropFilter: 'blur(12px)', color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: 15,
+            }}>
+              {overview}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Scope Section if present */}
+      {scope && scope.length > 0 && (
+        <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 24, textAlign: 'center' }}>
+              Assessment Scope
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+              {scope.map((item, idx) => (
+                <div key={idx} style={{
+                  padding: '20px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: 14, display: 'flex', alignItems: 'center', gap: 12, backdropFilter: 'blur(12px)'
+                }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: accentColor, boxShadow: `0 0 8px ${accentColor}80` }} />
+                  <span style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Methodology Table */}
-      {methodology && (
+      {normalizedMethodology && normalizedMethodology.length > 0 && (
         <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
           <div style={{ maxWidth: 1000, margin: '0 auto' }}>
             <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8, textAlign: 'center' }}>
@@ -94,7 +162,7 @@ export default function ServicePageLayout({
               A structured, repeatable approach that delivers consistent results
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {methodology.map((phase, i) => (
+              {normalizedMethodology.map((phase, i) => (
                 <div key={i} style={{
                   display: 'grid', gridTemplateColumns: '60px 1fr', gap: 20,
                   padding: '24px', background: 'rgba(15, 23, 42, 0.6)',
@@ -115,15 +183,17 @@ export default function ServicePageLayout({
                   </div>
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>{phase.title}</h3>
-                    <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: 10 }}>{phase.focus}</p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                      {phase.activities.map((a, j) => (
-                        <span key={j} style={{
-                          fontSize: 10, fontWeight: 500, padding: '3px 10px', borderRadius: 9999,
-                          background: `${accentColor}08`, border: `1px solid ${accentColor}18`, color: accentColor,
-                        }}>{a}</span>
-                      ))}
-                    </div>
+                    {phase.focus && <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: 10 }}>{phase.focus}</p>}
+                    {phase.activities && phase.activities.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                        {phase.activities.map((a, j) => (
+                          <span key={j} style={{
+                            fontSize: 10, fontWeight: 500, padding: '3px 10px', borderRadius: 9999,
+                            background: `${accentColor}08`, border: `1px solid ${accentColor}18`, color: accentColor,
+                          }}>{a}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -132,49 +202,49 @@ export default function ServicePageLayout({
         </section>
       )}
 
-      {/* Quick Info Cards: Standards, Deliverables, Timeline, Pricing */}
+      {/* Quick Info Cards: Standards, Deliverables, Timeline */}
       <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <div className="info-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
             {/* Standards */}
-            <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
-              <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Standards & Frameworks</h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {standards.map((s, i) => (
-                  <span key={i} style={{ fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 9999, background: `${accentColor}08`, border: `1px solid ${accentColor}18`, color: accentColor }}>{s}</span>
-                ))}
+            {standards && standards.length > 0 && (
+              <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
+                <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Standards & Frameworks</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {standards.map((s, i) => (
+                    <span key={i} style={{ fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 9999, background: `${accentColor}08`, border: `1px solid ${accentColor}18`, color: accentColor }}>{s}</span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             {/* Deliverables */}
-            <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
-              <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Deliverables</h3>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {deliverables.map((d, i) => (
-                  <li key={i} style={{ fontSize: 13, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--c-green)" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12" /></svg>
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {deliverables && deliverables.length > 0 && (
+              <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
+                <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Deliverables</h3>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {deliverables.map((d, i) => (
+                    <li key={i} style={{ fontSize: 13, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--c-green, #10B981)" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12" /></svg>
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {/* Timeline */}
-            <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
-              <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Timeline</h3>
-              <div style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 800, color: accentColor, fontFamily: 'var(--font-mono)' }}>{timeline}</div>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>From scoping call to final report</p>
-            </div>
-            {/* Pricing */}
-            {/* <div style={{ padding: '24px', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: 14 }}>
-              <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Indicative Pricing</h3>
-              <div style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 800, color: accentColor, fontFamily: 'var(--font-mono)' }}>{pricing}</div>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>Custom scoped quote available</p>
-            </div> */}
+            {timeline && (
+              <div style={{ padding: '24px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 16, backdropFilter: 'blur(12px)' }}>
+                <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Timeline</h3>
+                <div style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 800, color: accentColor, fontFamily: 'var(--font-mono)' }}>{timeline}</div>
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>From scoping call to final report</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* Engagement Types */}
-      {engagementTypes && (
+      {engagementTypes && engagementTypes.length > 0 && (
         <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
           <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
             <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 32 }}>Engagement Types</h2>
@@ -197,14 +267,14 @@ export default function ServicePageLayout({
       )}
 
       {/* FAQs (R15) */}
-      {faqs && faqs.length > 0 && (
+      {normalizedFaqs && normalizedFaqs.length > 0 && (
         <section style={{ padding: '48px 24px', borderTop: '1px solid var(--border-subtle)' }}>
           <div style={{ maxWidth: 720, margin: '0 auto' }}>
             <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 32, textAlign: 'center' }}>
               Frequently Asked Questions
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {faqs.map((faq, i) => (
+              {normalizedFaqs.map((faq, i) => (
                 <div key={i} style={{
                   background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)',
                   borderRadius: 12, overflow: 'hidden', transition: 'border-color 0.2s',

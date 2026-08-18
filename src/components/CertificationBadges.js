@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 
 const BADGES = [
-  { name: 'OSCP', full: 'Offensive Security Certified Professional' },
-  { name: 'CEH', full: 'Certified Ethical Hacker' },
-  { name: 'CISSP', full: 'Certified Information Systems Security Professional' },
-  { name: 'ISO 27001', full: 'ISO/IEC 27001 Lead Implementer' },
-  { name: 'CERT-In', full: 'CERT-In Empanelled Auditor' },
-  { name: 'AWS Security', full: 'AWS Certified Security – Specialty' },
+  // { name: 'OSCP', full: 'Offensive Security Certified Professional' },
+  // { name: 'CEH', full: 'Certified Ethical Hacker' },
+  // { name: 'CISSP', full: 'Certified Information Systems Security Professional' },
+  // { name: 'ISO 27001', full: 'ISO/IEC 27001 Lead Implementer' },
+  // { name: 'CERT-In', full: 'CERT-In Empanelled Auditor' },
+  // { name: 'AWS Security', full: 'AWS Certified Security – Specialty' },
 ];
 
 export default function CertificationBadges() {

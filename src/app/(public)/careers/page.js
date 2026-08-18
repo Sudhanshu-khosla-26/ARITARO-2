@@ -138,6 +138,18 @@ export default function CareersPage() {
     loadData();
   }, []);
 
+  const handleEmailAction = (email = "careers@aritaro.com", subject = "Speculative Application") => {
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        navigator.clipboard.writeText(email);
+        toast.success(`Copied email to clipboard: ${email}`);
+      }
+    } catch (e) {
+      // ignore clipboard failure
+    }
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg-base)", color: "var(--text-primary)", position: "relative" }}>
       {/* Background decorations */}
@@ -181,10 +193,22 @@ export default function CareersPage() {
             </p>
 
             <div style={{ marginTop: 8, display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <a href="mailto:careers@aritaro.com?subject=Speculative%20Application" className="btn-ghost" style={{ padding: "10px 20px", fontSize: 13, textDecoration: "none", border: "1px solid var(--border-subtle)", borderRadius: 6 }}>
-                Email Resume &nbsp;→
-              </a>
-              <button type="button" onClick={() => openApplicationForm()} className="btn-primary" style={{ padding: "10px 20px", fontSize: 13, textDecoration: "none", borderRadius: 6, border: "none", cursor: "pointer" }}>
+              <button
+                type="button"
+                onClick={() => handleEmailAction("careers@aritaro.com", "Speculative Application")}
+                className="btn-ghost"
+                style={{ padding: "10px 20px", fontSize: 13, cursor: "pointer", border: "1px solid var(--border-subtle)", borderRadius: 6 }}
+                title="Copies email to clipboard and opens default mail client"
+              >
+                Email Resume &nbsp;✉
+              </button>
+              <button
+                type="button"
+                onClick={() => openApplicationForm()}
+                className="btn-primary"
+                style={{ padding: "10px 20px", fontSize: 13, textDecoration: "none", borderRadius: 6, border: "none", cursor: "pointer" }}
+                title="Direct online application form"
+              >
                 Apply via Platform &nbsp;→
               </button>
             </div>
@@ -354,9 +378,15 @@ export default function CareersPage() {
                 <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", margin: "0 0 4px 0" }}>Looking for something else?</h4>
                 <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>If your skills don't fit our active listings, reach out anyway.</p>
               </div>
-              <a href="mailto:careers@aritaro.com?subject=Hiring%20Question" style={{ fontSize: 13, color: "var(--accent)", textDecoration: "none", fontWeight: 500 }} onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"} onMouseLeave={(e) => e.currentTarget.style.textDecoration = "none"}>
+              <button
+                type="button"
+                onClick={() => handleEmailAction("careers@aritaro.com", "Hiring Inquiry")}
+                style={{ fontSize: 13, color: "var(--accent)", background: "none", border: "none", cursor: "pointer", fontWeight: 500, padding: 0 }}
+                onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"}
+                onMouseLeave={(e) => e.currentTarget.style.textDecoration = "none"}
+              >
                 Get in touch →
-              </a>
+              </button>
             </div>
 
           </div>
