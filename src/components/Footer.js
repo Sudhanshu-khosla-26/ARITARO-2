@@ -143,7 +143,7 @@ export default function Footer() {
 
             {/* Cert badges */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {['ISO 27001', 'SOC 2', 'GDPR', 'HIPAA'].map((cert) => (
+              {['ISO 27001', 'SOC 2 Type II', 'GDPR'].map((cert) => (
                 <span key={cert} style={{
                   fontSize: 11,
                   padding: '3px 10px',

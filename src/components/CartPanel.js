@@ -183,7 +183,10 @@ export default function CartPanel() {
                 </p>
               </div>
               <button
-                onClick={closeCart}
+                onClick={() => {
+                  closeCart();
+                  window.location.href = '/services';
+                }}
                 className="btn-outline"
                 style={{ fontSize: 12, padding: '10px 20px', marginTop: 8 }}
               >

@@ -6,6 +6,7 @@ export { default as Notification } from "./Notification";
 export { default as Blog } from "./Blog";
 export { default as CaseStudy } from "./CaseStudy";
 export { default as JobOpportunity } from "./JobOpportunity";
+export { default as JobApplication } from "./JobApplication";
 export { default as ContactRequest } from "./ContactRequest";
 export { default as ServiceRequest } from "./ServiceRequest";
 export { default as Report } from "./Report";

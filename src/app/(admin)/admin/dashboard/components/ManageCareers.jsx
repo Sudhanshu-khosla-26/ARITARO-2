@@ -8,6 +8,8 @@ import {
 	createJobOpportunity,
 	removeJobOpportunity,
 	togglePublishJobOpportunity,
+	listJobApplications,
+	updateJobApplicationStatus,
 } from "@/actions/admin.actions";
 
 const inputStyle = {
@@ -51,7 +53,9 @@ function StatusBadge({ isPublished }) {
 
 export default function ManageCareers() {
 	const [jobs, setJobs] = useState([]);
+	const [applications, setApplications] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [applicationsLoading, setApplicationsLoading] = useState(true);
 	const [showForm, setShowForm] = useState(false);
 	const [ConfirmDialog, confirm] = useConfirm();
 
@@ -72,9 +76,21 @@ export default function ManageCareers() {
 		setLoading(false);
 	}, []);
 
+	const loadApplications = useCallback(async () => {
+		setApplicationsLoading(true);
+		const result = await listJobApplications();
+		if (result.success) {
+			setApplications(result.applications);
+		} else {
+			toast.error(result.error || "Failed to load job applications");
+		}
+		setApplicationsLoading(false);
+	}, []);
+
 	useEffect(() => {
 		loadJobs();
-	}, [loadJobs]);
+		loadApplications();
+	}, [loadJobs, loadApplications]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -129,6 +145,16 @@ export default function ManageCareers() {
 			loadJobs();
 		} else {
 			toast.error(res.error || "Failed to update position state");
+		}
+	};
+
+	const handleApplicationStatusChange = async (applicationId, status) => {
+		const res = await updateJobApplicationStatus(applicationId, status);
+		if (res.success) {
+			toast.success("Application status updated");
+			loadApplications();
+		} else {
+			toast.error(res.error || "Failed to update application status");
 		}
 	};
 
@@ -328,6 +354,82 @@ export default function ManageCareers() {
 						</div>
 					</>
 				)}
+
+				<div style={{ marginTop: 28, display: "flex", flexDirection: "column", gap: 16 }}>
+					<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+						<h3 style={{ fontSize: 18, fontWeight: 700, color: "#F9FAFB", margin: 0 }}>Career Applications</h3>
+					</div>
+
+					{applicationsLoading ? (
+						<div style={{ textAlign: "center", padding: 24, color: "#6B7280" }}>Loading applications...</div>
+					) : applications.length === 0 ? (
+						<div style={{ textAlign: "center", padding: 24, border: "1px dashed rgba(51,65,85,0.4)", borderRadius: 14, color: "#6B7280" }}>No job applications found yet.</div>
+					) : (
+						<div style={{ overflowX: "auto" }}>
+							<table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+								<thead>
+									<tr>
+										<th style={thStyle}>Applicant</th>
+										<th style={thStyle}>Position</th>
+										<th style={thStyle}>Contact</th>
+										<th style={thStyle}>Experience</th>
+										<th style={thStyle}>Resume</th>
+										<th style={thStyle}>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									{applications.map((application) => (
+										<tr key={application.id} style={{ borderBottom: "1px solid rgba(51,65,85,0.2)" }}>
+											<td style={{ ...tdStyle, verticalAlign: "top", maxWidth: 220 }}>
+												<div style={{ fontWeight: 700, color: "#fff" }}>{application.name}</div>
+												<div style={{ color: "#94A3B8", fontSize: 12, marginTop: 4 }}>{new Date(application.createdAt).toLocaleDateString()}</div>
+												{application.coverLetter && (
+													<div style={{ color: "#CBD5E1", whiteSpace: "pre-wrap", marginTop: 8, fontSize: 12 }}>{application.coverLetter}</div>
+												)}
+											</td>
+											<td style={{ ...tdStyle, verticalAlign: "top" }}>{application.position}</td>
+											<td style={{ ...tdStyle, verticalAlign: "top" }}>
+												<div>{application.email}</div>
+												{application.phone && <div style={{ marginTop: 4 }}>{application.phone}</div>}
+												{application.portfolioUrl && (
+													<a href={application.portfolioUrl} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 6, color: "#60A5FA" }}>
+														Portfolio
+													</a>
+												)}
+											</td>
+											<td style={{ ...tdStyle, verticalAlign: "top" }}>{application.experience || "—"}</td>
+											<td style={{ ...tdStyle, verticalAlign: "top" }}>
+												{application.resumeUrl ? (
+													<a href={application.resumeUrl} target="_blank" rel="noreferrer" style={{ color: "#60A5FA" }}>Open Resume</a>
+												) : "—"}
+											</td>
+											<td style={{ ...tdStyle, verticalAlign: "top" }}>
+												<select
+													value={application.status}
+													onChange={(e) => handleApplicationStatusChange(application.id, e.target.value)}
+													style={{
+														padding: "6px 10px",
+														borderRadius: 6,
+														background: "rgba(15,23,42,0.8)",
+														color: "#F8FAFC",
+														border: "1px solid rgba(51,65,85,0.8)",
+													}}
+												>
+													<option value="new">New</option>
+													<option value="reviewing">Reviewing</option>
+													<option value="shortlisted">Shortlisted</option>
+													<option value="rejected">Rejected</option>
+													<option value="hired">Hired</option>
+												</select>
+											</td>
+										</tr>
+									))}
+								</tbody>
+								</table>
+							</div>
+					)}
+				</div>
+
 				<style>{`
 					@media (max-width: 768px) {
 						.desktop-only-table {

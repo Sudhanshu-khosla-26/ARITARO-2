@@ -14,6 +14,7 @@ const contactMethods = [
     ),
     label: 'Call Us',
     value: '+91 96258 94393',
+    href: 'tel:+919625894393',
     sub: 'Mon–Sat, 9AM–7PM IST',
   },
   {
@@ -25,6 +26,7 @@ const contactMethods = [
     ),
     label: 'Email',
     value: 'info@aritaro.in',
+    href: 'mailto:info@aritaro.in',
     sub: 'Response within 2 hours',
   },
   {
@@ -36,7 +38,8 @@ const contactMethods = [
     ),
     label: 'Office',
     value: 'New Delhi, India',
-    sub: 'By appointment only',
+    href: 'https://maps.google.com/?q=New+Delhi+India',
+    sub: 'A-14, Sector 63, Noida • By appointment only',
   },
 ];
 
@@ -227,16 +230,23 @@ export default function ContactSection() {
             {/* Contact cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
               {contactMethods.map((method, i) => (
-                <div key={i} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 14,
-                  padding: '14px 16px',
-                  background: 'var(--bg-surface)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: 10,
-                  transition: 'all 0.2s ease',
-                }}
+                <a
+                  key={i}
+                  href={method.href}
+                  target={method.href.startsWith('http') ? '_blank' : undefined}
+                  rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                    padding: '14px 16px',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 10,
+                    transition: 'all 0.2s ease',
+                    color: 'inherit',
+                    textDecoration: 'none',
+                  }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)';
                     e.currentTarget.style.background = 'rgba(59, 130, 246, 0.08)';
@@ -278,7 +288,7 @@ export default function ContactSection() {
                       {method.sub}
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
 

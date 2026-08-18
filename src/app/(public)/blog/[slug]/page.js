@@ -5,46 +5,51 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 
+export const dynamic = "force-dynamic";
+
 // ─── Dynamic SEO metadata ─────────────────────────────────────────────────────
 export async function generateMetadata({ params }) {
 	const { slug } = await params;
-	await connectDB();
-	const blog = await Blog.findOne({ slug, isPublished: true }).lean();
 
-	if (!blog) {
+	try {
+		await connectDB();
+		const blog = await Blog.findOne({ slug, isPublished: true }).lean();
+
+		if (!blog) {
+			return {
+				title: "Article not found | Aritaro",
+				description:
+					"The article you are looking for does not exist or has been removed.",
+			};
+		}
+
 		return {
-			title: "Article not found | Aritaro",
-			description:
-				"The article you are looking for does not exist or has been removed.",
+			title: `${blog.metaTitle || blog.title} | Aritaro Blog`,
+			description: blog.metaDescription || blog.excerpt,
+			keywords: blog.tags?.join(", "),
+			openGraph: {
+				title: blog.metaTitle || blog.title,
+				description: blog.metaDescription || blog.excerpt,
+				type: "article",
+				publishedTime: blog.publishedAt?.toISOString(),
+				images: blog.coverImage
+					? [{ url: blog.coverImage, alt: blog.title }]
+					: [],
+			},
+			twitter: {
+				card: "summary_large_image",
+				title: blog.metaTitle || blog.title,
+				description: blog.metaDescription || blog.excerpt,
+				images: blog.coverImage ? [blog.coverImage] : [],
+			},
+		};
+	} catch (error) {
+		console.warn("Blog metadata unavailable without database connection:", error.message);
+		return {
+			title: "Aritaro Blog",
+			description: "Cybersecurity insights and AI automation thought leadership from Aritaro.",
 		};
 	}
-
-	return {
-		title: `${blog.metaTitle || blog.title} | Aritaro Blog`,
-		description: blog.metaDescription || blog.excerpt,
-		keywords: blog.tags?.join(", "),
-		openGraph: {
-			title: blog.metaTitle || blog.title,
-			description: blog.metaDescription || blog.excerpt,
-			type: "article",
-			publishedTime: blog.publishedAt?.toISOString(),
-			images: blog.coverImage
-				? [{ url: blog.coverImage, alt: blog.title }]
-				: [],
-		},
-		twitter: {
-			card: "summary_large_image",
-			title: blog.metaTitle || blog.title,
-			description: blog.metaDescription || blog.excerpt,
-			images: blog.coverImage ? [blog.coverImage] : [],
-		},
-	};
-}
-
-export async function generateStaticParams() {
-	await connectDB();
-	const blogs = await Blog.find({ isPublished: true }).select("slug").lean();
-	return blogs.map((b) => ({ slug: b.slug }));
 }
 
 function formatDate(iso) {
@@ -59,13 +64,39 @@ function formatDate(iso) {
 
 export default async function SingleBlogPage({ params }) {
 	const { slug } = await params;
-	await connectDB();
+	let blog = null;
 
-	const blog = await Blog.findOne({ slug, isPublished: true })
-		.populate("author", "name")
-		.lean();
+	try {
+		await connectDB();
+		blog = await Blog.findOne({ slug, isPublished: true })
+			.populate("author", "name")
+			.lean();
+	} catch (error) {
+		console.warn("Blog article unavailable without database connection:", error.message);
+	}
 
-	if (!blog) notFound();
+	if (!blog) {
+		return (
+			<main
+				style={{
+					minHeight: "100vh",
+					background: "#020617",
+					color: "#F1F5F9",
+					fontFamily: "var(--font-sans)",
+					display: "grid",
+					placeItems: "center",
+					padding: "40px 24px",
+				}}
+			>
+				<div style={{ textAlign: "center", maxWidth: 640 }}>
+					<h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", marginBottom: 12 }}>Article unavailable</h1>
+					<p style={{ color: "#94A3B8", lineHeight: 1.7 }}>
+						This article cannot be loaded right now because the database is unavailable.
+					</p>
+				</div>
+			</main>
+		);
+	}
 
 	// ── Structured Data (JSON-LD) ─────────────────────────────────────────
 	const jsonLd = {

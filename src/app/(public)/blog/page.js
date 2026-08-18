@@ -101,7 +101,7 @@ export default async function BlogIndexPage() {
 				{blogs.length === 0 ? (
 					<div style={{ textAlign: "center", padding: "80px 24px", color: "#64748B" }}>
 						<div style={{ fontSize: 48, marginBottom: 16 }}>📝</div>
-						<h2 style={{ fontSize: 20, fontWeight: 700, color: "#F1F5F9", marginBottom: 8 }}>No articles yet</h2>
+						<h2 style={{ fontSize: 20, fontWeight: 700, color: "#F1F5F9", marginBottom: 8 }}>No Blog yet</h2>
 						<p style={{ fontSize: 14, color: "#94A3B8" }}>Stay tuned — our team is preparing fresh insights.</p>
 					</div>
 				) : (

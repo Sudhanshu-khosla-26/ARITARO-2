@@ -1,4 +1,8 @@
+import dns from "node:dns";
 import mongoose from "mongoose";
+
+// Force trusted public resolvers to avoid local ISP/router DNS issues with mongo+srv.
+dns.setServers(["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"]);
 
 async function connectDB() {
 	if (mongoose.connection.readyState >= 1) return mongoose.connection;

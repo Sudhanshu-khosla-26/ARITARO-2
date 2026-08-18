@@ -18,6 +18,7 @@ export default function AboutSection() {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const [mounted, setMounted] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -117,12 +118,15 @@ export default function AboutSection() {
               position: 'relative',
               aspectRatio: '16/10',
             }}>
-              {mounted && (
+              {mounted && !videoFailed && (
                 <video
                   autoPlay
                   muted
                   loop
                   playsInline
+                  preload="metadata"
+                  onError={() => setVideoFailed(true)}
+                  poster="/og-image.jpg"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -134,6 +138,17 @@ export default function AboutSection() {
                 >
                   <source src="/grok-video-be4a4f39-a70b-41ec-af1d-5cf4d274b1aa.mp4" type="video/mp4" />
                 </video>
+              )}
+              {videoFailed && (
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: 'radial-gradient(circle at 30% 20%, rgba(99,102,241,0.35), transparent 32%), linear-gradient(135deg, #070b17 0%, #111827 45%, #0f172a 100%)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: 'white', fontFamily: 'var(--font-orbitron), monospace', letterSpacing: '0.18em',
+                  fontSize: 12, textTransform: 'uppercase',
+                }}>
+                  Security overview
+                </div>
               )}
               {/* Overlay tint */}
               <div style={{

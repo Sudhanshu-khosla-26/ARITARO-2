@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
 import { listJobOpportunities } from "@/actions/admin.actions";
+import { submitCareerApplication } from "@/actions/contact.actions";
 
 const ROLES = [
   {
@@ -55,10 +57,73 @@ const CULTURE_VALUES = [
   }
 ];
 
+const fieldStyle = {
+  width: "100%",
+  background: "rgba(15, 23, 42, 0.72)",
+  border: "1px solid var(--border-subtle)",
+  borderRadius: 8,
+  color: "var(--text-primary)",
+  padding: "10px 12px",
+  fontSize: 13,
+  boxSizing: "border-box",
+};
+
 export default function CareersPage() {
   const [hoveredRole, setHoveredRole] = useState(null);
   const [jobsList, setJobsList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [appSubmitting, setAppSubmitting] = useState(false);
+  const [applicationForm, setApplicationForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    position: "",
+    portfolioUrl: "",
+    resumeUrl: "",
+    experience: "",
+    coverLetter: "",
+  });
+
+  const handleApplicationFieldChange = (field, value) => {
+    setApplicationForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const openApplicationForm = (roleTitle = "") => {
+    setApplicationForm((prev) => ({ ...prev, position: roleTitle || prev.position }));
+    setShowApplicationForm(true);
+  };
+
+  const handleApplicationSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    Object.entries(applicationForm).forEach(([key, value]) => {
+      formData.set(key, value || "");
+    });
+
+    setAppSubmitting(true);
+    const res = await submitCareerApplication(formData);
+    setAppSubmitting(false);
+
+    if (res.success) {
+      toast.success(res.message);
+      setShowApplicationForm(false);
+      setApplicationForm({
+        name: "",
+        email: "",
+        phone: "",
+        position: "",
+        portfolioUrl: "",
+        resumeUrl: "",
+        experience: "",
+        coverLetter: "",
+      });
+      return;
+    }
+
+    toast.error(res.error || "Failed to submit application");
+  };
 
   useEffect(() => {
     async function loadData() {
@@ -116,12 +181,12 @@ export default function CareersPage() {
             </p>
 
             <div style={{ marginTop: 8, display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link href="mailto:careers@aritaro.com?subject=Speculative Application" className="btn-ghost" style={{ padding: "10px 20px", fontSize: 13, textDecoration: "none", border: "1px solid var(--border-subtle)", borderRadius: 6 }}>
+              <a href="mailto:careers@aritaro.com?subject=Speculative%20Application" className="btn-ghost" style={{ padding: "10px 20px", fontSize: 13, textDecoration: "none", border: "1px solid var(--border-subtle)", borderRadius: 6 }}>
                 Email Resume &nbsp;→
-              </Link>
-              <Link href="/contact?subject=Speculative%20Job%20Application&message=Please%20provide%20your%20LinkedIn/Github/Portfolio%20link%20and%20why%20you%20want%20to%20join%20Aritaro." className="btn-primary" style={{ padding: "10px 20px", fontSize: 13, textDecoration: "none", borderRadius: 6 }}>
+              </a>
+              <button type="button" onClick={() => openApplicationForm()} className="btn-primary" style={{ padding: "10px 20px", fontSize: 13, textDecoration: "none", borderRadius: 6, border: "none", cursor: "pointer" }}>
                 Apply via Platform &nbsp;→
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -226,14 +291,52 @@ export default function CareersPage() {
                         </div>
                       </div>
 
-                      <Link href={`/contact?subject=Application%20for%20${encodeURIComponent(role.title)}&message=Hi%20Aritaro%20Team%2C%0A%0AI%20am%20applying%20for%20the%20${encodeURIComponent(role.title)}%20position.%20Please%20find%20my%20details%20below%3A`} className="btn-primary" style={{ padding: "8px 16px", fontSize: 12, borderRadius: 6, textDecoration: "none" }}>
+                      <button type="button" onClick={() => openApplicationForm(role.title)} className="btn-primary" style={{ padding: "8px 16px", fontSize: 12, borderRadius: 6, textDecoration: "none", border: "none", cursor: "pointer" }}>
                         Apply
-                      </Link>
+                      </button>
                     </div>
                   ))}
                 </div>
               )}
             </div>
+
+            {showApplicationForm && (
+              <form onSubmit={handleApplicationSubmit} style={{
+                background: "rgba(15, 23, 42, 0.5)",
+                border: "1px solid var(--border-subtle)",
+                borderRadius: 12,
+                padding: 20,
+                display: "grid",
+                gap: 14,
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+                  <h3 style={{ margin: 0, color: "var(--text-primary)", fontSize: 16 }}>Apply for a role</h3>
+                  <button type="button" onClick={() => setShowApplicationForm(false)} style={{ background: "transparent", border: "1px solid var(--border-subtle)", color: "var(--text-muted)", borderRadius: 6, padding: "6px 10px", cursor: "pointer" }}>Close</button>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <input value={applicationForm.name} onChange={(e) => handleApplicationFieldChange("name", e.target.value)} placeholder="Full name" style={{ ...fieldStyle }} required />
+                  <input value={applicationForm.email} onChange={(e) => handleApplicationFieldChange("email", e.target.value)} placeholder="Email" type="email" style={{ ...fieldStyle }} required />
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <input value={applicationForm.phone} onChange={(e) => handleApplicationFieldChange("phone", e.target.value)} placeholder="Phone" style={{ ...fieldStyle }} />
+                  <select value={applicationForm.position} onChange={(e) => handleApplicationFieldChange("position", e.target.value)} style={{ ...fieldStyle }} required>
+                    <option value="">Select role</option>
+                    {jobsList.map((job) => (
+                      <option key={job.id || job._id || job.title} value={job.title}>{job.title}</option>
+                    ))}
+                  </select>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <input value={applicationForm.portfolioUrl} onChange={(e) => handleApplicationFieldChange("portfolioUrl", e.target.value)} placeholder="Portfolio / LinkedIn URL" style={{ ...fieldStyle }} />
+                  <input value={applicationForm.resumeUrl} onChange={(e) => handleApplicationFieldChange("resumeUrl", e.target.value)} placeholder="Resume URL" style={{ ...fieldStyle }} />
+                </div>
+                <textarea value={applicationForm.experience} onChange={(e) => handleApplicationFieldChange("experience", e.target.value)} placeholder="Years of relevant experience" rows={3} style={{ ...fieldStyle, resize: "vertical", minHeight: 80 }} />
+                <textarea value={applicationForm.coverLetter} onChange={(e) => handleApplicationFieldChange("coverLetter", e.target.value)} placeholder="Tell us about yourself and why you want to join Aritaro." rows={5} style={{ ...fieldStyle, resize: "vertical", minHeight: 120 }} />
+                <button type="submit" disabled={appSubmitting} className="btn-primary" style={{ padding: "10px 18px", fontSize: 13, border: "none", cursor: appSubmitting ? "not-allowed" : "pointer", opacity: appSubmitting ? 0.7 : 1 }}>
+                  {appSubmitting ? "Submitting..." : "Submit Application"}
+                </button>
+              </form>
+            )}
 
             {/* Speculative footer inside the column */}
             <div style={{
@@ -251,7 +354,7 @@ export default function CareersPage() {
                 <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", margin: "0 0 4px 0" }}>Looking for something else?</h4>
                 <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>If your skills don't fit our active listings, reach out anyway.</p>
               </div>
-              <a href="mailto:careers@aritaro.com?subject=Speculative Application" style={{ fontSize: 13, color: "var(--accent)", textDecoration: "none", fontWeight: 500 }} onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"} onMouseLeave={(e) => e.currentTarget.style.textDecoration = "none"}>
+              <a href="mailto:careers@aritaro.com?subject=Hiring%20Question" style={{ fontSize: 13, color: "var(--accent)", textDecoration: "none", fontWeight: 500 }} onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"} onMouseLeave={(e) => e.currentTarget.style.textDecoration = "none"}>
                 Get in touch →
               </a>
             </div>

@@ -7,6 +7,7 @@ import Report from "@/models/Report";
 import AuditLog from "@/models/AuditLog";
 import CaseStudy from "@/models/CaseStudy";
 import JobOpportunity from "@/models/JobOpportunity";
+import JobApplication from "@/models/JobApplication";
 import { requireAdmin } from "@/lib/session";
 import { initApp } from "@/lib/init";
 import { sanitizeInput } from "@/lib/security";
@@ -444,6 +445,50 @@ export async function togglePublishCaseStudy(caseStudyId, isPublished) {
 
 	await CaseStudy.findByIdAndUpdate(caseStudyId, { isPublished });
 	return { success: true, message: "Publication state updated" };
+}
+
+export async function listJobApplications() {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	const applications = await JobApplication.find({}).sort({ createdAt: -1 }).lean();
+	return {
+		success: true,
+		applications: applications.map((app) => ({
+			id: app._id.toString(),
+			name: app.name,
+			email: app.email,
+			phone: app.phone || "",
+			position: app.position,
+			portfolioUrl: app.portfolioUrl || "",
+			resumeUrl: app.resumeUrl || "",
+			experience: app.experience || "",
+			coverLetter: app.coverLetter || "",
+			source: app.source || "careers_page",
+			status: app.status || "new",
+			createdAt: app.createdAt?.toISOString() ?? null,
+		})),
+	};
+}
+
+export async function updateJobApplicationStatus(applicationId, status) {
+	const { authorized } = await requireAdmin();
+	if (!authorized) return { success: false, error: "Unauthorized" };
+	if (!(await initApp())) return dbUnavailable;
+
+	const allowedStatuses = ["new", "reviewing", "shortlisted", "rejected", "hired"];
+	const nextStatus = sanitizeInput(String(status || "").trim());
+	if (!allowedStatuses.includes(nextStatus)) {
+		return { success: false, error: "Invalid status" };
+	}
+
+	const app = await JobApplication.findByIdAndUpdate(applicationId, { status: nextStatus }, { new: true });
+	if (!app) {
+		return { success: false, error: "Application not found" };
+	}
+
+	return { success: true, message: "Application status updated", status: app.status };
 }
 
 export async function listJobOpportunities() {

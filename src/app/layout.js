@@ -1,5 +1,6 @@
 import "./globals.css";
 import NavigationWrapper from "@/components/NavigationWrapper";
+import FooterWrapper from "@/components/FooterWrapper";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -51,10 +52,12 @@ export default function RootLayout({ children }) {
 	return (
 		<html
 			lang="en"
+			suppressHydrationWarning
 			data-theme="dark"
 			className={`dark ${inter.variable} ${jetbrainsMono.variable}`}
 		>
 			<body
+				suppressHydrationWarning
 				className="min-h-screen antialiased overflow-x-hidden"
 				style={{
 					fontFamily: "var(--font-sans)",
@@ -67,6 +70,7 @@ export default function RootLayout({ children }) {
 					{/* <GlobalBackground /> */}
 					<NavigationWrapper />
 					{children}
+					<FooterWrapper />
 					<Toaster position="top-right" richColors closeButton />
 				</Providers>
 			</body>

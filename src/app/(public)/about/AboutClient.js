@@ -39,7 +39,7 @@ const VALUES = [
 	},
 	{
 		title: "Transparency",
-		desc: "Clear methodology, clear deliverables, no black boxes. You know exactly what we test and how we test it.",
+		desc: "Clear methodology, clear deliverables, and a transparent testing process. You know exactly what we test and how we test it.",
 	},
 	{
 		title: "Speed",

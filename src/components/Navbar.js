@@ -324,7 +324,7 @@ export default function Navbar() {
                   Login
                 </Link>
                 <button
-                  onClick={() => handleNavClick('#contact')}
+                  onClick={() => router.push('/request-assessment')}
                   className="btn-primary nav-cta-desktop"
                   style={{
                     fontSize: 13,

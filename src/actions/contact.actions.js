@@ -3,6 +3,7 @@
 import connectDB from "@/lib/db";
 import ContactRequest from "@/models/ContactRequest";
 import ServiceRequest from "@/models/ServiceRequest";
+import JobApplication from "@/models/JobApplication";
 import Notification from "@/models/Notification";
 import User from "@/models/User";
 import AuditLog from "@/models/AuditLog";
@@ -72,6 +73,51 @@ export async function submitContact(formData) {
 	});
 
 	return { success: true, message: "Message sent! We'll respond within 24 hours." };
+}
+
+export async function submitCareerApplication(formData) {
+	const raw = {
+		name: formData.get("name"),
+		email: formData.get("email"),
+		phone: formData.get("phone") || undefined,
+		position: formData.get("position"),
+		portfolioUrl: formData.get("portfolioUrl") || undefined,
+		resumeUrl: formData.get("resumeUrl") || undefined,
+		experience: formData.get("experience") || undefined,
+		coverLetter: formData.get("coverLetter") || undefined,
+	};
+
+	const parsed = z.object({
+		name: z.string().min(1, "Name is required"),
+		email: z.string().email("Valid email is required"),
+		phone: z.string().optional().or(z.literal("")),
+		position: z.string().min(1, "Position is required"),
+		portfolioUrl: z.string().url("Portfolio URL must be valid").optional().or(z.literal("")),
+		resumeUrl: z.string().url("Resume URL must be valid").optional().or(z.literal("")),
+		experience: z.string().optional().or(z.literal("")),
+		coverLetter: z.string().optional().or(z.literal("")),
+	}).safeParse(raw);
+
+	if (!parsed.success) {
+		return { success: false, error: parsed.error.issues[0]?.message };
+	}
+
+	if (!(await initApp())) return dbUnavailable;
+
+	await JobApplication.create({
+		name: sanitizeInput(parsed.data.name),
+		email: parsed.data.email.trim().toLowerCase(),
+		phone: parsed.data.phone ? sanitizeInput(parsed.data.phone) : undefined,
+		position: sanitizeInput(parsed.data.position),
+		portfolioUrl: parsed.data.portfolioUrl ? sanitizeInput(parsed.data.portfolioUrl) : undefined,
+		resumeUrl: parsed.data.resumeUrl ? sanitizeInput(parsed.data.resumeUrl) : undefined,
+		experience: parsed.data.experience ? sanitizeInput(parsed.data.experience) : undefined,
+		coverLetter: parsed.data.coverLetter ? sanitizeInput(parsed.data.coverLetter) : undefined,
+		source: "careers_page",
+		status: "new",
+	});
+
+	return { success: true, message: "Application submitted successfully. Our team will review it soon." };
 }
 
 export async function submitServiceRequest(formData) {
