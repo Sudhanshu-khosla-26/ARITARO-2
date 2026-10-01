@@ -1,73 +1,60 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+gsap.registerPlugin(ScrollTrigger);
 
 export default function SmoothScrollProvider({ children }) {
   const pathname = usePathname();
-  const lenisRef = useRef(null);
 
   useEffect(() => {
-    // Respect user's prefers-reduced-motion setting
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
+      duration: 1.1,
+      easing: (t) => 1 - Math.pow(1 - t, 4), // ease-out-quart — snappy start, smooth land
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.2,
       autoResize: true,
+      autoRaf: false, // GSAP drives the ticker — one source of truth
     });
 
-    lenisRef.current = lenis;
     window.lenis = lenis;
 
-    // Sync Lenis scroll with GSAP ScrollTrigger
+    // Keep ScrollTrigger in sync with Lenis eased scroll values
     lenis.on('scroll', ScrollTrigger.update);
 
-    const tickerCallback = (time) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(tickerCallback);
+    // GSAP drives Lenis — single RAF loop for everything
+    const update = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(update);
     gsap.ticker.lagSmoothing(0);
 
-    // Refresh ScrollTrigger when layout shifts
-    const resizeObserver = new ResizeObserver(() => {
-      lenis.resize();
-      ScrollTrigger.refresh();
-    });
-    resizeObserver.observe(document.body);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
 
     return () => {
-      resizeObserver.disconnect();
-      gsap.ticker.remove(tickerCallback);
+      lenis.off('scroll', ScrollTrigger.update);
+      gsap.ticker.remove(update);
       lenis.destroy();
       window.lenis = null;
     };
   }, []);
 
-  // Scroll to top smoothly or immediately on route change
+  // Instant scroll reset on route change
   useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 100);
+    const lenis = window.lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true, force: true });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
+    requestAnimationFrame(() => ScrollTrigger.refresh());
   }, [pathname]);
 
-  return <>{children}</>;
+  return children;
 }

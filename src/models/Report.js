@@ -14,12 +14,15 @@ const reportSchema = new Schema(
 		uploaded_by: { type: Schema.Types.ObjectId, ref: "User", required: true },
 		approved_by: { type: Schema.Types.ObjectId, ref: "User" },
 		admin_notes: { type: String },
+		deletedAt: { type: Date, default: null },
 	},
 	{ timestamps: true }
 );
 
 reportSchema.index({ request_id: 1, status: 1 });
+reportSchema.index({ uploaded_by: 1, createdAt: -1 });
 reportSchema.index({ status: 1 });
+reportSchema.index({ deletedAt: 1, createdAt: -1 });
 
 const Report = mongoose.models.Report || mongoose.model("Report", reportSchema);
 

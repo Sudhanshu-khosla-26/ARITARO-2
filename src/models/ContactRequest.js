@@ -20,11 +20,14 @@ const ContactRequestSchema = new Schema(
 			default: "new",
 		},
 		adminNotes: { type: String },
+		deletedAt: { type: Date, default: null },
 	},
 	{ timestamps: true },
 );
 
-ContactRequestSchema.index({ status: 1, type: 1 });
+ContactRequestSchema.index({ status: 1, type: 1, createdAt: -1 });
+ContactRequestSchema.index({ email: 1 });
+ContactRequestSchema.index({ deletedAt: 1, createdAt: -1 });
 
 const ContactRequest =
 	mongoose.models.ContactRequest ||

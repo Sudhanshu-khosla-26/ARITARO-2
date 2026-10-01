@@ -15,13 +15,14 @@ const NotificationSchema = new Schema(
 		referenceId: { type: Schema.Types.ObjectId, refPath: "referenceModel" },
 		referenceModel: {
 			type: String,
-			enum: ["QuoteRequest", "ContactRequest", "ServiceRequest"],
+			enum: ["ContactRequest", "ServiceRequest", "Report", "User", "Blog"],
 		},
 	},
 	{ timestamps: true },
 );
 
-NotificationSchema.index({ user: 1, isRead: 1 });
+NotificationSchema.index({ user: 1, isRead: 1, createdAt: -1 });
+NotificationSchema.index({ user: 1, createdAt: -1 });
 
 const Notification =
 	mongoose.models.Notification ||

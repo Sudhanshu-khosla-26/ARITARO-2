@@ -299,13 +299,13 @@ export async function seedDatabase() {
 	const conn = await connectDB();
 	if (!conn) return;
 
-	const userCount = await User.countDocuments({ role: "admin" });
-	if (userCount === 0) {
+	const adminCount = await User.countDocuments({ role: "admin" });
+	if (adminCount === 0) {
 		const adminEmail = process.env.ADMIN_EMAIL || "admin@aritaro.com";
 		const adminPassword = process.env.ADMIN_PASSWORD || "Admin@123";
 
 		await User.create({
-			name: "aritaro Admin",
+			name: "Aritaro Admin",
 			email: adminEmail,
 			password: adminPassword,
 			role: "admin",
@@ -313,6 +313,21 @@ export async function seedDatabase() {
 		});
 
 		console.log(`✅ Admin user created: ${adminEmail}`);
+	}
+
+	const clientCount = await User.countDocuments({ role: "client" });
+	if (clientCount === 0) {
+		await User.create({
+			name: "Demo Enterprise Client",
+			email: "client@aritaro.com",
+			password: "Client@123",
+			company: "Acme Cyber Corp",
+			company_name: "Acme Cyber Corp",
+			role: "client",
+			isVerified: true,
+		});
+
+		console.log("✅ Demo Client user created: client@aritaro.com");
 	}
 
 	const serviceCount = await Service.countDocuments();

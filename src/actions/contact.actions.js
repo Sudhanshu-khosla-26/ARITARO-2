@@ -61,9 +61,9 @@ export async function submitContact(formData) {
 		await ContactRequest.create({
 			type: "contact",
 			name: sanitizeInput(parsed.data.name),
-			email: parsed.data.email,
+			email: parsed.data.email.trim().toLowerCase(),
 			company: parsed.data.company ? sanitizeInput(parsed.data.company) : undefined,
-			phone: parsed.data.phone,
+			phone: parsed.data.phone ? sanitizeInput(parsed.data.phone) : undefined,
 			subject: sanitizeInput(parsed.data.subject),
 			message: sanitizeInput(parsed.data.message),
 		});
@@ -176,8 +176,8 @@ export async function submitServiceRequest(formData) {
 			desired_start_date: parsed.data.desired_start_date ? new Date(parsed.data.desired_start_date) : undefined,
 			deadline: parsed.data.deadline ? new Date(parsed.data.deadline) : undefined,
 			contact_name: sanitizeInput(parsed.data.contact_name),
-			contact_email: parsed.data.contact_email,
-			contact_phone: parsed.data.contact_phone,
+			contact_email: parsed.data.contact_email.trim().toLowerCase(),
+			contact_phone: parsed.data.contact_phone ? sanitizeInput(parsed.data.contact_phone) : undefined,
 			authorization_confirmed: parsed.data.authorization_confirmed,
 			sla_due_at,
 		});

@@ -1,12 +1,47 @@
-// src/lib/auth.ts
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import User from "@/models/User";
 import connectDB from "@/lib/db";
+import { rateLimit } from "@/lib/security";
+
+const isProd = process.env.NODE_ENV === "production";
 
 export const authOptions = {
 	session: {
 		strategy: "jwt",
+		maxAge: 30 * 24 * 60 * 60, // 30 days
+	},
+
+	useSecureCookies: isProd,
+
+	cookies: {
+		sessionToken: {
+			name: isProd ? "__Secure-next-auth.session-token" : "next-auth.session-token",
+			options: {
+				httpOnly: true,
+				sameSite: "lax",
+				path: "/",
+				secure: isProd,
+			},
+		},
+		callbackUrl: {
+			name: isProd ? "__Secure-next-auth.callback-url" : "next-auth.callback-url",
+			options: {
+				httpOnly: true,
+				sameSite: "lax",
+				path: "/",
+				secure: isProd,
+			},
+		},
+		csrfToken: {
+			name: isProd ? "__Host-next-auth.csrf-token" : "next-auth.csrf-token",
+			options: {
+				httpOnly: true,
+				sameSite: "lax",
+				path: "/",
+				secure: isProd,
+			},
+		},
 	},
 
 	pages: {
@@ -24,24 +59,34 @@ export const authOptions = {
 			},
 			async authorize(credentials) {
 				if (!credentials?.email || !credentials?.password) {
-					throw new Error("Email and password required");
+					throw new Error("Email and password are required");
+				}
+
+				const normalizedEmail = String(credentials.email).trim().toLowerCase();
+
+				// Brute-force rate limiting: 5 attempts per 15 minutes per email
+				const limit = rateLimit(`auth_user_${normalizedEmail}`, 5, 15 * 60 * 1000);
+				if (!limit.success) {
+					throw new Error("Too many failed login attempts. Please try again after 15 minutes.");
 				}
 
 				try {
 					await connectDB();
 
 					const user = await User.findOne({
-						email: credentials.email,
+						email: normalizedEmail,
 					}).select("+password");
 
 					if (!user || !user.password) {
-						throw new Error("No account found with this email");
+						// Generic error to prevent account enumeration
+						throw new Error("Invalid email or password");
 					}
 
 					const isValid = await user.comparePassword(credentials.password);
 
 					if (!isValid) {
-						throw new Error("Incorrect password");
+						// Generic error to prevent account enumeration
+						throw new Error("Invalid email or password");
 					}
 
 					if (user.isSuspended) {
@@ -61,7 +106,17 @@ export const authOptions = {
 						image: user.avatar,
 					};
 				} catch (e) {
-					throw new Error(e.message); // re-throw so NextAuth surfaces the error
+					// Log technical error securely on server
+					console.error("Authentication authorization error:", e.message);
+					if (
+						e.message === "Invalid email or password" ||
+						e.message === "Your account has been suspended" ||
+						e.message.startsWith("Too many")
+					) {
+						throw e;
+					}
+					// Generic message for unexpected DB/server errors
+					throw new Error("Authentication failed. Please try again later.");
 				}
 			},
 		}),

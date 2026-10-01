@@ -49,6 +49,7 @@ const serviceRequestSchema = new Schema(
 		contact_phone: { type: String },
 		authorization_confirmed: { type: Boolean, default: false },
 		sla_due_at: { type: Date },
+		deletedAt: { type: Date, default: null },
 	},
 	{ timestamps: true },
 );
@@ -61,7 +62,6 @@ serviceRequestSchema.pre("save", async function () {
 			const seq = String(count + 1).padStart(4, "0");
 			this.ticket_ref = `ARI-${year}-${seq}`;
 		} catch (err) {
-			// Fallback in case of model reference error during initialization
 			const rand = Math.floor(1000 + Math.random() * 9000);
 			this.ticket_ref = `ARI-${year}-${rand}`;
 		}
@@ -70,7 +70,9 @@ serviceRequestSchema.pre("save", async function () {
 
 serviceRequestSchema.index({ company_id: 1, createdAt: -1 });
 serviceRequestSchema.index({ company_id: 1, status: 1 });
-serviceRequestSchema.index({ status: 1 });
+serviceRequestSchema.index({ assigned_admin_id: 1, status: 1 });
+serviceRequestSchema.index({ status: 1, sla_due_at: 1 });
+serviceRequestSchema.index({ deletedAt: 1, createdAt: -1 });
 
 const ServiceRequest =
 	mongoose.models.ServiceRequest ||

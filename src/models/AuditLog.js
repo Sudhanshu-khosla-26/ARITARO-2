@@ -12,6 +12,11 @@ const auditLogSchema = new Schema(
 	{ timestamps: { createdAt: true, updatedAt: false } }, // Append-only, no update timestamps
 );
 
+auditLogSchema.index({ actor_id: 1, createdAt: -1 });
+auditLogSchema.index({ target_type: 1, target_id: 1 });
+auditLogSchema.index({ action: 1, createdAt: -1 });
+auditLogSchema.index({ createdAt: -1 });
+
 const AuditLog = mongoose.models.AuditLog || mongoose.model("AuditLog", auditLogSchema);
 
 export default AuditLog;

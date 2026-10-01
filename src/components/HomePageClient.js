@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import SmoothScrollProvider from '@/components/SmoothScrollProvider';
 import WhatsAppWidget from '@/components/WhatsAppWidget';
+import CompanyLogosSection from '@/components/CompanyLogosSection';
 
 const HeroSection = dynamic(() => import('@/components/HeroSection'), {
   ssr: false,
@@ -34,6 +35,7 @@ export default function HomePageClient() {
     <SmoothScrollProvider>
       <main style={{ minHeight: '100vh' }}>
         <HeroSection />
+        <CompanyLogosSection />
         <ServicesSection />
         <AboutSection />
         <TestimonialsSection />

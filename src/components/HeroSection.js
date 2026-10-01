@@ -12,7 +12,7 @@ export default function HeroSection() {
 	const headingRef = useRef(null);
 	const subRef = useRef(null);
 	const actionsRef = useRef(null);
-	const trustRef = useRef(null);
+	// const trustRef = useRef(null);
 
 	const [isLight, setIsLight] = useState(false);
 
@@ -39,26 +39,26 @@ export default function HeroSection() {
 				.fromTo(
 					headingRef.current,
 					{ y: 32, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.7, ease: "power2.out" },
+					{ y: 0, opacity: 1, duration: 0.7, ease: "expo.out" },
 				)
 				.fromTo(
 					subRef.current,
 					{ y: 20, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+					{ y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
 					"-=0.4",
 				)
 				.fromTo(
 					actionsRef.current,
 					{ y: 16, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
+					{ y: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
 					"-=0.3",
 				)
-				.fromTo(
-					".trust-item",
-					{ y: 12, opacity: 0 },
-					{ y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 },
-					"-=0.25",
-				);
+			// .fromTo(
+			// 	".trust-item",
+			// 	{ y: 12, opacity: 0 },
+			// 	{ y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 },
+			// 	"-=0.25",
+			// );
 		}, sectionRef);
 		return () => ctx.revert();
 	}, []);
@@ -324,55 +324,6 @@ export default function HeroSection() {
 					</button>
 				</div>
 
-				{/* Trust bar */}
-				<div
-					ref={trustRef}
-					style={{
-						display: "flex",
-						gap: "clamp(16px, 4vw, 40px)",
-						flexWrap: "wrap",
-						justifyContent: "center",
-						alignItems: "center",
-					}}
-				>
-					{/* {["ISO 27001", "SOC 2 Type II", "GDPR"].map((item, i) => (
-						<div key={i} style={{ display: "flex", alignItems: "center" }}>
-							{i > 0 && (
-								<span
-									style={{
-										width: 1,
-										height: 14,
-										background: "var(--border-subtle)",
-										marginRight: "clamp(16px, 4vw, 40px)",
-									}}
-								/>
-							)}
-							<span
-								className="trust-item"
-								style={{
-									fontSize: 12,
-									color: "var(--text-muted)",
-									letterSpacing: "0.05em",
-									textTransform: "uppercase",
-									display: "flex",
-									alignItems: "center",
-									gap: 8,
-								}}
-							>
-								{item === "ISO 27001" && (
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-								)}
-								{item === "SOC 2 Type II" && (
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5 9.5 17 19 7.5"></path></svg>
-								)}
-								{item === "GDPR" && (
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-								)}
-								{item}
-							</span>
-						</div>
-					))} */}
-				</div>
 			</div>
 
 			{/* Scroll Cue Chevron */}

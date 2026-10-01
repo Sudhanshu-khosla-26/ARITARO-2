@@ -164,7 +164,7 @@ export default function AboutSection() {
             </div>
 
             {/* ── Floating stat card (bottom-left) ── */}
-            <div style={{
+            {/* <div style={{
               position: 'absolute',
               bottom: -24,
               left: -20,
@@ -176,6 +176,7 @@ export default function AboutSection() {
               padding: '20px 24px',
               boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
               minWidth: 180,
+              zIndex: 2,
             }}>
               <div style={{
                 fontFamily: 'var(--font-orbitron), monospace',
@@ -193,25 +194,25 @@ export default function AboutSection() {
                 Threat detection &amp;<br />prevention rate
               </div>
               {/* Active indicator */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 6, marginTop: 10,
+            {/* <div style={{
+              display: 'flex', alignItems: 'center', gap: 6, marginTop: 10,
+            }}>
+              <span style={{
+                width: 6, height: 6, borderRadius: '50%',
+                background: '#00FF9C', boxShadow: '0 0 6px rgba(0,255,156,0.6)',
+                animation: 'pulse-glow 2s ease-in-out infinite',
+              }} />
+              <span style={{
+                fontFamily: 'var(--font-orbitron), monospace',
+                fontSize: 8, letterSpacing: '1.5px', color: 'rgba(0,255,156,0.7)',
               }}>
-                <span style={{
-                  width: 6, height: 6, borderRadius: '50%',
-                  background: '#00FF9C', boxShadow: '0 0 6px rgba(0,255,156,0.6)',
-                  animation: 'pulse-glow 2s ease-in-out infinite',
-                }} />
-                <span style={{
-                  fontFamily: 'var(--font-orbitron), monospace',
-                  fontSize: 8, letterSpacing: '1.5px', color: 'rgba(0,255,156,0.7)',
-                }}>
-                  LIVE MONITORING
-                </span>
-              </div>
+                LIVE MONITORING
+              </span>
             </div>
+          </div> */}
 
             {/* ── Second floating card (top-right) ── */}
-            <div style={{
+            {/* <div style={{
               position: 'absolute',
               top: -20,
               right: -20,
@@ -221,6 +222,7 @@ export default function AboutSection() {
               border: '1px solid var(--glass-border)',
               borderRadius: 10,
               padding: '14px 18px',
+              zIndex: 2,
             }}>
               <div style={{
                 fontFamily: 'var(--font-orbitron), monospace',
@@ -236,7 +238,7 @@ export default function AboutSection() {
               }}>
                 Enterprise Clients
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* ── RIGHT: Text content ── */}
@@ -303,6 +305,6 @@ export default function AboutSection() {
           100% { top: 100%; opacity: 0; }
         }
       `}</style>
-    </section>
+    </section >
   );
 }

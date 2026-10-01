@@ -25,7 +25,21 @@ function LoginContent() {
 
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const redirect = searchParams.get("redirect") || "/";
+	const rawRedirect = searchParams.get("redirect") || "/";
+
+	// Validate redirect URL against Open Redirect & XSS (javascript: / data: / protocol-relative URLs)
+	const safeRedirect = (() => {
+		if (
+			typeof rawRedirect === "string" &&
+			rawRedirect.startsWith("/") &&
+			!rawRedirect.startsWith("//") &&
+			!rawRedirect.startsWith("/\\") &&
+			!rawRedirect.includes(":")
+		) {
+			return rawRedirect === "/" ? "/dashboard" : rawRedirect;
+		}
+		return "/dashboard";
+	})();
 
 	// Role-Based Redirection on authentication
 	useEffect(() => {
@@ -33,10 +47,10 @@ function LoginContent() {
 			if (user.role === "admin") {
 				router.replace("/admin/dashboard");
 			} else {
-				router.replace(redirect === "/" ? "/dashboard" : redirect);
+				router.replace(safeRedirect);
 			}
 		}
-	}, [status, user, router, redirect]);
+	}, [status, user, router, safeRedirect]);
 
 	const onSubmit = async (data) => {
 		setError("");

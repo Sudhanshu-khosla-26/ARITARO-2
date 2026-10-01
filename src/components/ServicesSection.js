@@ -1,47 +1,32 @@
 'use client';
 
-import { useRef } from 'react';
 import Link from 'next/link';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import { useCart } from './CartContext';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const SECTION_ID = 'services-stack-wrapper';
 
 const services = [
   {
     number: '01',
     slug: 'api-pt',
     title: 'API Penetration Testing',
-    tag: 'OWASP API Top 10',
-    desc: 'Deep, manual and automated security testing of REST, GraphQL, gRPC & SOAP APIs. Discover BOLA/IDOR, broken authentication, and business logic flaws before attackers do.',
+    short: 'API SECURITY',
+    tag: 'OWASP API TOP 10',
+    desc: 'Deep manual and automated testing of modern APIs to uncover authorization flaws, broken authentication, exposed data and business-logic vulnerabilities.',
     features: [
-      'REST, GraphQL, gRPC & SOAP',
-      'JWT & OAuth Authentication Audits',
-      'BOLA / IDOR Deep Exploits',
-      'Zero-Day Business Logic Review',
+      'REST / GraphQL / gRPC / SOAP',
+      'JWT & OAuth authentication',
+      'BOLA / IDOR testing',
+      'Business logic analysis',
     ],
-    color: '#3B82F6',
+    duration: '1–2 WEEKS',
     href: '/services/api-pt',
-    duration: '1-2 Weeks',
+    color: '#3B82F6',
     icon: (
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="2" y="2" width="20" height="8" rx="2" />
-        <rect x="2" y="14" width="20" height="8" rx="2" />
-        <line x1="6" y1="6" x2="6.01" y2="6" />
-        <line x1="6" y1="18" x2="6.01" y2="18" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <rect x="3" y="3" width="18" height="7" rx="1.5" />
+        <rect x="3" y="14" width="18" height="7" rx="1.5" />
+        <circle cx="7" cy="6.5" r="0.7" fill="currentColor" />
+        <circle cx="7" cy="17.5" r="0.7" fill="currentColor" />
       </svg>
     ),
   },
@@ -49,31 +34,23 @@ const services = [
     number: '02',
     slug: 'wap-pt',
     title: 'Web Application Pentest',
-    tag: 'Web & Cloud Portals',
-    desc: 'Comprehensive manual and automated assessment of enterprise web platforms. Logic-aware vulnerability research that identifies critical flaws scanners miss.',
+    short: 'WEB SECURITY',
+    tag: 'WEB APPLICATIONS',
+    desc: 'Logic-aware security testing for enterprise web applications, focusing on vulnerabilities that automated scanners frequently miss.',
     features: [
-      'OWASP Top 10 Comprehensive',
-      'Privilege Escalation & Auth Bypass',
-      'Client-Side & Server-Side Injections',
-      'Code-Level Developer Fix Guides',
+      'OWASP Top 10 assessment',
+      'Privilege escalation',
+      'Authentication bypass',
+      'Injection & client-side attacks',
     ],
-    color: '#06B6D4',
+    duration: '2–3 WEEKS',
     href: '/services/wap-pt',
-    duration: '2-3 Weeks',
+    color: '#06B6D4',
     icon: (
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="2" y="3" width="20" height="14" rx="2" />
-        <line x1="8" y1="21" x2="16" y2="21" />
-        <line x1="12" y1="17" x2="12" y2="21" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <rect x="3" y="4" width="18" height="13" rx="1.5" />
+        <path d="M8 20h8" />
+        <path d="M12 17v3" />
       </svg>
     ),
   },
@@ -81,29 +58,21 @@ const services = [
     number: '03',
     slug: 'cloud',
     title: 'Cloud Security Assessment',
-    tag: 'AWS · Azure · GCP',
-    desc: 'Adversarial configuration and architecture review across multi-cloud environments. Identify over-privileged IAM, public assets, and lateral movement paths.',
+    short: 'CLOUD SECURITY',
+    tag: 'AWS · AZURE · GCP',
+    desc: 'Security review of cloud architecture, identity controls, public assets and infrastructure configurations to identify attack paths before they become incidents.',
     features: [
-      'Multi-Cloud IAM & Role Audits',
-      'CIS Benchmark Compliance Scans',
-      'Kubernetes & Container Hardening',
-      'Data Perimeter Leak Detection',
+      'IAM & role analysis',
+      'CIS configuration review',
+      'Kubernetes & container security',
+      'Public exposure analysis',
     ],
-    color: '#818CF8',
+    duration: '1–3 WEEKS',
     href: '/services/cloud',
-    duration: '1-3 Weeks',
+    color: '#818CF8',
     icon: (
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M7.5 18h9a4 4 0 0 0 .5-7.97A6 6 0 0 0 5.2 11.2 3.5 3.5 0 0 0 7.5 18Z" />
       </svg>
     ),
   },
@@ -111,34 +80,26 @@ const services = [
     number: '04',
     slug: 'ai-pt',
     title: 'AI & LLM Penetration Testing',
-    tag: 'Next-Gen AI Security',
-    desc: 'Specialized adversarial red-teaming for LLM architectures, RAG pipelines, and agentic AI systems. Jailbreak prevention and prompt injection protection.',
+    short: 'AI SECURITY',
+    tag: 'NEXT-GEN AI SYSTEMS',
+    desc: 'Adversarial testing for LLM applications, RAG pipelines and agentic systems, covering prompt injection, jailbreaks and unsafe tool access.',
     features: [
-      'OWASP Top 10 for LLMs',
-      'Prompt Injection & Jailbreak Defense',
-      'RAG Vector Poisoning Defense',
-      'Tool Calling & Agent Scoping',
+      'OWASP LLM Top 10',
+      'Prompt injection testing',
+      'RAG poisoning analysis',
+      'Agent & tool-call security',
     ],
-    color: '#A855F7',
+    duration: '2–4 WEEKS',
     href: '/services/ai-pt',
-    duration: '2-4 Weeks',
+    color: '#A855F7',
     icon: (
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <circle cx="12" cy="12" r="4" />
-        <line x1="4.93" y1="4.93" x2="9.17" y2="9.17" />
-        <line x1="14.83" y1="14.83" x2="19.07" y2="19.07" />
-        <line x1="14.83" y1="9.17" x2="19.07" y2="4.93" />
-        <line x1="4.93" y1="19.07" x2="9.17" y2="14.83" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <circle cx="12" cy="12" r="8.5" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 3v3" />
+        <path d="M12 18v3" />
+        <path d="M3 12h3" />
+        <path d="M18 12h3" />
       </svg>
     ),
   },
@@ -147,1000 +108,719 @@ const services = [
 export default function ServicesSection() {
   const { cartItems, addToCart } = useCart();
 
-  const sectionRef = useRef(null);
-  const ctaRef = useRef(null);
-  const arrowRef = useRef(null);
-
-  useGSAP(
-    () => {
-      const wrappers = gsap.utils.toArray('.svc-card-wrapper');
-      const cards = gsap.utils.toArray('.svc-card');
-
-      if (!wrappers.length || !cards.length) {
-        return;
-      }
-
-      /*
-       * Keep the original card design untouched.
-       */
-      gsap.set(cards, {
-        scale: 1,
-        rotationX: 0,
-        transformOrigin: 'top center',
-        force3D: true,
-      });
-
-      /*
-       * Official GSAP-style stacking cards:
-       *
-       * one tween
-       * one ScrollTrigger
-       * one pin
-       *
-       * per card.
-       */
-      wrappers.forEach((wrapper, index) => {
-        const card = cards[index];
-
-        if (!wrapper || !card) return;
-
-        let scale = 1;
-        let rotation = 0;
-
-        /*
-         * Earlier cards shrink behind the next card.
-         * Last card stays full size.
-         */
-        if (index !== cards.length - 1) {
-          scale = 0.90 + 0.025 * index;
-          rotation = -6;
-        }
-
-        gsap.to(card, {
-          scale,
-          rotationX: rotation,
-          transformOrigin: 'top center',
-          ease: 'none',
-
-          scrollTrigger: {
-            trigger: wrapper,
-
-            /*
-             * Stay safely below navbar.
-             */
-            start: `top ${90 + index * 8}`,
-
-            /*
-             * Same pattern used by GSAP's stacking demo.
-             */
-            end: 'bottom 550px',
-
-            /*
-             * The whole service stack determines when
-             * the pinning sequence ends.
-             */
-            endTrigger: `#${SECTION_ID}`,
-
-            /*
-             * Smooth catch-up.
-             */
-            scrub: 0.7,
-
-            /*
-             * Pin the wrapper, animate the card inside it.
-             */
-            pin: wrapper,
-
-            /*
-             * Next card moves naturally underneath.
-             */
-            pinSpacing: false,
-
-            anticipatePin: 1,
-
-            invalidateOnRefresh: true,
-
-            id: `service-stack-${index}`,
-          },
-        });
-      });
-
-      /*
-       * CTA entrance.
-       */
-      if (ctaRef.current) {
-        gsap.fromTo(
-          ctaRef.current,
-          {
-            y: 35,
-            opacity: 0,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-
-            scrollTrigger: {
-              trigger: ctaRef.current,
-              start: 'top 88%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      }
-
-      /*
-       * CTA arrow.
-       */
-      if (arrowRef.current) {
-        gsap.to(arrowRef.current, {
-          y: 5,
-          opacity: 0.5,
-          duration: 0.8,
-          repeat: -1,
-          yoyo: true,
-          ease: 'power1.inOut',
-        });
-      }
-
-      /*
-       * Recalculate all pin positions.
-       */
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-      });
-    },
-    {
-      scope: sectionRef,
-      revertOnUpdate: true,
-    }
-  );
   return (
-    <section
-      ref={sectionRef}
-      id="services"
-      style={{
-        position: 'relative',
-        background: 'var(--bg-base)',
-        overflow: 'hidden',
-      }}
-    >
-      {/* =======================================================
-          BACKGROUND
-      ======================================================= */}
+    <section id="services" className="services-section">
 
-      <div
-        className="cyber-grid"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          opacity: 0.12,
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Background */}
+      <div className="services-grid" />
+      <div className="services-glow" />
 
-      <div
-        style={{
-          position: 'absolute',
-          top: '10%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 900,
-          height: 700,
-          background:
-            'radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* =======================================================
-          HEADER
-      ======================================================= */}
-
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          textAlign: 'center',
-          padding: '100px 24px 64px',
-        }}
-      >
-        <div
-          className="section-label"
-          style={{
-            display: 'inline-flex',
-            marginBottom: 18,
-          }}
-        >
-          CORE CAPABILITIES
+      {/* Header */}
+      <header className="services-header">
+        <div className="services-kicker">
+          <span />
+          SECURITY SERVICES
+          <span />
         </div>
-
-        <h2
-          style={{
-            fontSize: 'clamp(32px, 5vw, 54px)',
-            fontWeight: 800,
-            color: 'var(--text-primary)',
-            letterSpacing: '-1.5px',
-            marginBottom: 16,
-            lineHeight: 1.08,
-          }}
-        >
-          Our{' '}
-          <span
-            style={{
-              background:
-                'linear-gradient(135deg,#3B82F6,#06B6D4)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            Security Services
-          </span>
+        <h2>
+          Security built around
+          <br />
+          <span>real attack surfaces.</span>
         </h2>
-
-        <p
-          style={{
-            fontSize: 16,
-            color: 'var(--text-muted)',
-            lineHeight: 1.75,
-            maxWidth: 560,
-            margin: '0 auto',
-          }}
-        >
-          Precision-targeted attack simulations across every threat
-          surface — APIs, web apps, cloud infrastructure, and AI systems.
+        <p>
+          Focused offensive security assessments for APIs, applications, cloud
+          infrastructure and AI systems.
         </p>
-      </div>
+      </header>
 
-      {/* =======================================================
-          SERVICES STACK
-      ======================================================= */}
-
-      <div
-        id={SECTION_ID}
-        style={{
-          paddingTop: 40,
-
-          /*
-           * Reduced from the previous huge bottom spacing.
-           * The CTA now visually connects to the stack.
-           */
-          paddingBottom: 80,
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <div
-          style={{
-            width: '90%',
-            maxWidth: 1060,
-            margin: '0 auto',
-            padding: '0 24px',
-          }}
+      {/* ─── SCROLL STACK ─── */}
+      <div className="services-stack-wrap">
+        <ScrollStack
+          itemDistance={90}
+          itemStackDistance={28}
+          stackPosition={110}
+          scaleEndPosition="90px"
+          baseScale={0.92}
+          itemScale={0.018}
+          rotationAmount={0}
+          blurAmount={0}
+          useWindowScroll={true}
         >
           {services.map((service, index) => {
             const isAdded = cartItems.some(
-              (item) =>
-                item.number === service.slug ||
-                item.title === service.title
+              (item) => item.number === service.slug || item.title === service.title
             );
 
             return (
-              <div
-                key={service.slug}
-                className="svc-card-wrapper"
-                style={{
-                  width: '100%',
-                  perspective: '500px',
+              <ScrollStackItem key={service.slug} itemClassName="service-stack-item">
+                <article className="service-card">
 
-                  /*
-                   * KEEP ORIGINAL CARD SPACING.
-                   */
-                  marginBottom:
-                    index === services.length - 1
-                      ? 0
-                      : 50,
-
-                  position: 'relative',
-                }}
-              >
-                {/* =================================================
-                    CARD
-                ================================================= */}
-
-                <div
-                  className="svc-card"
-                  style={{
-                    width: '100%',
-                    minHeight: 300,
-                    background: 'rgba(9,14,23,0.97)',
-                    border: `1px solid ${service.color}22`,
-                    borderRadius: 20,
-                    padding: '40px 36px',
-                    boxShadow:
-                      '0 24px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
-                    backdropFilter: 'blur(20px)',
-                    position: 'relative',
-                    willChange: 'auto',
-                    transformStyle: 'flat',
-                  }}
-                >
-                  {/* Number */}
-
+                  {/* Colored top-edge accent */}
                   <div
+                    className="card-accent"
                     style={{
-                      position: 'absolute',
-                      top: 24,
-                      right: 28,
-                      fontFamily:
-                        'var(--font-mono)',
-                      fontSize: 12,
-                      fontWeight: 700,
-                      color:
-                        `${service.color}45`,
-                      letterSpacing: '0.06em',
+                      background: `linear-gradient(90deg, transparent 0%, ${service.color} 40%, transparent 100%)`,
                     }}
-                  >
-                    {service.number} / 04
+                  />
+
+                  {/* Top bar */}
+                  <div className="service-topbar">
+                    <div className="service-number">
+                      <span className="active-number">{service.number}</span>
+                      <span className="number-divider">/</span>
+                      <span>04</span>
+                    </div>
+
+                    <div className="service-type" style={{ color: service.color }}>
+                      {service.short}
+                    </div>
+
+                    <div className="service-status">
+                      <i />
+                      AVAILABLE
+                    </div>
                   </div>
 
-                  {/* =================================================
-                      CARD CONTENT
-                  ================================================= */}
+                  {/* Main grid */}
+                  <div className="service-content">
 
-                  <div
-                    className="svc-grid"
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns:
-                        '1.3fr 1fr',
-                      gap: 40,
-                      alignItems: 'center',
-                    }}
-                  >
                     {/* LEFT */}
-
-                    <div>
+                    <div className="service-left">
                       <div
+                        className="service-icon"
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 14,
-                          marginBottom: 18,
+                          color: service.color,
+                          background: `${service.color}14`,
+                          borderColor: `${service.color}35`,
                         }}
                       >
-                        <div
-                          style={{
-                            width: 48,
-                            height: 48,
-                            borderRadius: 12,
-                            background:
-                              `${service.color}15`,
-                            border:
-                              `1px solid ${service.color}35`,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color:
-                              service.color,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {service.icon}
-                        </div>
-
-                        <div>
-                          <span
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 700,
-                              letterSpacing:
-                                '0.09em',
-                              textTransform:
-                                'uppercase',
-                              color:
-                                service.color,
-                              display: 'block',
-                              marginBottom: 3,
-                            }}
-                          >
-                            {service.tag}
-                          </span>
-
-                          <h3
-                            style={{
-                              fontSize:
-                                'clamp(18px, 2.2vw, 24px)',
-                              fontWeight: 800,
-                              color:
-                                'var(--text-primary)',
-                              margin: 0,
-                              letterSpacing:
-                                '-0.4px',
-                              lineHeight: 1.2,
-                            }}
-                          >
-                            {service.title}
-                          </h3>
-                        </div>
+                        {service.icon}
                       </div>
 
-                      <p
-                        style={{
-                          fontSize: 14.5,
-                          color:
-                            'var(--text-muted)',
-                          lineHeight: 1.75,
-                          marginBottom: 28,
-                          maxWidth: 440,
-                        }}
-                      >
-                        {service.desc}
-                      </p>
+                      <div className="service-tag">{service.tag}</div>
+                      <h3>{service.title}</h3>
+                      <p>{service.desc}</p>
 
-                      {/* Buttons */}
-
-                      <div
-                        style={{
-                          display: 'flex',
-                          gap: 12,
-                          alignItems:
-                            'center',
-                          flexWrap: 'wrap',
-                        }}
-                      >
-                        <Link
-                          href={service.href}
-                          className="btn-primary"
-                          style={{
-                            fontSize: 13,
-                            padding:
-                              '10px 20px',
-                            borderRadius: 8,
-                            textDecoration:
-                              'none',
-                          }}
-                        >
-                          Explore Methodology →
+                      <div className="service-actions">
+                        <Link href={service.href} className="service-primary">
+                          <span>Explore Service</span>
+                          <span className="service-arrow">↗</span>
                         </Link>
 
                         <button
                           type="button"
+                          className={`service-scope${isAdded ? ' active' : ''}`}
                           onClick={() =>
                             addToCart({
-                              number:
-                                service.slug,
-                              title:
-                                service.title,
-                              desc:
-                                service.desc,
-                              color:
-                                service.color,
+                              number: service.slug,
+                              title: service.title,
+                              desc: service.desc,
+                              color: service.color,
                             })
                           }
-                          className="btn-ghost"
-                          style={{
-                            fontSize: 13,
-                            padding:
-                              '10px 18px',
-                            borderRadius: 8,
-                            cursor:
-                              'pointer',
-                            borderColor:
-                              isAdded
-                                ? service.color
-                                : 'var(--border-subtle)',
-                            color: isAdded
-                              ? service.color
-                              : 'var(--text-primary)',
-                            background:
-                              isAdded
-                                ? `${service.color}12`
-                                : 'transparent',
-                          }}
                         >
-                          {isAdded
-                            ? '✓ Added to Scope'
-                            : '+ Add to Scope'}
+                          {isAdded ? '✓ In Scope' : '+ Add to Scope'}
                         </button>
                       </div>
                     </div>
 
-                    {/* =================================================
-                        RIGHT — SCOPE
-                    ================================================= */}
-
-                    <div
-                      style={{
-                        background:
-                          'rgba(15,23,42,0.7)',
-                        border:
-                          `1px solid ${service.color}14`,
-                        borderRadius: 14,
-                        padding:
-                          '22px 20px',
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: 11,
-                          fontWeight: 700,
-                          letterSpacing:
-                            '0.09em',
-                          textTransform:
-                            'uppercase',
-                          color:
-                            'var(--text-muted)',
-                          marginBottom: 14,
-                          display: 'flex',
-                          justifyContent:
-                            'space-between',
-                          alignItems:
-                            'center',
-                        }}
-                      >
-                        <span>
-                          Assessment Scope
-                        </span>
-
-                        <span
-                          style={{
-                            color:
-                              service.color,
-                            fontFamily:
-                              'var(--font-mono)',
-                            fontSize: 12,
-                          }}
-                        >
-                          {service.duration}
-                        </span>
+                    {/* RIGHT */}
+                    <div className="service-right">
+                      <div className="scope-header">
+                        <span>ASSESSMENT SCOPE</span>
+                        <strong style={{ color: service.color }}>{service.duration}</strong>
                       </div>
 
-                      <ul
-                        style={{
-                          listStyle: 'none',
-                          padding: 0,
-                          margin: 0,
-                          display: 'flex',
-                          flexDirection:
-                            'column',
-                          gap: 10,
-                        }}
-                      >
-                        {service.features.map(
-                          (feature, fi) => (
-                            <li
-                              key={fi}
-                              style={{
-                                fontSize: 13.5,
-                                color:
-                                  'var(--text-primary)',
-                                display:
-                                  'flex',
-                                alignItems:
-                                  'flex-start',
-                                gap: 10,
-                                lineHeight:
-                                  1.4,
-                              }}
-                            >
-                              <span
-                                style={{
-                                  width: 6,
-                                  height: 6,
-                                  borderRadius:
-                                    '50%',
-                                  background:
-                                    service.color,
-                                  flexShrink: 0,
-                                  marginTop: 5,
-                                  boxShadow:
-                                    `0 0 6px ${service.color}80`,
-                                }}
-                              />
+                      <div className="scope-list">
+                        {service.features.map((feature, fi) => (
+                          <div className="scope-item" key={feature}>
+                            <span className="scope-index">
+                              {String(fi + 1).padStart(2, '0')}
+                            </span>
+                            <span className="scope-text">{feature}</span>
+                            <span className="scope-icon">↗</span>
+                          </div>
+                        ))}
+                      </div>
 
-                              {feature}
-                            </li>
-                          )
-                        )}
-                      </ul>
+                      <div className="scope-footer">
+                        <span>ARITARO / OFFENSIVE SECURITY</span>
+                        <span>ENCRYPTED</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+
+                  {/* Bottom bar */}
+                  <div className="service-bottombar">
+                    <span>SECURITY ASSESSMENT</span>
+                    <span>20{index + 1} / 2026</span>
+                  </div>
+
+                </article>
+              </ScrollStackItem>
             );
           })}
+        </ScrollStack>
+      </div>
 
-          {/* Invisible end marker used by ScrollTrigger */}
+      {/* CTA — sits AFTER the stack container so it only scrolls in after the stack has fully released */}
+      <div className="services-cta-wrap">
+        <div className="services-cta-line" />
 
-          {/* <div
-            className="services-stack-end"
-            aria-hidden="true"
-            style={{
-              width: '100%',
-              height: 1,
-              opacity: 0,
-              pointerEvents: 'none',
-            }}
-          /> */}
+        <div className="services-cta">
+          <div className="cta-copy">
+            <div className="cta-label">
+              <span />
+              ARITARO // SECURITY ARSENAL
+            </div>
+            <h3>
+              Need something
+              <br />
+              <span>beyond the core?</span>
+            </h3>
+            <p>
+              Custom red-team operations, threat simulations, compliance
+              assessments and security engineering.
+            </p>
+          </div>
+
+          <Link href="/services" className="cta-button">
+            <span>View all services</span>
+            <span>↗</span>
+          </Link>
         </div>
       </div>
 
-      {/* =======================================================
-          FULL CATALOG CTA
-      ======================================================= */}
+      {/* ─── CSS ─── */}
+      <style jsx>{`
+        /* ===================================================
+           SECTION
+        =================================================== */
+        .services-section {
+          position: relative;
+          background: var(--bg-base, #030712);
+          color: var(--text-primary, #fff);
+          /* Extra bottom padding so the CTA has breathing room */
+          padding-bottom: 140px;
+          overflow: visible;
+        }
 
-      <div
-        ref={ctaRef}
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          padding:
-            '30px 24px 100px',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1060,
-            margin: '0 auto',
-            position: 'relative',
-          }}
-        >
-          {/* Connector */}
+        /* ===================================================
+           BACKGROUND DECORATIONS
+        =================================================== */
+        .services-grid {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          opacity: 0.055;
+          background-image:
+            linear-gradient(rgba(59, 130, 246, 0.18) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(59, 130, 246, 0.18) 1px, transparent 1px);
+          background-size: 72px 72px;
+          mask-image: linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 10%,
+            black 84%,
+            transparent 100%
+          );
+        }
 
-          <div
-            style={{
-              width: 1,
-              height: 60,
-              margin: '0 auto',
-              background:
-                'linear-gradient(to bottom, rgba(59,130,246,0.7), transparent)',
-            }}
-          />
+        .services-glow {
+          position: absolute;
+          top: 250px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 820px;
+          height: 600px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(35, 105, 245, 0.07), transparent 70%);
+          pointer-events: none;
+        }
 
-          {/* CTA */}
+        /* ===================================================
+           HEADER
+        =================================================== */
+        .services-header {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+          padding: 100px 24px 56px;
+        }
 
-          <div
-            className="services-cta"
-            style={{
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: 20,
-              border:
-                '1px solid rgba(59,130,246,0.22)',
-              background:
-                'linear-gradient(135deg, rgba(10,18,32,0.98), rgba(5,10,18,0.98))',
-              boxShadow:
-                '0 30px 80px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',
-              padding:
-                '46px 50px',
-            }}
-          >
-            {/* Grid */}
+        .services-kicker {
+          display: inline-flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 22px;
+          color: rgba(105, 145, 220, 0.6);
+          font-family: var(--font-mono, monospace);
+          font-size: 9px;
+          letter-spacing: 0.2em;
+        }
 
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                opacity: 0.12,
-                backgroundImage:
-                  'linear-gradient(rgba(59,130,246,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.15) 1px, transparent 1px)',
-                backgroundSize:
-                  '40px 40px',
-                maskImage:
-                  'linear-gradient(to right, transparent, black, transparent)',
-                pointerEvents: 'none',
-              }}
-            />
+        .services-kicker span {
+          width: 25px;
+          height: 1px;
+          background: rgba(75, 125, 240, 0.35);
+        }
 
-            {/* Glow */}
+        .services-header h2 {
+          margin: 0;
+          font-size: clamp(36px, 5vw, 60px);
+          font-weight: 750;
+          line-height: 1.05;
+          letter-spacing: -0.04em;
+          color: var(--text-primary, #fff);
+        }
 
-            <div
-              style={{
-                position: 'absolute',
-                width: 350,
-                height: 350,
-                right: -120,
-                top: -180,
-                borderRadius: '50%',
-                background:
-                  'radial-gradient(circle, rgba(59,130,246,0.12), transparent 70%)',
-                pointerEvents: 'none',
-              }}
-            />
+        .services-header h2 span {
+          color: rgba(255, 255, 255, 0.34);
+        }
 
-            <div
-              className="services-cta-content"
-              style={{
-                position: 'relative',
-                zIndex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent:
-                  'space-between',
-                gap: 40,
-              }}
-            >
-              {/* LEFT */}
+        .services-header p {
+          width: min(570px, 100%);
+          margin: 22px auto 0;
+          color: var(--text-muted, #94a3b8);
+          font-size: 15px;
+          line-height: 1.8;
+        }
 
-              <div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems:
-                      'center',
-                    gap: 10,
-                    marginBottom: 14,
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius:
-                        '50%',
-                      background:
-                        '#3B82F6',
-                      boxShadow:
-                        '0 0 12px #3B82F6',
-                    }}
-                  />
+        /* ===================================================
+           STACK WRAPPER
+           • width + centering only — no overflow constraints
+             so the translateY transform can move cards freely
+        =================================================== */
+        .services-stack-wrap {
+          position: relative;
+          z-index: 2;
+          width: min(1120px, calc(100% - 40px));
+          margin: 0 auto;
+          padding-top: 28px;
+          padding-bottom: 500px;
+          overflow: visible;
+        }
 
-                  <span
-                    style={{
-                      fontFamily:
-                        'var(--font-mono)',
-                      fontSize: 10,
-                      letterSpacing:
-                        '0.16em',
-                      color: '#3B82F6',
-                      fontWeight: 700,
-                    }}
-                  >
-                    ARITARO // SECURITY ARSENAL
-                  </span>
-                </div>
+        /* The ScrollStackItem wrapper itself — no extra styling */
+        .service-stack-item {
+          /* no padding / margin here — ScrollStack.jsx manages margin-bottom */
+        }
 
-                <h3
-                  style={{
-                    fontSize:
-                      'clamp(24px, 3vw, 36px)',
-                    fontWeight: 800,
-                    color:
-                      'var(--text-primary)',
-                    margin: 0,
-                    letterSpacing:
-                      '-0.8px',
-                    lineHeight: 1.15,
-                  }}
-                >
-                  12+ security modules.
-                  <br />
+        /* ===================================================
+           CARD  (fully opaque → zero bleed-through)
+        =================================================== */
+        .service-card {
+          position: relative;
+          min-height: 440px;
+          box-sizing: border-box;
+          overflow: hidden;
+          /* 100 % opaque — nothing behind it can show through */
+          background: #090e18;
+          border: 1px solid rgba(75, 125, 220, 0.2);
+          border-radius: 20px;
+          box-shadow:
+            0 28px 70px rgba(0, 0, 0, 0.8),
+            0 2px 8px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
 
-                  <span
-                    style={{
-                      color:
-                        'var(--text-muted)',
-                    }}
-                  >
-                    One complete defense surface.
-                  </span>
-                </h3>
+        .service-card:hover {
+          border-color: rgba(90, 150, 255, 0.38);
+          box-shadow:
+            0 32px 80px rgba(0, 0, 0, 0.85),
+            0 0 40px rgba(59, 130, 246, 0.08);
+        }
 
-                <p
-                  style={{
-                    maxWidth: 540,
-                    margin:
-                      '16px 0 0',
-                    color:
-                      'var(--text-muted)',
-                    fontSize: 14,
-                    lineHeight: 1.7,
-                  }}
-                >
-                  Go beyond our core
-                  assessments with
-                  specialized red-team
-                  operations, compliance
-                  audits, cloud hardening,
-                  threat simulation, and
-                  more.
-                </p>
-              </div>
+        .card-accent {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          pointer-events: none;
+        }
 
-              {/* RIGHT */}
+        /* ===================================================
+           TOP BAR
+        =================================================== */
+        .service-topbar {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          align-items: center;
+          gap: 20px;
+          height: 52px;
+          padding: 0 28px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          background: rgba(255, 255, 255, 0.015);
+        }
 
-              <div
-                className="services-cta-action"
-                style={{
-                  flexShrink: 0,
-                  textAlign: 'center',
-                }}
-              >
-                <Link
-                  href="/services"
-                  className="services-arsenal-button"
-                  style={{
-                    position:
-                      'relative',
-                    display:
-                      'inline-flex',
-                    alignItems:
-                      'center',
-                    gap: 14,
-                    padding:
-                      '15px 22px',
-                    borderRadius: 10,
-                    background:
-                      '#3B82F6',
-                    color: '#fff',
-                    textDecoration:
-                      'none',
-                    fontSize: 13,
-                    fontWeight: 700,
-                    boxShadow:
-                      '0 10px 35px rgba(59,130,246,0.25)',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <span>
-                    View All Services
-                  </span>
+        .service-number {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          color: rgba(255, 255, 255, 0.35);
+        }
 
-                  <span
-                    style={{
-                      fontSize: 18,
-                      lineHeight: 1,
-                    }}
-                  >
-                    →
-                  </span>
-                </Link>
+        .active-number {
+          color: #fff;
+          font-weight: 700;
+        }
 
-                <div
-                  style={{
-                    marginTop: 14,
-                    fontFamily:
-                      'var(--font-mono)',
-                    fontSize: 9,
-                    letterSpacing:
-                      '0.14em',
-                    color:
-                      'rgba(255,255,255,0.28)',
-                  }}
-                >
-                  EXPLORE FULL CATALOG
-                </div>
-              </div>
-            </div>
+        .number-divider {
+          color: rgba(255, 255, 255, 0.2);
+        }
 
-            {/* Bottom status */}
+        .service-type {
+          font-weight: 700;
+        }
 
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 1,
-                marginTop: 34,
-                paddingTop: 18,
-                borderTop:
-                  '1px solid rgba(255,255,255,0.06)',
-                display: 'flex',
-                justifyContent:
-                  'space-between',
-                alignItems:
-                  'center',
-                color:
-                  'rgba(255,255,255,0.25)',
-                fontFamily:
-                  'var(--font-mono)',
-                fontSize: 9,
-                letterSpacing:
-                  '0.12em',
-              }}
-            >
-              <span>
-                ALL SYSTEMS PROTECTED
-              </span>
+        .service-status {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #10b981;
+          font-size: 10px;
+        }
 
-              <span>
-                SECURITY LEVEL: ENTERPRISE
-              </span>
-            </div>
-          </div>
+        .service-status i {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 8px #10b981;
+        }
 
-          {/* Scroll continuation */}
+        /* ===================================================
+           CONTENT GRID
+        =================================================== */
+        .service-content {
+          display: grid;
+          grid-template-columns: 1.25fr 1fr;
+          gap: 40px;
+          padding: 38px 36px 32px;
+          align-items: center;
+        }
 
-          <div
-            className="services-scroll-hint"
-            style={{
-              display: 'flex',
-              justifyContent:
-                'center',
-              alignItems: 'center',
-              gap: 12,
-              marginTop: 30,
-              color:
-                'rgba(255,255,255,0.3)',
-              fontFamily:
-                'var(--font-mono)',
-              fontSize: 9,
-              letterSpacing:
-                '0.16em',
-              textTransform:
-                'uppercase',
-            }}
-          >
-            <span>
-              Scroll to continue
-            </span>
+        .service-left {
+          display: flex;
+          flex-direction: column;
+        }
 
-            <span
-              ref={arrowRef}
-              style={{
-                display:
-                  'inline-block',
-                fontSize: 15,
-              }}
-            >
-              ↓
-            </span>
-          </div>
-        </div>
-      </div>
+        .service-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          border: 1px solid;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 16px;
+        }
 
-      {/* =======================================================
-          RESPONSIVE
-      ======================================================= */}
+        .service-tag {
+          font-family: var(--font-mono, monospace);
+          font-size: 10px;
+          letter-spacing: 0.15em;
+          color: rgba(148, 163, 184, 0.8);
+          margin-bottom: 6px;
+        }
 
-      <style>{`
-        @media (max-width: 820px) {
-          .svc-grid {
-            grid-template-columns: 1fr !important;
-            gap: 20px !important;
-          }
+        .service-left h3 {
+          margin: 0 0 12px;
+          font-size: clamp(22px, 2.5vw, 30px);
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          color: #fff;
+          line-height: 1.15;
+        }
 
-          .svc-card {
-            padding: 28px 20px !important;
+        .service-left p {
+          margin: 0 0 28px;
+          font-size: 14.5px;
+          line-height: 1.7;
+          color: #94a3b8;
+          max-width: 460px;
+        }
+
+        .service-actions {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+
+        .service-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          background: #2563eb;
+          color: #fff;
+          padding: 10px 20px;
+          border-radius: 8px;
+          font-size: 13px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .service-primary:hover {
+          background: #1d4ed8;
+          transform: translateY(-1px);
+        }
+
+        .service-arrow {
+          font-size: 15px;
+        }
+
+        .service-scope {
+          padding: 10px 18px;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #e2e8f0;
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .service-scope:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 255, 255, 0.22);
+        }
+
+        .service-scope.active {
+          background: rgba(16, 185, 129, 0.12);
+          border-color: #10b981;
+          color: #34d399;
+        }
+
+        /* ===================================================
+           SCOPE PANEL (RIGHT)
+        =================================================== */
+        .service-right {
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.07);
+          border-radius: 14px;
+          padding: 24px;
+        }
+
+        .scope-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          color: #64748b;
+          margin-bottom: 18px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .scope-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+
+        .scope-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 13.5px;
+          color: #cbd5e1;
+        }
+
+        .scope-index {
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.3);
+        }
+
+        .scope-text {
+          flex: 1;
+        }
+
+        .scope-icon {
+          color: rgba(255, 255, 255, 0.3);
+          font-size: 12px;
+        }
+
+        .scope-footer {
+          display: flex;
+          justify-content: space-between;
+          font-family: var(--font-mono, monospace);
+          font-size: 9px;
+          letter-spacing: 0.12em;
+          color: rgba(255, 255, 255, 0.28);
+          padding-top: 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* ===================================================
+           BOTTOM BAR
+        =================================================== */
+        .service-bottombar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 42px;
+          padding: 0 28px;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          font-family: var(--font-mono, monospace);
+          font-size: 10px;
+          letter-spacing: 0.12em;
+          color: rgba(255, 255, 255, 0.35);
+          background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* ===================================================
+           CTA SECTION
+           • negative margin-top pulls it up so it meets the
+             tail of the stack-wrap padding cleanly.
+           • z-index 3 ensures it sits above the stack when
+             the user scrolls past the release point.
+        =================================================== */
+        .services-cta-wrap {
+          position: relative;
+          z-index: 3;
+          margin-top: -400px;
+          width: min(1120px, calc(100% - 40px));
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .services-cta-line {
+          width: 1px;
+          height: 48px;
+          margin: 0 auto 30px;
+          background: linear-gradient(to bottom, rgba(59, 130, 246, 0.6), transparent);
+        }
+
+        .services-cta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 36px;
+          background: linear-gradient(135deg, #091222 0%, #050a14 100%);
+          border: 1px solid rgba(59, 130, 246, 0.25);
+          border-radius: 20px;
+          padding: 44px 48px;
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-family: var(--font-mono, monospace);
+          font-size: 10px;
+          letter-spacing: 0.16em;
+          color: #3b82f6;
+          font-weight: 700;
+          margin-bottom: 12px;
+        }
+
+        .cta-label span {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #3b82f6;
+          box-shadow: 0 0 10px #3b82f6;
+        }
+
+        .services-cta h3 {
+          margin: 0;
+          font-size: clamp(26px, 3vw, 36px);
+          font-weight: 750;
+          letter-spacing: -0.03em;
+          line-height: 1.15;
+          color: #fff;
+        }
+
+        .services-cta h3 span {
+          color: rgba(255, 255, 255, 0.34);
+        }
+
+        .services-cta p {
+          max-width: 520px;
+          margin: 14px 0 0;
+          font-size: 14px;
+          line-height: 1.7;
+          color: #94a3b8;
+        }
+
+        .cta-button {
+          flex-shrink: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 14px 26px;
+          background: #2563eb;
+          color: #fff;
+          border-radius: 10px;
+          text-decoration: none;
+          font-weight: 700;
+          font-size: 13px;
+          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+          transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .cta-button:hover {
+          background: #1d4ed8;
+          transform: translateY(-1px);
+        }
+
+        /* ===================================================
+           RESPONSIVE
+        =================================================== */
+        @media (max-width: 860px) {
+          .service-content {
+            grid-template-columns: 1fr;
+            gap: 28px;
+            padding: 30px 24px;
           }
 
           .services-cta {
-            padding: 34px 24px !important;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 32px 28px;
           }
 
-          .services-cta-content {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-          }
-
-          .services-cta-action {
-            width: 100% !important;
-          }
-
-          .services-arsenal-button {
-            width: 100% !important;
-            justify-content: center !important;
+          .cta-button {
+            width: 100%;
+            justify-content: center;
           }
         }
 
-        @media (max-width: 520px) {
-          .services-scroll-hint {
-            margin-top: 24px !important;
+        @media (max-width: 768px) {
+          .service-card {
+            min-height: auto;
           }
 
-          .services-cta {
-            border-radius: 16px !important;
+          .service-topbar {
+            padding: 0 18px;
+          }
+
+          .service-bottombar {
+            padding: 0 18px;
+          }
+
+          .services-cta-wrap {
+            margin-top: -340px;
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .svc-card {
-            transform: none !important;
-          }
-
-          .services-scroll-hint span:last-child {
-            animation: none !important;
+          .service-card {
+            transition: none;
           }
         }
       `}</style>

@@ -31,10 +31,14 @@ const userSchema = new Schema(
 		verificationTokenExpiry: { type: Date, select: false },
 		resetPasswordToken: { type: String, select: false },
 		resetPasswordExpiry: { type: Date, select: false },
+		deletedAt: { type: Date, default: null },
 		lastLogin: { type: Date },
 	},
 	{ timestamps: true },
 );
+
+userSchema.index({ role: 1, status: 1 });
+userSchema.index({ deletedAt: 1, createdAt: -1 });
 
 userSchema.pre("save", async function () {
 	if (!this.isModified("password")) return;

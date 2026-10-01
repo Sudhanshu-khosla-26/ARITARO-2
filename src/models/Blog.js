@@ -13,9 +13,15 @@ const BlogSchema = new Schema(
 		publishedAt: { type: Date },
 		metaTitle: { type: String },
 		metaDescription: { type: String },
+		deletedAt: { type: Date, default: null },
 	},
 	{ timestamps: true },
 );
+
+BlogSchema.index({ isPublished: 1, publishedAt: -1 });
+BlogSchema.index({ tags: 1, isPublished: 1 });
+BlogSchema.index({ author: 1, createdAt: -1 });
+BlogSchema.index({ deletedAt: 1, createdAt: -1 });
 
 const Blog = mongoose.models.Blog || mongoose.model("Blog", BlogSchema);
 
